@@ -208,7 +208,8 @@
     <h2 id="modal-title"></h2>
     <div class="modal-meta">
       <span><i>📅</i> <span id="modal-date"></span></span>
-      <span><i>🕐</i> <span id="modal-time"></span> <small style="opacity:0.5;font-size:0.8em;">EST (Miami, UTC-4)</small></span>
+      <span><i>🕐</i> <span id="modal-time"></span></span>
+      <span id="modal-time-converted-row" style="display:none"><i>🌎</i> <span id="modal-time-converted"></span></span>
       <span><i>👤</i> <span id="modal-instructor"></span></span>
     </div>
     <div class="modal-desc" id="modal-desc"></div>
@@ -257,6 +258,7 @@
           instructor: String(row.instructor || '').trim(),
           desc:       String(row.desc || '').trim(),
           link:       String(row.link || '').trim(),
+          timezone:   String(row.timezone || '').trim(),
         }))
         .filter(e => e.date && e.title);
       setSyncStatus('ok', `Sincronizado · ${EVENTS.length} evento${EVENTS.length !== 1 ? 's' : ''}`);
@@ -347,13 +349,114 @@
     });
   }
 
+  // ── TIMEZONE CONVERSION ───────────────────────────────
+  const TZ_ABBR = {
+    'EST': 'America/New_York',
+    'EDT': 'America/New_York',
+    'CST': 'America/Chicago',
+    'CDT': 'America/Chicago',
+    'MST': 'America/Denver',
+    'MDT': 'America/Denver',
+    'PST': 'America/Los_Angeles',
+    'PDT': 'America/Los_Angeles',
+    'HST': 'Pacific/Honolulu',
+    'COT': 'America/Bogota',
+    'PET': 'America/Lima',
+    'VET': 'America/Caracas',
+    'ART': 'America/Argentina/Buenos_Aires',
+    'BRT': 'America/Sao_Paulo',
+    'CLT': 'America/Santiago',
+    'CET': 'Europe/Madrid',
+    'GMT': 'Europe/London',
+    'UTC': 'UTC',
+  };
+
+  function resolveTimezone(tz) {
+    if (!tz) return '';
+    const upper = tz.trim().toUpperCase();
+    return TZ_ABBR[upper] || tz.trim();
+  }
+
+  function convertToMiami(timeStr, dateStr, fromTZ) {
+    if (!timeStr || !fromTZ) return null;
+    try {
+      // Parse "10:00 AM" or "10:00 AM – 12:00 PM"
+      const parts = timeStr.split('–').map(s => s.trim());
+      const converted = parts.map(part => {
+        const match = part.match(/(\d{1,2}):(\d{2})\s*(AM|PM)/i);
+        if (!match) return null;
+        let [, h, m, meridiem] = match;
+        h = parseInt(h); m = parseInt(m);
+        if (meridiem.toUpperCase() === 'PM' && h !== 12) h += 12;
+        if (meridiem.toUpperCase() === 'AM' && h === 12) h = 0;
+
+        // Build a date string in the source timezone
+        const isoStr = `${dateStr}T${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:00`;
+
+        // Get the UTC offset for both timezones at that moment
+        const srcDate = new Date(new Date(isoStr).toLocaleString('en-US', { timeZone: fromTZ }));
+        const refDate = new Date(isoStr);
+        const diff = refDate - srcDate; // ms offset
+
+        // Create date in source TZ and convert to Miami
+        const srcMs = new Date(isoStr + '').getTime() + diff;
+        const miamiStr = new Date(srcMs).toLocaleString('en-US', {
+          timeZone: 'America/New_York',
+          hour: 'numeric', minute: '2-digit', hour12: true
+        });
+        return miamiStr;
+      });
+
+      if (converted.includes(null)) return null;
+      return converted.join(' – ');
+    } catch(e) {
+      return null;
+    }
+  }
+
+  function getTZLabel(tz) {
+    const labels = {
+      'America/New_York':    'ET (Nueva York)',
+      'America/Chicago':     'CT (Chicago)',
+      'America/Denver':      'MT (Denver)',
+      'America/Los_Angeles': 'PT (Los Ángeles)',
+      'America/Bogota':      'COT (Bogotá)',
+      'America/Lima':        'PET (Lima)',
+      'America/Caracas':     'VET (Caracas)',
+      'America/Santiago':    'CLT (Santiago)',
+      'America/Sao_Paulo':   'BRT (São Paulo)',
+      'Europe/Madrid':       'CET (Madrid)',
+      'Europe/London':       'GMT (Londres)',
+      'Pacific/Honolulu':    'HST (Hawái)',
+    };
+    return labels[tz] || tz;
+  }
+
   function openModal(ev) {
     const [y,m,d] = normalizeDate(ev.date).split('-');
     document.getElementById('modal-badge').textContent = ev.type === 'cap' ? 'Capacitación Interna' : 'Webinar';
     document.getElementById('modal-badge').className = `modal-type-badge ${ev.type}`;
     document.getElementById('modal-title').textContent = ev.title;
     document.getElementById('modal-date').textContent = `${d} de ${MONTHS_ES[parseInt(m)-1]} ${y}`;
-    document.getElementById('modal-time').textContent = ev.time;
+    // Time display
+    const convertedRow = document.getElementById('modal-time-converted-row');
+    if (ev.timezone && ev.timezone.toUpperCase() !== 'EST' && ev.timezone !== 'America/New_York') {
+      const ianaZone = resolveTimezone(ev.timezone);
+      const converted = convertToMiami(ev.time, normalizeDate(ev.date), ianaZone);
+      document.getElementById('modal-time').innerHTML =
+        `${ev.time} <small style="opacity:0.5;font-size:0.8em;">${getTZLabel(ianaZone)}</small>`;
+      if (converted) {
+        document.getElementById('modal-time-converted').innerHTML =
+          `${converted} <small style="opacity:0.5;font-size:0.8em;">EST (Miami, UTC-4)</small>`;
+        convertedRow.style.display = 'flex';
+      } else {
+        convertedRow.style.display = 'none';
+      }
+    } else {
+      document.getElementById('modal-time').innerHTML =
+        `${ev.time} <small style="opacity:0.5;font-size:0.8em;">EST (Miami, UTC-4)</small>`;
+      convertedRow.style.display = 'none';
+    }
     document.getElementById('modal-instructor').textContent = ev.instructor;
     document.getElementById('modal-desc').textContent = ev.desc;
     const linkBtn = document.getElementById('modal-link');
