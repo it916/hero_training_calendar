@@ -123,6 +123,21 @@
   .modal-meta span i { font-style: normal; width: 18px; opacity: 0.5; }
   .modal-desc { font-size: 0.95rem; color: rgba(255,255,255,0.55); line-height: 1.6; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 16px; }
 
+  .modal-link-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    margin-top: 18px;
+    background: linear-gradient(135deg, var(--cyan), var(--blue-mid));
+    color: var(--darker);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800; font-size: 1rem; letter-spacing: 1.5px; text-transform: uppercase;
+    padding: 12px 24px; border-radius: 10px;
+    text-decoration: none; border: none; cursor: pointer;
+    transition: filter 0.2s, transform 0.15s;
+    width: 100%; justify-content: center;
+  }
+  .modal-link-btn:hover { filter: brightness(1.1); transform: translateY(-1px); }
+  .modal-link-btn.hidden { display: none; }
+
   @media (max-width: 700px) {
     header, .controls, .legend, .calendar-wrap, .upcoming-strip, .error-banner { padding-left: 16px; padding-right: 16px; }
     .hero { padding: 40px 16px 36px; }
@@ -197,6 +212,9 @@
       <span><i>👤</i> <span id="modal-instructor"></span></span>
     </div>
     <div class="modal-desc" id="modal-desc"></div>
+    <a class="modal-link-btn hidden" id="modal-link" target="_blank" rel="noopener">
+      🔗 Unirse al Meeting
+    </a>
   </div>
 </div>
 
@@ -238,6 +256,7 @@
           time:       String(row.time || '').trim(),
           instructor: String(row.instructor || '').trim(),
           desc:       String(row.desc || '').trim(),
+          link:       String(row.link || '').trim(),
         }))
         .filter(e => e.date && e.title);
       setSyncStatus('ok', `Sincronizado · ${EVENTS.length} evento${EVENTS.length !== 1 ? 's' : ''}`);
@@ -337,6 +356,14 @@
     document.getElementById('modal-time').textContent = ev.time;
     document.getElementById('modal-instructor').textContent = ev.instructor;
     document.getElementById('modal-desc').textContent = ev.desc;
+    const linkBtn = document.getElementById('modal-link');
+    if (ev.link) {
+      linkBtn.href = ev.link;
+      linkBtn.classList.remove('hidden');
+    } else {
+      linkBtn.href = '#';
+      linkBtn.classList.add('hidden');
+    }
     document.getElementById('modal-overlay').classList.add('open');
   }
 
