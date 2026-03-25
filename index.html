@@ -3,214 +3,534 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Hero Insurance – Calendario de Entrenamientos</title>
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<title>Hero Insurance – Training Calendar</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Trebuchet+MS&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --cyan: #19CDEB;
-    --blue-mid: #0097CC;
-    --blue-deep: #0065F3;
-    --dark: #373535;
-    --darker: #1e1c1c;
-    --white: #FDFDFD;
-  }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { background: var(--darker); color: var(--white); font-family: 'Barlow', sans-serif; min-height: 100vh; }
 
-  header {
-    background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 40%, #0e2a3a 100%);
-    border-bottom: 3px solid var(--cyan);
-    padding: 24px 40px;
-    display: flex; align-items: center; justify-content: space-between;
-    position: sticky; top: 0; z-index: 100;
-  }
-  .logo-text { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 2rem; letter-spacing: -1px; }
-  .logo-text span { display: inline-block; background: var(--cyan); color: var(--darker); padding: 2px 8px; margin-left: 6px; font-size: 0.9rem; font-weight: 700; letter-spacing: 3px; vertical-align: middle; }
-  .header-tag { font-family: 'Barlow Condensed', sans-serif; font-size: 0.85rem; letter-spacing: 4px; text-transform: uppercase; color: var(--cyan); opacity: 0.8; }
+/* ============================================================
+   HERO INSURANCE — BRAND VARIABLES
+   ============================================================ */
+:root {
+  --hero-primary:        #06a3b6;
+  --hero-primary-hover:  #058fa0;
+  --hero-primary-light:  #d6edf0;
+  --hero-bg-page:        #f0f4f8;
+  --hero-bg-card:        #ffffff;
+  --hero-bg-preview:     #f9fafb;
+  --hero-text-primary:   #1a1a1a;
+  --hero-text-body:      #444444;
+  --hero-text-muted:     #777777;
+  --hero-text-subtle:    #aaaaaa;
+  --hero-border-topbar:  #e0e0e0;
+  --hero-border-card:    #e8e8e8;
+  --hero-border-btn:     #dddddd;
+  --hero-success:        #27ae60;
+  --hero-success-bg:     #eafaf1;
+  --hero-error:          #c0392b;
+  --hero-error-bg:       #fdedec;
+  --hero-error-border:   #f5b7b1;
+  --hero-font:           'Trebuchet MS', Arial, sans-serif;
+  --hero-radius-card:    10px;
+  --hero-radius-btn:     8px;
+  --hero-radius-pill:    20px;
+  --hero-transition:     background 0.2s, transform 0.15s;
 
-  .hero {
-    background: linear-gradient(160deg, #0a1628 0%, #0d2540 50%, #0a3a2e 100%);
-    padding: 60px 40px 50px; text-align: center; position: relative; overflow: hidden;
-  }
-  .hero::before {
-    content: ''; position: absolute; top: -80px; left: 50%; transform: translateX(-50%);
-    width: 600px; height: 600px;
-    background: radial-gradient(circle, rgba(25,205,235,0.12) 0%, transparent 70%); pointer-events: none;
-  }
-  .hero h1 { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: clamp(2.5rem, 6vw, 5rem); text-transform: uppercase; letter-spacing: -2px; line-height: 0.95; margin-bottom: 16px; }
-  .hero h1 em { font-style: normal; color: var(--cyan); }
-  .hero p { font-size: 1.1rem; color: rgba(255,255,255,0.6); max-width: 500px; margin: 0 auto 16px; }
+  /* Calendar category colors */
+  --cat-aca:      #06a3b6;
+  --cat-medicare: #0065F3;
+  --cat-supp:     #27ae60;
+  --cat-life:     #e67e22;
+}
 
-  .sync-bar { display: inline-flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 6px 16px; font-size: 0.8rem; color: rgba(255,255,255,0.5); }
-  .sync-dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.3); transition: background 0.3s; }
-  .sync-dot.loading { background: #f0a500; animation: pulse 1s infinite; }
-  .sync-dot.ok { background: #2ecc71; }
-  .sync-dot.error { background: #e74c3c; }
-  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  .controls { padding: 32px 40px 16px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
-  .month-nav { display: flex; align-items: center; gap: 20px; }
-  .month-nav button { background: rgba(25,205,235,0.1); border: 1px solid rgba(25,205,235,0.3); color: var(--cyan); width: 40px; height: 40px; border-radius: 8px; font-size: 1.2rem; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; }
-  .month-nav button:hover { background: rgba(25,205,235,0.25); border-color: var(--cyan); }
-  #month-label { font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 1.8rem; text-transform: uppercase; letter-spacing: 1px; min-width: 220px; text-align: center; }
+body {
+  font-family: var(--hero-font);
+  background: var(--hero-bg-page);
+  color: var(--hero-text-primary);
+  min-height: 100vh;
+  line-height: 1.65;
+}
 
-  .filters { display: flex; gap: 10px; flex-wrap: wrap; }
-  .filter-btn { padding: 8px 18px; border-radius: 20px; border: 1.5px solid transparent; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 0.9rem; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; transition: all 0.2s; }
-  .filter-btn.aca      { background: rgba(25,205,235,0.1);  border-color: #19CDEB; color: #19CDEB; }
-  .filter-btn.medicare { background: rgba(0,101,243,0.15);  border-color: #0065F3; color: #7ab4ff; }
-  .filter-btn.supp     { background: rgba(46,204,113,0.15); border-color: #2ecc71; color: #2ecc71; }
-  .filter-btn.life     { background: rgba(241,196,15,0.15); border-color: #f1c40f; color: #f1c40f; }
+/* ============================================================
+   TOPBAR
+   ============================================================ */
+.topbar {
+  background: var(--hero-bg-card);
+  border-bottom: 1px solid var(--hero-border-topbar);
+  height: 66px;
+  display: flex; align-items: center;
+  padding: 0 40px;
+  position: sticky; top: 0; z-index: 100;
+}
 
-  .filter-btn.active.aca      { background: #19CDEB; color: var(--darker); }
-  .filter-btn.active.medicare { background: #0065F3; color: white; }
-  .filter-btn.active.supp     { background: #2ecc71; color: var(--darker); }
-  .filter-btn.active.life     { background: #f1c40f; color: var(--darker); }
+.topbar-logo {
+  font-size: 22px; font-weight: 700;
+  color: var(--hero-primary);
+  letter-spacing: -0.5px;
+  display: flex; align-items: center; gap: 6px;
+}
 
-  .event-pill.aca      { background: rgba(25,205,235,0.2);  color: #19CDEB; border-left: 3px solid #19CDEB; }
-  .event-pill.medicare { background: rgba(0,101,243,0.25);  color: #7ab4ff; border-left: 3px solid #0065F3; }
-  .event-pill.supp     { background: rgba(46,204,113,0.2);  color: #2ecc71; border-left: 3px solid #2ecc71; }
-  .event-pill.life     { background: rgba(241,196,15,0.15); color: #f1c40f; border-left: 3px solid #f1c40f; }
+.topbar-logo span {
+  background: var(--hero-primary);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 4px;
+}
 
-  .upcoming-card.aca      { border-left-color: #19CDEB; }
-  .upcoming-card.medicare { border-left-color: #0065F3; }
-  .upcoming-card.supp     { border-left-color: #2ecc71; }
-  .upcoming-card.life     { border-left-color: #f1c40f; }
+.topbar-right {
+  margin-left: auto;
+  display: flex; align-items: center; gap: 16px;
+}
 
-  .modal-type-badge.aca      { background: #19CDEB; color: var(--darker); }
-  .modal-type-badge.medicare { background: #0065F3; color: white; }
-  .modal-type-badge.supp     { background: #2ecc71; color: var(--darker); }
-  .modal-type-badge.life     { background: #f1c40f; color: var(--darker); }
+.topbar-title {
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 1.5px; text-transform: uppercase;
+  color: var(--hero-text-muted);
+}
 
-  .legend { display: flex; gap: 24px; padding: 0 40px 12px; flex-wrap: wrap; align-items: center; justify-content: space-between; }
-  .legend-left { display: flex; gap: 24px; flex-wrap: wrap; }
-  .legend-item { display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: rgba(255,255,255,0.5); }
-  .legend-dot { width: 10px; height: 10px; border-radius: 3px; }
-  .legend-dot.aca      { background: #19CDEB; }
-  .legend-dot.medicare { background: #0065F3; }
-  .legend-dot.supp     { background: #2ecc71; }
-  .legend-dot.life     { background: #f1c40f; }
-  .refresh-btn { background: rgba(25,205,235,0.1); border: 1px solid rgba(25,205,235,0.3); color: var(--cyan); padding: 6px 14px; border-radius: 8px; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 0.85rem; letter-spacing: 1px; cursor: pointer; transition: all 0.2s; }
-  .refresh-btn:hover { background: rgba(25,205,235,0.2); }
+/* ============================================================
+   HERO BANNER
+   ============================================================ */
+.page-banner {
+  background: var(--hero-bg-card);
+  border-bottom: 1px solid var(--hero-border-card);
+  padding: 32px 40px 28px;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 16px;
+}
 
-  .error-banner { display: none; margin: 0 40px 16px; background: rgba(231,76,60,0.1); border: 1px solid rgba(231,76,60,0.4); border-radius: 10px; padding: 14px 20px; font-size: 0.9rem; color: #ff8a80; }
-  .error-banner.show { display: block; }
+.banner-text .hero-tag {
+  font-size: 10px; font-weight: 700;
+  letter-spacing: 1.5px; text-transform: uppercase;
+  color: var(--hero-primary); margin-bottom: 6px;
+}
 
-  .calendar-wrap { padding: 0 40px 60px; }
-  .weekdays { display: grid; grid-template-columns: repeat(7, 1fr); margin-bottom: 8px; gap: 4px; }
-  .weekdays div { text-align: center; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 0.85rem; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.35); padding: 8px 0; }
-  .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+.banner-text h1 {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 900;
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  text-transform: uppercase;
+  letter-spacing: -1px;
+  color: var(--hero-text-primary);
+  line-height: 1;
+  margin-bottom: 6px;
+}
 
-  .day-cell { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 10px; min-height: 110px; padding: 10px 8px 8px; transition: background 0.2s; }
-  .day-cell:hover { background: rgba(255,255,255,0.055); }
-  .day-cell.empty { background: transparent; border-color: transparent; pointer-events: none; }
-  .day-cell.today { border-color: var(--cyan); background: rgba(25,205,235,0.06); }
+.banner-text h1 em { font-style: normal; color: var(--hero-primary); }
 
-  .day-num { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 1rem; color: rgba(255,255,255,0.5); margin-bottom: 6px; display: block; }
-  .day-cell.today .day-num { background: var(--cyan); color: var(--darker); width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; margin-bottom: 6px; }
+.banner-text p { font-size: 13px; color: var(--hero-text-muted); }
 
-  .event-pill { display: block; width: 100%; border-radius: 6px; padding: 4px 7px; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 0.75rem; letter-spacing: 0.5px; line-height: 1.3; margin-bottom: 3px; cursor: pointer; border: none; text-align: left; transition: filter 0.2s, transform 0.15s; }
-  .event-pill:hover { filter: brightness(1.2); transform: scale(1.02); }
-  .event-pill.hidden { display: none; }
+.sync-bar {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--hero-bg-preview);
+  border: 1px solid var(--hero-border-card);
+  border-radius: var(--hero-radius-pill);
+  padding: 7px 16px;
+  font-size: 12px; color: var(--hero-text-muted);
+}
 
-  .skeleton { background: linear-gradient(90deg, rgba(255,255,255,0.05) 25%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.05) 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; border-radius: 6px; height: 20px; margin-bottom: 4px; }
-  @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+.sync-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--hero-text-subtle);
+  transition: background 0.3s;
+}
 
-  .upcoming-strip { margin: 0 40px 40px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.07); border-radius: 14px; padding: 24px 28px; }
-  .upcoming-strip h3 { font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 1.2rem; text-transform: uppercase; letter-spacing: 2px; color: var(--cyan); margin-bottom: 16px; }
-  .upcoming-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
+.sync-dot.loading { background: #e67e22; animation: pulse 1s infinite; }
+.sync-dot.ok      { background: var(--hero-success); }
+.sync-dot.error   { background: var(--hero-error); }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
-  .upcoming-card { background: rgba(255,255,255,0.04); border-radius: 10px; padding: 14px 16px; border-left: 3px solid var(--cyan); cursor: pointer; transition: background 0.2s; }
-  .upcoming-card.web { border-left-color: var(--blue-deep); }
-  .upcoming-card:hover { background: rgba(255,255,255,0.08); }
-  .upcoming-card .uc-date { font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 0.85rem; letter-spacing: 1px; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 4px; }
-  .upcoming-card .uc-title { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 1rem; color: var(--white); line-height: 1.2; }
-  .upcoming-card .uc-time { font-size: 0.8rem; color: rgba(255,255,255,0.4); margin-top: 4px; }
+/* ============================================================
+   CONTROLS
+   ============================================================ */
+.controls {
+  padding: 20px 40px 0;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 14px;
+}
 
-  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.75); z-index: 500; backdrop-filter: blur(4px); align-items: center; justify-content: center; padding: 20px; }
-  .modal-overlay.open { display: flex; }
-  .modal { background: linear-gradient(145deg, #1a1a1a, #1e2a3a); border: 1px solid rgba(25,205,235,0.3); border-radius: 16px; padding: 36px; max-width: 460px; width: 100%; position: relative; animation: modalIn 0.25s ease; }
-  @keyframes modalIn { from{opacity:0;transform:scale(0.92) translateY(10px)} to{opacity:1;transform:scale(1) translateY(0)} }
-  .modal-close { position: absolute; top: 16px; right: 20px; background: none; border: none; color: rgba(255,255,255,0.4); font-size: 1.5rem; cursor: pointer; transition: color 0.2s; }
-  .modal-close:hover { color: white; }
-  .modal-type-badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 14px; }
-  .modal-type-badge.cap { background: var(--cyan); color: var(--darker); }
-  .modal-type-badge.web { background: var(--blue-deep); color: white; }
-  .modal h2 { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 1.8rem; text-transform: uppercase; margin-bottom: 12px; line-height: 1.1; }
-  .modal-meta { display: flex; flex-direction: column; gap: 8px; margin-bottom: 18px; }
-  .modal-meta span { font-size: 0.95rem; color: rgba(255,255,255,0.65); display: flex; align-items: center; gap: 8px; }
-  .modal-meta span i { font-style: normal; width: 18px; opacity: 0.5; }
-  .modal-desc { font-size: 0.95rem; color: rgba(255,255,255,0.55); line-height: 1.6; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 16px; }
+.month-nav { display: flex; align-items: center; gap: 12px; }
 
-  .modal-link-btn {
-    display: inline-flex; align-items: center; gap: 8px;
-    margin-top: 18px;
-    background: linear-gradient(135deg, var(--cyan), var(--blue-mid));
-    color: var(--darker);
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 800; font-size: 1rem; letter-spacing: 1.5px; text-transform: uppercase;
-    padding: 12px 24px; border-radius: 10px;
-    text-decoration: none; border: none; cursor: pointer;
-    transition: filter 0.2s, transform 0.15s;
-    width: 100%; justify-content: center;
-  }
-  .modal-link-btn:hover { filter: brightness(1.1); transform: translateY(-1px); }
-  .modal-link-btn.hidden { display: none; }
+.month-nav button {
+  background: var(--hero-bg-card);
+  border: 1px solid var(--hero-border-btn);
+  color: var(--hero-text-body);
+  width: 36px; height: 36px;
+  border-radius: var(--hero-radius-btn);
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: var(--hero-transition);
+  display: flex; align-items: center; justify-content: center;
+}
 
-  @media (max-width: 700px) {
-    header, .controls, .legend, .calendar-wrap, .upcoming-strip, .error-banner { padding-left: 16px; padding-right: 16px; }
-    .hero { padding: 40px 16px 36px; }
-    .day-cell { min-height: 70px; padding: 6px 4px; }
-    .event-pill { font-size: 0.65rem; padding: 3px 4px; }
-    .day-num { font-size: 0.85rem; }
-    #month-label { font-size: 1.3rem; min-width: 160px; }
-  }
+.month-nav button:hover {
+  background: var(--hero-primary-light);
+  border-color: var(--hero-primary);
+  color: var(--hero-primary);
+}
+
+#month-label {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 800; font-size: 1.5rem;
+  text-transform: uppercase; letter-spacing: 0.5px;
+  color: var(--hero-text-primary);
+  min-width: 200px; text-align: center;
+}
+
+.controls-right { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+
+.refresh-btn {
+  background: var(--hero-bg-card);
+  border: 1px solid var(--hero-border-btn);
+  color: var(--hero-text-muted);
+  padding: 7px 14px;
+  border-radius: var(--hero-radius-btn);
+  font-family: var(--hero-font);
+  font-size: 12px; font-weight: 700;
+  cursor: pointer; transition: var(--hero-transition);
+}
+.refresh-btn:hover { background: var(--hero-primary-light); border-color: var(--hero-primary); color: var(--hero-primary); }
+
+/* ============================================================
+   FILTERS
+   ============================================================ */
+.filters { display: flex; gap: 8px; flex-wrap: wrap; padding: 14px 40px 0; }
+
+.filter-btn {
+  padding: 6px 16px;
+  border-radius: var(--hero-radius-pill);
+  border: 1.5px solid var(--hero-border-btn);
+  background: var(--hero-bg-card);
+  color: var(--hero-text-muted);
+  font-family: var(--hero-font);
+  font-weight: 700; font-size: 12px;
+  letter-spacing: 0.5px; text-transform: uppercase;
+  cursor: pointer; transition: var(--hero-transition);
+}
+
+.filter-btn:hover { border-color: var(--hero-primary); color: var(--hero-primary); background: var(--hero-primary-light); }
+
+.filter-btn.active.all      { background: var(--hero-text-primary); border-color: var(--hero-text-primary); color: #fff; }
+.filter-btn.active.aca      { background: var(--cat-aca);      border-color: var(--cat-aca);      color: #fff; }
+.filter-btn.active.medicare { background: var(--cat-medicare); border-color: var(--cat-medicare); color: #fff; }
+.filter-btn.active.supp     { background: var(--cat-supp);     border-color: var(--cat-supp);     color: #fff; }
+.filter-btn.active.life     { background: var(--cat-life);     border-color: var(--cat-life);     color: #fff; }
+
+/* ============================================================
+   LEGEND
+   ============================================================ */
+.legend {
+  display: flex; gap: 20px; flex-wrap: wrap;
+  padding: 12px 40px 0;
+  align-items: center;
+}
+
+.legend-item { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--hero-text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+.legend-dot { width: 10px; height: 10px; border-radius: 3px; }
+.legend-dot.aca      { background: var(--cat-aca); }
+.legend-dot.medicare { background: var(--cat-medicare); }
+.legend-dot.supp     { background: var(--cat-supp); }
+.legend-dot.life     { background: var(--cat-life); }
+
+/* ============================================================
+   ERROR BANNER
+   ============================================================ */
+.error-banner {
+  display: none;
+  margin: 16px 40px 0;
+  background: var(--hero-error-bg);
+  border: 1px solid var(--hero-error-border);
+  border-radius: var(--hero-radius-btn);
+  padding: 12px 16px;
+  font-size: 13px; color: var(--hero-error);
+}
+.error-banner.show { display: block; }
+
+/* ============================================================
+   CALENDAR GRID
+   ============================================================ */
+.calendar-wrap { padding: 16px 40px 40px; }
+
+.weekdays {
+  display: grid; grid-template-columns: repeat(7, 1fr);
+  margin-bottom: 6px; gap: 4px;
+}
+
+.weekdays div {
+  text-align: center;
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 1.5px; text-transform: uppercase;
+  color: var(--hero-text-subtle); padding: 8px 0;
+}
+
+.calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+
+.day-cell {
+  background: var(--hero-bg-card);
+  border: 1px solid var(--hero-border-card);
+  border-radius: var(--hero-radius-card);
+  min-height: 108px;
+  padding: 10px 8px 8px;
+  transition: border-color 0.2s;
+}
+
+.day-cell:hover { border-color: var(--hero-primary); }
+
+.day-cell.empty {
+  background: transparent; border-color: transparent;
+  pointer-events: none;
+}
+
+.day-cell.today {
+  border-color: var(--hero-primary);
+  background: #f0fbfd;
+}
+
+.day-num {
+  font-size: 13px; font-weight: 700;
+  color: var(--hero-text-subtle);
+  margin-bottom: 5px; display: block;
+}
+
+.day-cell.today .day-num {
+  background: var(--hero-primary); color: #fff;
+  width: 24px; height: 24px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; margin-bottom: 5px;
+}
+
+.event-pill {
+  display: block; width: 100%;
+  border-radius: 5px;
+  padding: 3px 7px;
+  font-family: var(--hero-font);
+  font-weight: 700; font-size: 11px;
+  line-height: 1.4; margin-bottom: 3px;
+  cursor: pointer; border: none; text-align: left;
+  transition: filter 0.15s, transform 0.15s;
+}
+
+.event-pill:hover { filter: brightness(0.93); transform: scale(1.01); }
+
+.event-pill.aca      { background: #d6f2f5; color: #05788a; border-left: 3px solid var(--cat-aca); }
+.event-pill.medicare { background: #dde8fd; color: #0045b0; border-left: 3px solid var(--cat-medicare); }
+.event-pill.supp     { background: #d5f5e3; color: #1a7a44; border-left: 3px solid var(--cat-supp); }
+.event-pill.life     { background: #fde8d3; color: #a04000; border-left: 3px solid var(--cat-life); }
+.event-pill.hidden   { display: none; }
+
+/* SKELETON */
+.skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 5px; height: 18px; margin-bottom: 4px;
+}
+@keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+
+/* ============================================================
+   UPCOMING STRIP
+   ============================================================ */
+.upcoming-strip {
+  margin: 0 40px 40px;
+  background: var(--hero-bg-card);
+  border: 1px solid var(--hero-border-card);
+  border-radius: var(--hero-radius-card);
+  padding: 20px 24px;
+}
+
+.upcoming-strip h3 {
+  font-size: 10px; font-weight: 700;
+  letter-spacing: 1.5px; text-transform: uppercase;
+  color: var(--hero-primary); margin-bottom: 14px;
+}
+
+.upcoming-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 10px;
+}
+
+.upcoming-card {
+  background: var(--hero-bg-preview);
+  border: 1px solid var(--hero-border-card);
+  border-radius: var(--hero-radius-btn);
+  padding: 12px 14px;
+  border-left: 3px solid var(--cat-aca);
+  cursor: pointer;
+  transition: var(--hero-transition);
+}
+
+.upcoming-card:hover { background: var(--hero-primary-light); border-color: var(--hero-primary); }
+.upcoming-card.medicare { border-left-color: var(--cat-medicare); }
+.upcoming-card.supp     { border-left-color: var(--cat-supp); }
+.upcoming-card.life     { border-left-color: var(--cat-life); }
+
+.uc-date  { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--hero-text-subtle); margin-bottom: 3px; }
+.uc-title { font-size: 13px; font-weight: 700; color: var(--hero-text-primary); line-height: 1.3; }
+.uc-time  { font-size: 11px; color: var(--hero-text-muted); margin-top: 3px; }
+
+/* ============================================================
+   MODAL
+   ============================================================ */
+.modal-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,0.35);
+  z-index: 500; backdrop-filter: blur(3px);
+  align-items: center; justify-content: center; padding: 20px;
+}
+.modal-overlay.open { display: flex; }
+
+.modal {
+  background: var(--hero-bg-card);
+  border: 1px solid var(--hero-border-card);
+  border-radius: var(--hero-radius-card);
+  padding: 32px;
+  max-width: 440px; width: 100%;
+  position: relative;
+  animation: modalIn 0.22s ease;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.12);
+}
+
+@keyframes modalIn { from{opacity:0;transform:scale(0.94) translateY(8px)} to{opacity:1;transform:scale(1) translateY(0)} }
+
+.modal-close {
+  position: absolute; top: 14px; right: 16px;
+  background: none; border: none;
+  color: var(--hero-text-subtle);
+  font-size: 1.3rem; cursor: pointer; transition: color 0.2s;
+}
+.modal-close:hover { color: var(--hero-text-primary); }
+
+.modal-type-badge {
+  display: inline-block;
+  padding: 3px 12px;
+  border-radius: var(--hero-radius-pill);
+  font-size: 10px; font-weight: 700;
+  letter-spacing: 1.5px; text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.modal-type-badge.aca      { background: #d6f2f5; color: #05788a; }
+.modal-type-badge.medicare { background: #dde8fd; color: #0045b0; }
+.modal-type-badge.supp     { background: #d5f5e3; color: #1a7a44; }
+.modal-type-badge.life     { background: #fde8d3; color: #a04000; }
+
+.modal h2 {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 900; font-size: 1.6rem;
+  text-transform: uppercase; letter-spacing: -0.5px;
+  color: var(--hero-text-primary);
+  margin-bottom: 14px; line-height: 1.1;
+}
+
+.modal-meta { display: flex; flex-direction: column; gap: 7px; margin-bottom: 16px; }
+
+.modal-meta span {
+  font-size: 13px; color: var(--hero-text-body);
+  display: flex; align-items: flex-start; gap: 8px;
+}
+
+.modal-meta span i { font-style: normal; flex-shrink: 0; }
+
+.modal-desc {
+  font-size: 13px; color: var(--hero-text-muted);
+  line-height: 1.65;
+  border-top: 1px solid var(--hero-border-card);
+  padding-top: 14px;
+}
+
+.modal-link-btn {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  margin-top: 16px;
+  background: var(--hero-primary); color: #fff;
+  font-family: var(--hero-font);
+  font-weight: 700; font-size: 14px;
+  padding: 12px 24px; border-radius: var(--hero-radius-btn);
+  text-decoration: none; border: none; cursor: pointer;
+  transition: var(--hero-transition);
+  width: 100%;
+}
+.modal-link-btn:hover { background: var(--hero-primary-hover); transform: translateY(-1px); }
+.modal-link-btn.hidden { display: none; }
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 700px) {
+  .topbar, .page-banner, .controls, .filters, .legend, .calendar-wrap, .upcoming-strip, .error-banner { padding-left: 16px; padding-right: 16px; }
+  .day-cell { min-height: 72px; padding: 6px 4px; }
+  .event-pill { font-size: 10px; padding: 2px 4px; }
+  .day-num { font-size: 11px; }
+  #month-label { font-size: 1.2rem; min-width: 160px; }
+  .topbar-title { display: none; }
+}
 </style>
 </head>
 <body>
 
-<header>
-  <div class="logo-text">HERO <span>INSURANCE</span></div>
-  <div class="header-tag">Training Calendar</div>
-</header>
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="topbar-logo">
+    HERO <span>INSURANCE</span>
+  </div>
+  <div class="topbar-right">
+    <div class="topbar-title">Training Calendar</div>
+  </div>
+</div>
 
-<div class="hero">
-  <h1>CALENDARIO DE<br><em>ENTRENAMIENTOS</em></h1>
-  <p>Capacitaciones internas y webinars para todo el equipo Hero Insurance.</p>
+<!-- BANNER -->
+<div class="page-banner">
+  <div class="banner-text">
+    <div class="hero-tag">Hero Insurance USA</div>
+    <h1>TRAINING <em>CALENDAR</em></h1>
+    <p>Capacitaciones y sesiones en vivo para el equipo Hero.</p>
+  </div>
   <div class="sync-bar">
     <div class="sync-dot loading" id="sync-dot"></div>
     <span id="sync-label">Cargando desde Google Sheets...</span>
   </div>
 </div>
 
+<!-- CONTROLS -->
 <div class="controls">
   <div class="month-nav">
     <button id="prev-btn">&#8249;</button>
     <div id="month-label"></div>
     <button id="next-btn">&#8250;</button>
   </div>
-  <div class="filters">
-    <button class="filter-btn all active" data-filter="all">Todos</button>
-    <button class="filter-btn aca"      data-filter="aca">ACA</button>
-    <button class="filter-btn medicare" data-filter="medicare">Medicare</button>
-    <button class="filter-btn supp"     data-filter="supp">Supp</button>
-    <button class="filter-btn life"     data-filter="life">Life</button>
+  <div class="controls-right">
+    <button class="refresh-btn" id="refresh-btn">↻ Actualizar</button>
   </div>
 </div>
 
+<!-- FILTERS -->
+<div class="filters">
+  <button class="filter-btn all active" data-filter="all">Todos</button>
+  <button class="filter-btn aca"      data-filter="aca">ACA</button>
+  <button class="filter-btn medicare" data-filter="medicare">Medicare</button>
+  <button class="filter-btn supp"     data-filter="supp">Supp</button>
+  <button class="filter-btn life"     data-filter="life">Life</button>
+</div>
+
+<!-- LEGEND -->
 <div class="legend">
-  <div class="legend-left">
-    <div class="legend-item"><div class="legend-dot aca"></div> ACA</div>
-    <div class="legend-item"><div class="legend-dot medicare"></div> Medicare</div>
-    <div class="legend-item"><div class="legend-dot supp"></div> Supplemental</div>
-    <div class="legend-item"><div class="legend-dot life"></div> Life</div>
-  </div>
-  <button class="refresh-btn" id="refresh-btn">↻ Actualizar</button>
+  <div class="legend-item"><div class="legend-dot aca"></div> ACA</div>
+  <div class="legend-item"><div class="legend-dot medicare"></div> Medicare</div>
+  <div class="legend-item"><div class="legend-dot supp"></div> Supplemental</div>
+  <div class="legend-item"><div class="legend-dot life"></div> Life</div>
 </div>
 
+<!-- ERROR -->
 <div class="error-banner" id="error-banner">
   ⚠️ No se pudo conectar con Google Sheets. Verifica que el Apps Script esté publicado y con acceso público.
 </div>
 
+<!-- CALENDAR -->
 <div class="calendar-wrap">
   <div class="weekdays">
     <div>Dom</div><div>Lun</div><div>Mar</div><div>Mié</div><div>Jue</div><div>Vie</div><div>Sáb</div>
@@ -218,11 +538,13 @@
   <div class="calendar-grid" id="calendar-grid"></div>
 </div>
 
+<!-- UPCOMING -->
 <div class="upcoming-strip">
   <h3>⚡ Próximos Eventos</h3>
   <div class="upcoming-list" id="upcoming-list"></div>
 </div>
 
+<!-- MODAL -->
 <div class="modal-overlay" id="modal-overlay">
   <div class="modal">
     <button class="modal-close" id="modal-close">×</button>
@@ -243,18 +565,101 @@
 
 <script>
   const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbxoOpBZQllJAtCxpNShPLdrf-xkP4AqcoG1z-vUjQIpmNSM7hewAw6vSP4BY_D5YHVUwg/exec';
-  const MONTHS_ES = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+  const MONTHS_ES  = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
 
   let EVENTS = [];
-  let currentYear = new Date().getFullYear();
+  let currentYear  = new Date().getFullYear();
   let currentMonth = new Date().getMonth();
   let activeFilter = 'all';
 
+  // ── TIMEZONE ──────────────────────────────────────────
+  const TZ_ABBR = {
+    'EST':'America/New_York','EDT':'America/New_York',
+    'CST':'America/Chicago','CDT':'America/Chicago',
+    'MST':'America/Denver','MDT':'America/Denver',
+    'PST':'America/Los_Angeles','PDT':'America/Los_Angeles',
+    'HST':'Pacific/Honolulu',
+    'COT':'America/Bogota','PET':'America/Lima',
+    'VET':'America/Caracas','ART':'America/Argentina/Buenos_Aires',
+    'BRT':'America/Sao_Paulo','CLT':'America/Santiago',
+    'CET':'Europe/Madrid','GMT':'Europe/London','UTC':'UTC',
+  };
+
+  const TZ_LABELS = {
+    'America/New_York':'ET (Nueva York)','America/Chicago':'CT (Chicago)',
+    'America/Denver':'MT (Denver)','America/Los_Angeles':'PT (Los Ángeles)',
+    'America/Bogota':'COT (Bogotá)','America/Lima':'PET (Lima)',
+    'America/Caracas':'VET (Caracas)','America/Sao_Paulo':'BRT (São Paulo)',
+    'America/Santiago':'CLT (Santiago)','Europe/Madrid':'CET (Madrid)',
+    'Europe/London':'GMT (Londres)','Pacific/Honolulu':'HST (Hawái)',
+  };
+
+  function resolveTimezone(tz) {
+    if (!tz) return '';
+    const upper = tz.trim().toUpperCase();
+    return TZ_ABBR[upper] || tz.trim();
+  }
+
+  function getTZLabel(iana) { return TZ_LABELS[iana] || iana; }
+
+  function convertToMiami(timeStr, dateStr, fromTZ) {
+    if (!timeStr || !fromTZ) return null;
+    try {
+      const parts = timeStr.split('–').map(s => s.trim());
+      const converted = parts.map(part => {
+        const match = part.match(/(\d{1,2}):(\d{2})\s*(AM|PM)/i);
+        if (!match) return null;
+        let [, h, m, mer] = match;
+        h = parseInt(h); m = parseInt(m);
+        if (mer.toUpperCase() === 'PM' && h !== 12) h += 12;
+        if (mer.toUpperCase() === 'AM' && h === 12) h = 0;
+        const isoStr = `${dateStr}T${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:00`;
+        const srcDate = new Date(new Date(isoStr).toLocaleString('en-US', { timeZone: fromTZ }));
+        const diff = new Date(isoStr) - srcDate;
+        const miamiStr = new Date(new Date(isoStr).getTime() + diff).toLocaleString('en-US', {
+          timeZone: 'America/New_York', hour: 'numeric', minute: '2-digit', hour12: true
+        });
+        return miamiStr;
+      });
+      if (converted.includes(null)) return null;
+      return converted.join(' – ');
+    } catch(e) { return null; }
+  }
+
+  // ── SYNC STATUS ──────────────────────────────────────
   function setSyncStatus(state, text) {
     document.getElementById('sync-dot').className = 'sync-dot ' + state;
     document.getElementById('sync-label').textContent = text;
   }
 
+  // ── FETCH ─────────────────────────────────────────────
+  async function loadEvents() {
+    setSyncStatus('loading', 'Cargando desde Google Sheets...');
+    renderSkeletons();
+    try {
+      const res = await fetch(SHEETS_URL);
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const data = await res.json();
+      EVENTS = data.map(row => ({
+        date:       String(row.date       || '').trim(),
+        title:      String(row.title      || '').trim(),
+        type:       String(row.type       || 'aca').trim().toLowerCase(),
+        time:       String(row.time       || '').trim(),
+        instructor: String(row.instructor || '').trim(),
+        desc:       String(row.desc       || '').trim(),
+        link:       String(row.link       || '').trim(),
+        timezone:   String(row.timezone   || '').trim(),
+      })).filter(e => e.date && e.title);
+      setSyncStatus('ok', `Sincronizado · ${EVENTS.length} evento${EVENTS.length !== 1 ? 's' : ''}`);
+      document.getElementById('error-banner').classList.remove('show');
+    } catch(err) {
+      setSyncStatus('error', 'Error al conectar con Sheets');
+      document.getElementById('error-banner').classList.add('show');
+    }
+    renderCalendar();
+  }
+
+  // ── NORMALIZE DATE ────────────────────────────────────
   function normalizeDate(val) {
     if (!val) return '';
     const s = String(val).trim();
@@ -264,76 +669,42 @@
     return s;
   }
 
-  async function loadEvents() {
-    setSyncStatus('loading', 'Cargando desde Google Sheets...');
-    renderSkeletons();
-    try {
-      const res = await fetch(SHEETS_URL);
-      if (!res.ok) throw new Error('HTTP ' + res.status);
-      const data = await res.json();
-      EVENTS = data
-        .map(row => ({
-          date:       String(row.date || '').trim(),
-          title:      String(row.title || '').trim(),
-          type:       String(row.type || 'cap').trim().toLowerCase(),
-          time:       String(row.time || '').trim(),
-          instructor: String(row.instructor || '').trim(),
-          desc:       String(row.desc || '').trim(),
-          link:       String(row.link || '').trim(),
-          timezone:   String(row.timezone || '').trim(),
-        }))
-        .filter(e => e.date && e.title);
-      setSyncStatus('ok', `Sincronizado · ${EVENTS.length} evento${EVENTS.length !== 1 ? 's' : ''}`);
-      document.getElementById('error-banner').classList.remove('show');
-    } catch (err) {
-      setSyncStatus('error', 'Error al conectar con Sheets');
-      document.getElementById('error-banner').classList.add('show');
-    }
-    renderCalendar();
-  }
-
+  // ── SKELETON ─────────────────────────────────────────
   function renderSkeletons() {
     const grid = document.getElementById('calendar-grid');
     grid.innerHTML = '';
     document.getElementById('month-label').textContent = `${MONTHS_ES[currentMonth]} ${currentYear}`;
-    const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+    const firstDay    = new Date(currentYear, currentMonth, 1).getDay();
     const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-    for (let i = 0; i < firstDay; i++) {
-      const el = document.createElement('div'); el.className = 'day-cell empty'; grid.appendChild(el);
-    }
+    for (let i = 0; i < firstDay; i++) { const el = document.createElement('div'); el.className = 'day-cell empty'; grid.appendChild(el); }
     for (let d = 1; d <= daysInMonth; d++) {
-      const cell = document.createElement('div');
-      cell.className = 'day-cell';
-      cell.innerHTML = `<span class="day-num">${d}</span><div class="skeleton" style="width:80%"></div>`;
+      const cell = document.createElement('div'); cell.className = 'day-cell';
+      cell.innerHTML = `<span class="day-num">${d}</span><div class="skeleton" style="width:75%"></div>`;
       grid.appendChild(cell);
     }
   }
 
-  function getEventsForDate(dateStr) {
-    return EVENTS.filter(e => normalizeDate(e.date) === dateStr);
-  }
-
+  // ── CALENDAR ──────────────────────────────────────────
   function renderCalendar() {
     const grid = document.getElementById('calendar-grid');
     grid.innerHTML = '';
     document.getElementById('month-label').textContent = `${MONTHS_ES[currentMonth]} ${currentYear}`;
-    const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+    const firstDay    = new Date(currentYear, currentMonth, 1).getDay();
     const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-    const today = new Date();
+    const today       = new Date();
 
-    for (let i = 0; i < firstDay; i++) {
-      const el = document.createElement('div'); el.className = 'day-cell empty'; grid.appendChild(el);
-    }
+    for (let i = 0; i < firstDay; i++) { const el = document.createElement('div'); el.className = 'day-cell empty'; grid.appendChild(el); }
+
     for (let d = 1; d <= daysInMonth; d++) {
-      const cell = document.createElement('div');
       const isToday = today.getDate() === d && today.getMonth() === currentMonth && today.getFullYear() === currentYear;
+      const cell    = document.createElement('div');
       cell.className = 'day-cell' + (isToday ? ' today' : '');
-      const dateStr = `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-      const events = getEventsForDate(dateStr);
-      const numEl = document.createElement('span');
-      numEl.className = 'day-num';
-      numEl.textContent = d;
+      const dateStr  = `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+      const events   = EVENTS.filter(e => normalizeDate(e.date) === dateStr);
+
+      const numEl = document.createElement('span'); numEl.className = 'day-num'; numEl.textContent = d;
       cell.appendChild(numEl);
+
       events.forEach(ev => {
         const pill = document.createElement('button');
         pill.className = `event-pill ${ev.type}${activeFilter !== 'all' && activeFilter !== ev.type ? ' hidden' : ''}`;
@@ -346,21 +717,18 @@
     renderUpcoming();
   }
 
+  // ── UPCOMING ──────────────────────────────────────────
   function renderUpcoming() {
     const list = document.getElementById('upcoming-list');
     list.innerHTML = '';
     const now = new Date(); now.setHours(0,0,0,0);
     const upcoming = EVENTS
-      .filter(e => {
-        const d = new Date(normalizeDate(e.date) + 'T00:00:00');
-        return d >= now && (activeFilter === 'all' || e.type === activeFilter);
-      })
+      .filter(e => { const d = new Date(normalizeDate(e.date)+'T00:00:00'); return d >= now && (activeFilter === 'all' || e.type === activeFilter); })
       .sort((a,b) => normalizeDate(a.date).localeCompare(normalizeDate(b.date)))
       .slice(0, 6);
-    if (!upcoming.length) {
-      list.innerHTML = '<p style="color:rgba(255,255,255,0.3);font-size:0.9rem;">No hay eventos próximos.</p>';
-      return;
-    }
+
+    if (!upcoming.length) { list.innerHTML = '<p style="font-size:13px;color:var(--hero-text-subtle);">No hay eventos próximos.</p>'; return; }
+
     upcoming.forEach(ev => {
       const [y,m,d] = normalizeDate(ev.date).split('-');
       const card = document.createElement('div');
@@ -371,125 +739,40 @@
     });
   }
 
-  // ── TIMEZONE CONVERSION ───────────────────────────────
-  const TZ_ABBR = {
-    'EST': 'America/New_York',
-    'EDT': 'America/New_York',
-    'CST': 'America/Chicago',
-    'CDT': 'America/Chicago',
-    'MST': 'America/Denver',
-    'MDT': 'America/Denver',
-    'PST': 'America/Los_Angeles',
-    'PDT': 'America/Los_Angeles',
-    'HST': 'Pacific/Honolulu',
-    'COT': 'America/Bogota',
-    'PET': 'America/Lima',
-    'VET': 'America/Caracas',
-    'ART': 'America/Argentina/Buenos_Aires',
-    'BRT': 'America/Sao_Paulo',
-    'CLT': 'America/Santiago',
-    'CET': 'Europe/Madrid',
-    'GMT': 'Europe/London',
-    'UTC': 'UTC',
-  };
-
-  function resolveTimezone(tz) {
-    if (!tz) return '';
-    const upper = tz.trim().toUpperCase();
-    return TZ_ABBR[upper] || tz.trim();
-  }
-
-  function convertToMiami(timeStr, dateStr, fromTZ) {
-    if (!timeStr || !fromTZ) return null;
-    try {
-      // Parse "10:00 AM" or "10:00 AM – 12:00 PM"
-      const parts = timeStr.split('–').map(s => s.trim());
-      const converted = parts.map(part => {
-        const match = part.match(/(\d{1,2}):(\d{2})\s*(AM|PM)/i);
-        if (!match) return null;
-        let [, h, m, meridiem] = match;
-        h = parseInt(h); m = parseInt(m);
-        if (meridiem.toUpperCase() === 'PM' && h !== 12) h += 12;
-        if (meridiem.toUpperCase() === 'AM' && h === 12) h = 0;
-
-        // Build a date string in the source timezone
-        const isoStr = `${dateStr}T${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:00`;
-
-        // Get the UTC offset for both timezones at that moment
-        const srcDate = new Date(new Date(isoStr).toLocaleString('en-US', { timeZone: fromTZ }));
-        const refDate = new Date(isoStr);
-        const diff = refDate - srcDate; // ms offset
-
-        // Create date in source TZ and convert to Miami
-        const srcMs = new Date(isoStr + '').getTime() + diff;
-        const miamiStr = new Date(srcMs).toLocaleString('en-US', {
-          timeZone: 'America/New_York',
-          hour: 'numeric', minute: '2-digit', hour12: true
-        });
-        return miamiStr;
-      });
-
-      if (converted.includes(null)) return null;
-      return converted.join(' – ');
-    } catch(e) {
-      return null;
-    }
-  }
-
-  function getTZLabel(tz) {
-    const labels = {
-      'America/New_York':    'ET (Nueva York)',
-      'America/Chicago':     'CT (Chicago)',
-      'America/Denver':      'MT (Denver)',
-      'America/Los_Angeles': 'PT (Los Ángeles)',
-      'America/Bogota':      'COT (Bogotá)',
-      'America/Lima':        'PET (Lima)',
-      'America/Caracas':     'VET (Caracas)',
-      'America/Santiago':    'CLT (Santiago)',
-      'America/Sao_Paulo':   'BRT (São Paulo)',
-      'Europe/Madrid':       'CET (Madrid)',
-      'Europe/London':       'GMT (Londres)',
-      'Pacific/Honolulu':    'HST (Hawái)',
-    };
-    return labels[tz] || tz;
-  }
+  // ── MODAL ─────────────────────────────────────────────
+  const TYPE_LABELS = { aca: 'ACA', medicare: 'Medicare', supp: 'Supplemental', life: 'Life Insurance' };
 
   function openModal(ev) {
     const [y,m,d] = normalizeDate(ev.date).split('-');
-    const TYPE_LABELS = { aca: 'ACA', medicare: 'Medicare', supp: 'Supplemental', life: 'Life Insurance' };
-    document.getElementById('modal-badge').textContent = TYPE_LABELS[ev.type] || ev.type.toUpperCase();
-    document.getElementById('modal-badge').className = `modal-type-badge ${ev.type}`;
-    document.getElementById('modal-title').textContent = ev.title;
-    document.getElementById('modal-date').textContent = `${d} de ${MONTHS_ES[parseInt(m)-1]} ${y}`;
-    // Time display
+    document.getElementById('modal-badge').textContent  = TYPE_LABELS[ev.type] || ev.type.toUpperCase();
+    document.getElementById('modal-badge').className    = `modal-type-badge ${ev.type}`;
+    document.getElementById('modal-title').textContent  = ev.title;
+    document.getElementById('modal-date').textContent   = `${d} de ${MONTHS_ES[parseInt(m)-1]} ${y}`;
+    document.getElementById('modal-instructor').textContent = ev.instructor;
+    document.getElementById('modal-desc').textContent   = ev.desc;
+
+    // Time + timezone
     const convertedRow = document.getElementById('modal-time-converted-row');
-    if (ev.timezone && ev.timezone.toUpperCase() !== 'EST' && ev.timezone !== 'America/New_York') {
-      const ianaZone = resolveTimezone(ev.timezone);
+    const ianaZone     = resolveTimezone(ev.timezone);
+    const isEastern    = !ev.timezone || ev.timezone.toUpperCase() === 'EST' || ev.timezone.toUpperCase() === 'EDT' || ianaZone === 'America/New_York';
+
+    if (!isEastern && ianaZone) {
       const converted = convertToMiami(ev.time, normalizeDate(ev.date), ianaZone);
-      document.getElementById('modal-time').innerHTML =
-        `${ev.time} <small style="opacity:0.5;font-size:0.8em;">${getTZLabel(ianaZone)}</small>`;
+      document.getElementById('modal-time').innerHTML = `${ev.time} <small style="color:var(--hero-text-subtle);font-size:0.85em;">${getTZLabel(ianaZone)}</small>`;
       if (converted) {
-        document.getElementById('modal-time-converted').innerHTML =
-          `${converted} <small style="opacity:0.5;font-size:0.8em;">EST (Miami, UTC-4)</small>`;
+        document.getElementById('modal-time-converted').innerHTML = `${converted} <small style="color:var(--hero-text-subtle);font-size:0.85em;">EST (Miami, UTC-4)</small>`;
         convertedRow.style.display = 'flex';
-      } else {
-        convertedRow.style.display = 'none';
-      }
+      } else { convertedRow.style.display = 'none'; }
     } else {
-      document.getElementById('modal-time').innerHTML =
-        `${ev.time} <small style="opacity:0.5;font-size:0.8em;">EST (Miami, UTC-4)</small>`;
+      document.getElementById('modal-time').innerHTML = `${ev.time} <small style="color:var(--hero-text-subtle);font-size:0.85em;">EST (Miami, UTC-4)</small>`;
       convertedRow.style.display = 'none';
     }
-    document.getElementById('modal-instructor').textContent = ev.instructor;
-    document.getElementById('modal-desc').textContent = ev.desc;
+
+    // Link
     const linkBtn = document.getElementById('modal-link');
-    if (ev.link) {
-      linkBtn.href = ev.link;
-      linkBtn.classList.remove('hidden');
-    } else {
-      linkBtn.href = '#';
-      linkBtn.classList.add('hidden');
-    }
+    if (ev.link) { linkBtn.href = ev.link; linkBtn.classList.remove('hidden'); }
+    else         { linkBtn.href = '#';     linkBtn.classList.add('hidden'); }
+
     document.getElementById('modal-overlay').classList.add('open');
   }
 
