@@ -130,7 +130,7 @@ body { font-family: var(--hero-font); background: var(--hero-bg-page); color: va
 .weekdays { display: grid; grid-template-columns: repeat(7, 1fr); margin-bottom: 6px; gap: 4px; }
 .weekdays div { text-align: center; font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--hero-text-subtle); padding: 8px 0; }
 .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
-.day-cell { background: var(--hero-bg-card); border: 1px solid var(--hero-border-card); border-radius: var(--hero-radius-card); min-height: 108px; padding: 10px 8px 8px; transition: border-color 0.2s; }
+.day-cell { background: var(--hero-bg-card); border: 1px solid var(--hero-border-card); border-radius: var(--hero-radius-card); min-height: 120px; padding: 10px 8px 8px; transition: border-color 0.2s; }
 .day-cell:hover { border-color: var(--hero-primary); }
 .day-cell.empty { background: transparent; border-color: transparent; pointer-events: none; }
 .day-cell.today { border-color: var(--hero-primary); background: #f0fbfd; }
@@ -144,6 +144,7 @@ body { font-family: var(--hero-font); background: var(--hero-bg-page); color: va
 .event-pill.supp     { background: #d5f5e3; color: #1a7a44; border-left: 3px solid var(--cat-supp); }
 .event-pill.life     { background: #fde8d3; color: #a04000; border-left: 3px solid var(--cat-life); }
 .event-pill.hidden   { display: none; }
+.pill-time { display: block; font-size: 10px; font-weight: 400; opacity: 0.75; margin-top: 1px; }
 
 /* Language badge on pill */
 .pill-lang {
@@ -212,6 +213,7 @@ body { font-family: var(--hero-font); background: var(--hero-bg-page); color: va
   .topbar, .page-banner, .controls, .filters, .legend, .calendar-wrap, .upcoming-strip, .error-banner { padding-left: 16px; padding-right: 16px; }
   .day-cell { min-height: 72px; padding: 6px 4px; }
   .event-pill { font-size: 10px; padding: 2px 4px; }
+  .pill-time { display: none; }
   .day-num { font-size: 11px; }
   #month-label { font-size: 1.2rem; min-width: 160px; }
   .topbar-title { display: none; }
@@ -547,7 +549,7 @@ body { font-family: var(--hero-font); background: var(--hero-bg-page); color: va
       events.forEach(ev => {
         const pill = document.createElement('button');
         pill.className = `event-pill ${ev.type}${activeFilter !== 'all' && activeFilter !== ev.type ? ' hidden' : ''}`;
-        pill.innerHTML = ev.title + langBadgeHTML(ev.lang);
+        pill.innerHTML = ev.title + langBadgeHTML(ev.lang) + (ev.time ? `<span class="pill-time">${ev.time}</span>` : '');
         pill.addEventListener('click', () => openModal(ev));
         cell.appendChild(pill);
       });
