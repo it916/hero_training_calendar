@@ -208,22 +208,52 @@ body { font-family: var(--hero-font); background: var(--hero-bg-page); color: va
 .modal-link-btn:hover { background: var(--hero-primary-hover); transform: translateY(-1px); }
 .modal-link-btn.hidden { display: none; }
 
-.modal-reminder-btn {
+/* CALENDAR PICKER */
+.cal-picker { position: relative; margin-top: 10px; width: 100%; }
+
+.cal-picker-btn {
   display: flex; align-items: center; justify-content: center; gap: 8px;
-  margin-top: 10px;
-  background: transparent;
-  color: var(--hero-primary);
-  font-family: var(--hero-font);
-  font-weight: 700; font-size: 14px;
-  padding: 11px 24px;
-  border-radius: var(--hero-radius-btn);
-  border: 1.5px solid var(--hero-primary);
-  cursor: pointer;
-  transition: var(--hero-transition);
-  width: 100%;
-  text-decoration: none;
+  width: 100%; padding: 11px 24px;
+  background: transparent; color: var(--hero-primary);
+  font-family: var(--hero-font); font-weight: 700; font-size: 14px;
+  border: 1.5px solid var(--hero-primary); border-radius: var(--hero-radius-btn);
+  cursor: pointer; transition: var(--hero-transition);
 }
-.modal-reminder-btn:hover { background: var(--hero-primary-light); transform: translateY(-1px); }
+.cal-picker-btn:hover { background: var(--hero-primary-light); }
+.cal-picker-btn .arrow { font-size: 10px; margin-left: auto; transition: transform 0.2s; }
+.cal-picker-btn.open .arrow { transform: rotate(180deg); }
+
+.cal-dropdown {
+  display: none;
+  flex-direction: column;
+  position: absolute; bottom: calc(100% + 6px); left: 0; right: 0;
+  background: var(--hero-bg-card);
+  border: 1px solid var(--hero-border-card);
+  border-radius: var(--hero-radius-card);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  overflow: hidden; z-index: 10;
+  animation: dropUp 0.18s ease;
+}
+.cal-dropdown.open { display: flex; }
+@keyframes dropUp { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
+
+.cal-option {
+  display: flex; align-items: center; gap: 12px;
+  padding: 13px 18px;
+  font-family: var(--hero-font); font-size: 13px; font-weight: 600;
+  color: var(--hero-text-body);
+  text-decoration: none; border: none; background: none;
+  cursor: pointer; transition: background 0.15s;
+  border-bottom: 1px solid var(--hero-border-card);
+}
+.cal-option:last-child { border-bottom: none; }
+.cal-option:hover { background: var(--hero-bg-preview); }
+.cal-option-icon { width: 28px; height: 28px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+.cal-option-icon.google  { background: #fff3f3; }
+.cal-option-icon.apple   { background: #f5f5f5; }
+.cal-option-icon.outlook { background: #f0f4ff; }
+.cal-option-label { display: flex; flex-direction: column; }
+.cal-option-label span { font-size: 11px; color: var(--hero-text-subtle); font-weight: 400; margin-top: 1px; }
 
 /* RESPONSIVE */
 @media (max-width: 700px) {
@@ -334,9 +364,27 @@ body { font-family: var(--hero-font); background: var(--hero-bg-page); color: va
     <a class="modal-link-btn hidden" id="modal-link" target="_blank" rel="noopener">
       🔗 <span data-i18n="join-btn">Unirse al Meeting</span>
     </a>
-    <button class="modal-reminder-btn" id="modal-reminder">
-      📅 <span data-i18n="reminder-btn">Agregar al Calendario</span>
-    </button>
+
+    <div class="cal-picker" id="cal-picker">
+      <button class="cal-picker-btn" id="cal-picker-btn">
+        📅 <span data-i18n="reminder-btn">Agregar al Calendario</span>
+        <span class="arrow">▼</span>
+      </button>
+      <div class="cal-dropdown" id="cal-dropdown">
+        <a class="cal-option" id="cal-google" target="_blank" rel="noopener">
+          <div class="cal-option-icon google">📅</div>
+          <div class="cal-option-label">Google Calendar<span data-i18n="cal-opens-browser">Abre en el navegador</span></div>
+        </a>
+        <button class="cal-option" id="cal-outlook">
+          <div class="cal-option-icon outlook">📘</div>
+          <div class="cal-option-label">Outlook<span data-i18n="cal-downloads">Descarga archivo .ics</span></div>
+        </button>
+        <button class="cal-option" id="cal-apple">
+          <div class="cal-option-icon apple">🍎</div>
+          <div class="cal-option-label">Apple Calendar<span data-i18n="cal-downloads">Descarga archivo .ics</span></div>
+        </button>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -357,6 +405,8 @@ body { font-family: var(--hero-font); background: var(--hero-bg-page); color: va
       'upcoming-title':'⚡ Próximos Eventos',
       'join-btn':      'Unirse al Meeting',
       'reminder-btn':  'Agregar al Calendario',
+      'cal-opens-browser': 'Abre en el navegador',
+      'cal-downloads': 'Descarga archivo .ics',
       'sync-loading':  'Cargando desde Google Sheets...',
       'sync-ok':       'Sincronizado',
       'sync-error':    'Error al conectar con Sheets',
@@ -382,6 +432,8 @@ body { font-family: var(--hero-font); background: var(--hero-bg-page); color: va
       'upcoming-title':'⚡ Upcoming Events',
       'join-btn':      'Join Meeting',
       'reminder-btn':  'Add to Calendar',
+      'cal-opens-browser': 'Opens in browser',
+      'cal-downloads': 'Downloads .ics file',
       'sync-loading':  'Loading from Google Sheets...',
       'sync-ok':       'Synced',
       'sync-error':    'Error connecting to Sheets',
@@ -707,6 +759,32 @@ body { font-family: var(--hero-font); background: var(--hero-bg-page); color: va
     URL.revokeObjectURL(url);
   }
 
+  function generateGoogleCalendarURL(ev) {
+    const nd   = normalizeDate(ev.date);
+    const hhmm = parseTimeToHHMM(ev.time);
+    if (!hhmm) return null;
+
+    let durationHours = 1;
+    const parts = ev.time.split(/[–-]/).map(s => s.trim());
+    if (parts.length === 2) {
+      const t1 = parseTimeToHHMM(parts[0]);
+      const t2 = parseTimeToHHMM(parts[1]);
+      if (t1 && t2) {
+        let diff = (t2.h * 60 + t2.m) - (t1.h * 60 + t1.m);
+        if (diff < 0) diff += 24 * 60;
+        durationHours = diff / 60;
+      }
+    }
+
+    const { start, end } = toICSDate(nd, hhmm, durationHours);
+    const typeLabels = { aca: 'ACA', medicare: 'Medicare', supp: 'Supplemental', life: 'Life Insurance' };
+    const title    = encodeURIComponent(`${typeLabels[ev.type] || ev.type.toUpperCase()} – ${ev.title}`);
+    const details  = encodeURIComponent([ev.desc, ev.instructor ? `Instructor: ${ev.instructor}` : '', ev.link ? `Meeting: ${ev.link}` : ''].filter(Boolean).join('\n'));
+    const location = encodeURIComponent(ev.link || '');
+
+    return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${start}/${end}&details=${details}&location=${location}`;
+  }
+
   // ── MODAL ─────────────────────────────────────────────
   function openModal(ev) {
     const nd = normalizeDate(ev.date);
@@ -753,15 +831,48 @@ body { font-family: var(--hero-font); background: var(--hero-bg-page); color: va
     if (ev.link) { linkBtn.href = ev.link; linkBtn.classList.remove('hidden'); }
     else         { linkBtn.href = '#';     linkBtn.classList.add('hidden'); }
 
+    // Calendar picker
+    const pickerBtn  = document.getElementById('cal-picker-btn');
+    const dropdown   = document.getElementById('cal-dropdown');
+
+    // Reset dropdown state
+    pickerBtn.classList.remove('open');
+    dropdown.classList.remove('open');
+
+    pickerBtn.onclick = (e) => {
+      e.stopPropagation();
+      pickerBtn.classList.toggle('open');
+      dropdown.classList.toggle('open');
+    };
+
+    // Google Calendar — direct URL
+    const googleURL = generateGoogleCalendarURL(ev);
+    const googleBtn = document.getElementById('cal-google');
+    if (googleURL) { googleBtn.href = googleURL; googleBtn.style.opacity = '1'; googleBtn.style.pointerEvents = ''; }
+    else           { googleBtn.href = '#';       googleBtn.style.opacity = '0.4'; googleBtn.style.pointerEvents = 'none'; }
+
+    // Outlook & Apple — ICS download
+    document.getElementById('cal-outlook').onclick = () => { downloadICS(ev); dropdown.classList.remove('open'); pickerBtn.classList.remove('open'); };
+    document.getElementById('cal-apple').onclick   = () => { downloadICS(ev); dropdown.classList.remove('open'); pickerBtn.classList.remove('open'); };
+
     // Reminder button
-    document.getElementById('modal-reminder').onclick = () => downloadICS(ev);
+    document.getElementById('modal-reminder') && (document.getElementById('modal-reminder').onclick = () => downloadICS(ev));
 
     document.getElementById('modal-overlay').classList.add('open');
   }
 
   // ── EVENTS ───────────────────────────────────────────
-  document.getElementById('modal-close').addEventListener('click', () => document.getElementById('modal-overlay').classList.remove('open'));
-  document.getElementById('modal-overlay').addEventListener('click', e => { if (e.target === document.getElementById('modal-overlay')) document.getElementById('modal-overlay').classList.remove('open'); });
+  document.getElementById('modal-close').addEventListener('click', () => {
+    document.getElementById('modal-overlay').classList.remove('open');
+    document.getElementById('cal-dropdown').classList.remove('open');
+    document.getElementById('cal-picker-btn').classList.remove('open');
+  });
+  document.getElementById('modal-overlay').addEventListener('click', e => {
+    // Close dropdown if open
+    const dropdown = document.getElementById('cal-dropdown');
+    if (dropdown.classList.contains('open')) { dropdown.classList.remove('open'); document.getElementById('cal-picker-btn').classList.remove('open'); return; }
+    if (e.target === document.getElementById('modal-overlay')) document.getElementById('modal-overlay').classList.remove('open');
+  });
   document.getElementById('prev-btn').addEventListener('click', () => { currentMonth--; if (currentMonth < 0) { currentMonth = 11; currentYear--; } renderCalendar(); });
   document.getElementById('next-btn').addEventListener('click', () => { currentMonth++; if (currentMonth > 11) { currentMonth = 0; currentYear++; } renderCalendar(); });
   document.querySelectorAll('.filter-btn').forEach(btn => {
