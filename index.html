@@ -56,30 +56,18 @@ body {
    TOPBAR
    ============================================================ */
 .topbar {
-  background: var(--hero-bg-card);
-  border-bottom: 1px solid var(--hero-border-topbar);
+  background: #1a1a1a;
+  border-bottom: 3px solid var(--hero-primary);
   height: 66px;
   display: flex; align-items: center;
   padding: 0 40px;
   position: sticky; top: 0; z-index: 100;
 }
 
-.topbar-logo {
-  font-size: 22px; font-weight: 700;
-  color: var(--hero-primary);
-  letter-spacing: -0.5px;
-  display: flex; align-items: center; gap: 6px;
-}
-
-.topbar-logo span {
-  background: var(--hero-primary);
-  color: #fff;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  padding: 3px 8px;
-  border-radius: 4px;
+.topbar-logo img {
+  height: 44px;
+  width: auto;
+  display: block;
 }
 
 .topbar-right {
@@ -90,7 +78,7 @@ body {
 .topbar-title {
   font-size: 11px; font-weight: 700;
   letter-spacing: 1.5px; text-transform: uppercase;
-  color: var(--hero-text-muted);
+  color: rgba(255,255,255,0.5);
 }
 
 /* ============================================================
@@ -476,7 +464,7 @@ body {
 <!-- TOPBAR -->
 <div class="topbar">
   <div class="topbar-logo">
-    HERO <span>INSURANCE</span>
+    <img src="Nuevo-Logo-Rectangular-Compress.png" alt="Hero Insurance">
   </div>
   <div class="topbar-right">
     <div class="topbar-title">Training Calendar</div>
