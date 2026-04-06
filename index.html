@@ -4,12 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Hero Insurance – Training Calendar</title>
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Trebuchet+MS&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&display=swap" rel="stylesheet">
 <style>
-
-/* ============================================================
-   HERO INSURANCE — BRAND VARIABLES
-   ============================================================ */
 :root {
   --hero-primary:        #06a3b6;
   --hero-primary-hover:  #058fa0;
@@ -34,8 +30,6 @@
   --hero-radius-btn:     8px;
   --hero-radius-pill:    20px;
   --hero-transition:     background 0.2s, transform 0.15s;
-
-  /* Calendar category colors */
   --cat-aca:      #06a3b6;
   --cat-medicare: #0065F3;
   --cat-supp:     #27ae60;
@@ -43,18 +37,9 @@
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--hero-font); background: var(--hero-bg-page); color: var(--hero-text-primary); min-height: 100vh; line-height: 1.65; }
 
-body {
-  font-family: var(--hero-font);
-  background: var(--hero-bg-page);
-  color: var(--hero-text-primary);
-  min-height: 100vh;
-  line-height: 1.65;
-}
-
-/* ============================================================
-   TOPBAR
-   ============================================================ */
+/* TOPBAR */
 .topbar {
   background: var(--hero-bg-card);
   border-bottom: 1px solid var(--hero-border-topbar);
@@ -63,27 +48,31 @@ body {
   padding: 0 40px;
   position: sticky; top: 0; z-index: 100;
 }
+.topbar-logo img { height: 44px; width: auto; display: block; }
+.topbar-right { margin-left: auto; display: flex; align-items: center; gap: 12px; }
+.topbar-title { font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--hero-text-muted); }
 
-.topbar-logo img {
-  height: 44px;
-  width: auto;
-  display: block;
+/* LANG SWITCHER */
+.lang-switcher {
+  display: flex;
+  border: 1px solid var(--hero-border-btn);
+  border-radius: var(--hero-radius-btn);
+  overflow: hidden;
 }
-
-.topbar-right {
-  margin-left: auto;
-  display: flex; align-items: center; gap: 16px;
-}
-
-.topbar-title {
+.lang-btn {
+  padding: 6px 12px;
+  font-family: var(--hero-font);
   font-size: 11px; font-weight: 700;
-  letter-spacing: 1.5px; text-transform: uppercase;
+  letter-spacing: 1px; text-transform: uppercase;
+  border: none; background: transparent;
   color: var(--hero-text-muted);
+  cursor: pointer; transition: var(--hero-transition);
 }
+.lang-btn:first-child { border-right: 1px solid var(--hero-border-btn); }
+.lang-btn.active { background: var(--hero-primary); color: #fff; }
+.lang-btn:not(.active):hover { background: var(--hero-primary-light); color: var(--hero-primary); }
 
-/* ============================================================
-   HERO BANNER
-   ============================================================ */
+/* BANNER */
 .page-banner {
   background: var(--hero-bg-card);
   border-bottom: 1px solid var(--hero-border-card);
@@ -91,133 +80,40 @@ body {
   display: flex; align-items: center; justify-content: space-between;
   flex-wrap: wrap; gap: 16px;
 }
-
-.banner-text .hero-tag {
-  font-size: 10px; font-weight: 700;
-  letter-spacing: 1.5px; text-transform: uppercase;
-  color: var(--hero-primary); margin-bottom: 6px;
-}
-
-.banner-text h1 {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-weight: 900;
-  font-size: clamp(1.8rem, 4vw, 2.6rem);
-  text-transform: uppercase;
-  letter-spacing: -1px;
-  color: var(--hero-text-primary);
-  line-height: 1;
-  margin-bottom: 6px;
-}
-
+.banner-text .hero-tag { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--hero-primary); margin-bottom: 6px; }
+.banner-text h1 { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: clamp(1.8rem, 4vw, 2.6rem); text-transform: uppercase; letter-spacing: -1px; color: var(--hero-text-primary); line-height: 1; margin-bottom: 6px; }
 .banner-text h1 em { font-style: normal; color: var(--hero-primary); }
-
 .banner-text p { font-size: 13px; color: var(--hero-text-muted); }
 
-.sync-bar {
-  display: inline-flex; align-items: center; gap: 8px;
-  background: var(--hero-bg-preview);
-  border: 1px solid var(--hero-border-card);
-  border-radius: var(--hero-radius-pill);
-  padding: 7px 16px;
-  font-size: 12px; color: var(--hero-text-muted);
-}
-
-.sync-dot {
-  width: 8px; height: 8px; border-radius: 50%;
-  background: var(--hero-text-subtle);
-  transition: background 0.3s;
-}
-
+.sync-bar { display: inline-flex; align-items: center; gap: 8px; background: var(--hero-bg-preview); border: 1px solid var(--hero-border-card); border-radius: var(--hero-radius-pill); padding: 7px 16px; font-size: 12px; color: var(--hero-text-muted); }
+.sync-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--hero-text-subtle); transition: background 0.3s; }
 .sync-dot.loading { background: #e67e22; animation: pulse 1s infinite; }
 .sync-dot.ok      { background: var(--hero-success); }
 .sync-dot.error   { background: var(--hero-error); }
 @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
-/* ============================================================
-   CONTROLS
-   ============================================================ */
-.controls {
-  padding: 20px 40px 0;
-  display: flex; align-items: center; justify-content: space-between;
-  flex-wrap: wrap; gap: 14px;
-}
-
+/* CONTROLS */
+.controls { padding: 20px 40px 0; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px; }
 .month-nav { display: flex; align-items: center; gap: 12px; }
-
-.month-nav button {
-  background: var(--hero-bg-card);
-  border: 1px solid var(--hero-border-btn);
-  color: var(--hero-text-body);
-  width: 36px; height: 36px;
-  border-radius: var(--hero-radius-btn);
-  font-size: 1.1rem;
-  cursor: pointer;
-  transition: var(--hero-transition);
-  display: flex; align-items: center; justify-content: center;
-}
-
-.month-nav button:hover {
-  background: var(--hero-primary-light);
-  border-color: var(--hero-primary);
-  color: var(--hero-primary);
-}
-
-#month-label {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-weight: 800; font-size: 1.5rem;
-  text-transform: uppercase; letter-spacing: 0.5px;
-  color: var(--hero-text-primary);
-  min-width: 200px; text-align: center;
-}
-
+.month-nav button { background: var(--hero-bg-card); border: 1px solid var(--hero-border-btn); color: var(--hero-text-body); width: 36px; height: 36px; border-radius: var(--hero-radius-btn); font-size: 1.1rem; cursor: pointer; transition: var(--hero-transition); display: flex; align-items: center; justify-content: center; }
+.month-nav button:hover { background: var(--hero-primary-light); border-color: var(--hero-primary); color: var(--hero-primary); }
+#month-label { font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 1.5rem; text-transform: uppercase; letter-spacing: 0.5px; color: var(--hero-text-primary); min-width: 200px; text-align: center; }
 .controls-right { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-
-.refresh-btn {
-  background: var(--hero-bg-card);
-  border: 1px solid var(--hero-border-btn);
-  color: var(--hero-text-muted);
-  padding: 7px 14px;
-  border-radius: var(--hero-radius-btn);
-  font-family: var(--hero-font);
-  font-size: 12px; font-weight: 700;
-  cursor: pointer; transition: var(--hero-transition);
-}
+.refresh-btn { background: var(--hero-bg-card); border: 1px solid var(--hero-border-btn); color: var(--hero-text-muted); padding: 7px 14px; border-radius: var(--hero-radius-btn); font-family: var(--hero-font); font-size: 12px; font-weight: 700; cursor: pointer; transition: var(--hero-transition); }
 .refresh-btn:hover { background: var(--hero-primary-light); border-color: var(--hero-primary); color: var(--hero-primary); }
 
-/* ============================================================
-   FILTERS
-   ============================================================ */
+/* FILTERS */
 .filters { display: flex; gap: 8px; flex-wrap: wrap; padding: 14px 40px 0; }
-
-.filter-btn {
-  padding: 6px 16px;
-  border-radius: var(--hero-radius-pill);
-  border: 1.5px solid var(--hero-border-btn);
-  background: var(--hero-bg-card);
-  color: var(--hero-text-muted);
-  font-family: var(--hero-font);
-  font-weight: 700; font-size: 12px;
-  letter-spacing: 0.5px; text-transform: uppercase;
-  cursor: pointer; transition: var(--hero-transition);
-}
-
+.filter-btn { padding: 6px 16px; border-radius: var(--hero-radius-pill); border: 1.5px solid var(--hero-border-btn); background: var(--hero-bg-card); color: var(--hero-text-muted); font-family: var(--hero-font); font-weight: 700; font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; cursor: pointer; transition: var(--hero-transition); }
 .filter-btn:hover { border-color: var(--hero-primary); color: var(--hero-primary); background: var(--hero-primary-light); }
-
 .filter-btn.active.all      { background: var(--hero-text-primary); border-color: var(--hero-text-primary); color: #fff; }
 .filter-btn.active.aca      { background: var(--cat-aca);      border-color: var(--cat-aca);      color: #fff; }
 .filter-btn.active.medicare { background: var(--cat-medicare); border-color: var(--cat-medicare); color: #fff; }
 .filter-btn.active.supp     { background: var(--cat-supp);     border-color: var(--cat-supp);     color: #fff; }
 .filter-btn.active.life     { background: var(--cat-life);     border-color: var(--cat-life);     color: #fff; }
 
-/* ============================================================
-   LEGEND
-   ============================================================ */
-.legend {
-  display: flex; gap: 20px; flex-wrap: wrap;
-  padding: 12px 40px 0;
-  align-items: center;
-}
-
+/* LEGEND */
+.legend { display: flex; gap: 20px; flex-wrap: wrap; padding: 12px 40px 0; align-items: center; }
 .legend-item { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--hero-text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
 .legend-dot { width: 10px; height: 10px; border-radius: 3px; }
 .legend-dot.aca      { background: var(--cat-aca); }
@@ -225,230 +121,93 @@ body {
 .legend-dot.supp     { background: var(--cat-supp); }
 .legend-dot.life     { background: var(--cat-life); }
 
-/* ============================================================
-   ERROR BANNER
-   ============================================================ */
-.error-banner {
-  display: none;
-  margin: 16px 40px 0;
-  background: var(--hero-error-bg);
-  border: 1px solid var(--hero-error-border);
-  border-radius: var(--hero-radius-btn);
-  padding: 12px 16px;
-  font-size: 13px; color: var(--hero-error);
-}
+/* ERROR */
+.error-banner { display: none; margin: 16px 40px 0; background: var(--hero-error-bg); border: 1px solid var(--hero-error-border); border-radius: var(--hero-radius-btn); padding: 12px 16px; font-size: 13px; color: var(--hero-error); }
 .error-banner.show { display: block; }
 
-/* ============================================================
-   CALENDAR GRID
-   ============================================================ */
+/* CALENDAR */
 .calendar-wrap { padding: 16px 40px 40px; }
-
-.weekdays {
-  display: grid; grid-template-columns: repeat(7, 1fr);
-  margin-bottom: 6px; gap: 4px;
-}
-
-.weekdays div {
-  text-align: center;
-  font-size: 11px; font-weight: 700;
-  letter-spacing: 1.5px; text-transform: uppercase;
-  color: var(--hero-text-subtle); padding: 8px 0;
-}
-
+.weekdays { display: grid; grid-template-columns: repeat(7, 1fr); margin-bottom: 6px; gap: 4px; }
+.weekdays div { text-align: center; font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--hero-text-subtle); padding: 8px 0; }
 .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
-
-.day-cell {
-  background: var(--hero-bg-card);
-  border: 1px solid var(--hero-border-card);
-  border-radius: var(--hero-radius-card);
-  min-height: 108px;
-  padding: 10px 8px 8px;
-  transition: border-color 0.2s;
-}
-
+.day-cell { background: var(--hero-bg-card); border: 1px solid var(--hero-border-card); border-radius: var(--hero-radius-card); min-height: 108px; padding: 10px 8px 8px; transition: border-color 0.2s; }
 .day-cell:hover { border-color: var(--hero-primary); }
+.day-cell.empty { background: transparent; border-color: transparent; pointer-events: none; }
+.day-cell.today { border-color: var(--hero-primary); background: #f0fbfd; }
+.day-num { font-size: 13px; font-weight: 700; color: var(--hero-text-subtle); margin-bottom: 5px; display: block; }
+.day-cell.today .day-num { background: var(--hero-primary); color: #fff; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; margin-bottom: 5px; }
 
-.day-cell.empty {
-  background: transparent; border-color: transparent;
-  pointer-events: none;
-}
-
-.day-cell.today {
-  border-color: var(--hero-primary);
-  background: #f0fbfd;
-}
-
-.day-num {
-  font-size: 13px; font-weight: 700;
-  color: var(--hero-text-subtle);
-  margin-bottom: 5px; display: block;
-}
-
-.day-cell.today .day-num {
-  background: var(--hero-primary); color: #fff;
-  width: 24px; height: 24px; border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 12px; margin-bottom: 5px;
-}
-
-.event-pill {
-  display: block; width: 100%;
-  border-radius: 5px;
-  padding: 3px 7px;
-  font-family: var(--hero-font);
-  font-weight: 700; font-size: 11px;
-  line-height: 1.4; margin-bottom: 3px;
-  cursor: pointer; border: none; text-align: left;
-  transition: filter 0.15s, transform 0.15s;
-}
-
+.event-pill { display: block; width: 100%; border-radius: 5px; padding: 3px 7px; font-family: var(--hero-font); font-weight: 700; font-size: 11px; line-height: 1.4; margin-bottom: 3px; cursor: pointer; border: none; text-align: left; transition: filter 0.15s, transform 0.15s; position: relative; }
 .event-pill:hover { filter: brightness(0.93); transform: scale(1.01); }
-
 .event-pill.aca      { background: #d6f2f5; color: #05788a; border-left: 3px solid var(--cat-aca); }
 .event-pill.medicare { background: #dde8fd; color: #0045b0; border-left: 3px solid var(--cat-medicare); }
 .event-pill.supp     { background: #d5f5e3; color: #1a7a44; border-left: 3px solid var(--cat-supp); }
 .event-pill.life     { background: #fde8d3; color: #a04000; border-left: 3px solid var(--cat-life); }
 .event-pill.hidden   { display: none; }
 
-/* SKELETON */
-.skeleton {
-  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-  background-size: 200% 100%;
-  animation: shimmer 1.5s infinite;
-  border-radius: 5px; height: 18px; margin-bottom: 4px;
+/* Language badge on pill */
+.pill-lang {
+  display: inline-block;
+  font-size: 9px; font-weight: 700;
+  letter-spacing: 0.5px; text-transform: uppercase;
+  border-radius: 3px; padding: 1px 4px;
+  margin-left: 4px; vertical-align: middle;
+  opacity: 0.75;
 }
+.pill-lang.es { background: #fff3cd; color: #856404; }
+.pill-lang.en { background: #cfe2ff; color: #084298; }
+
+/* SKELETON */
+.skeleton { background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; border-radius: 5px; height: 18px; margin-bottom: 4px; }
 @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
 
-/* ============================================================
-   UPCOMING STRIP
-   ============================================================ */
-.upcoming-strip {
-  margin: 0 40px 40px;
-  background: var(--hero-bg-card);
-  border: 1px solid var(--hero-border-card);
-  border-radius: var(--hero-radius-card);
-  padding: 20px 24px;
-}
-
-.upcoming-strip h3 {
-  font-size: 10px; font-weight: 700;
-  letter-spacing: 1.5px; text-transform: uppercase;
-  color: var(--hero-primary); margin-bottom: 14px;
-}
-
-.upcoming-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 10px;
-}
-
-.upcoming-card {
-  background: var(--hero-bg-preview);
-  border: 1px solid var(--hero-border-card);
-  border-radius: var(--hero-radius-btn);
-  padding: 12px 14px;
-  border-left: 3px solid var(--cat-aca);
-  cursor: pointer;
-  transition: var(--hero-transition);
-}
-
+/* UPCOMING */
+.upcoming-strip { margin: 0 40px 40px; background: var(--hero-bg-card); border: 1px solid var(--hero-border-card); border-radius: var(--hero-radius-card); padding: 20px 24px; }
+.upcoming-strip h3 { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--hero-primary); margin-bottom: 14px; }
+.upcoming-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; }
+.upcoming-card { background: var(--hero-bg-preview); border: 1px solid var(--hero-border-card); border-radius: var(--hero-radius-btn); padding: 12px 14px; border-left: 3px solid var(--cat-aca); cursor: pointer; transition: var(--hero-transition); }
 .upcoming-card:hover { background: var(--hero-primary-light); border-color: var(--hero-primary); }
 .upcoming-card.medicare { border-left-color: var(--cat-medicare); }
 .upcoming-card.supp     { border-left-color: var(--cat-supp); }
 .upcoming-card.life     { border-left-color: var(--cat-life); }
-
 .uc-date  { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--hero-text-subtle); margin-bottom: 3px; }
 .uc-title { font-size: 13px; font-weight: 700; color: var(--hero-text-primary); line-height: 1.3; }
 .uc-time  { font-size: 11px; color: var(--hero-text-muted); margin-top: 3px; }
+.uc-lang  { display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; border-radius: 4px; padding: 2px 7px; margin-top: 5px; }
+.uc-lang.es { background: #fff3cd; color: #856404; }
+.uc-lang.en { background: #cfe2ff; color: #084298; }
 
-/* ============================================================
-   MODAL
-   ============================================================ */
-.modal-overlay {
-  display: none; position: fixed; inset: 0;
-  background: rgba(0,0,0,0.35);
-  z-index: 500; backdrop-filter: blur(3px);
-  align-items: center; justify-content: center; padding: 20px;
-}
+/* MODAL */
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.35); z-index: 500; backdrop-filter: blur(3px); align-items: center; justify-content: center; padding: 20px; }
 .modal-overlay.open { display: flex; }
-
-.modal {
-  background: var(--hero-bg-card);
-  border: 1px solid var(--hero-border-card);
-  border-radius: var(--hero-radius-card);
-  padding: 32px;
-  max-width: 440px; width: 100%;
-  position: relative;
-  animation: modalIn 0.22s ease;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.12);
-}
-
+.modal { background: var(--hero-bg-card); border: 1px solid var(--hero-border-card); border-radius: var(--hero-radius-card); padding: 32px; max-width: 440px; width: 100%; position: relative; animation: modalIn 0.22s ease; box-shadow: 0 20px 60px rgba(0,0,0,0.12); }
 @keyframes modalIn { from{opacity:0;transform:scale(0.94) translateY(8px)} to{opacity:1;transform:scale(1) translateY(0)} }
-
-.modal-close {
-  position: absolute; top: 14px; right: 16px;
-  background: none; border: none;
-  color: var(--hero-text-subtle);
-  font-size: 1.3rem; cursor: pointer; transition: color 0.2s;
-}
+.modal-close { position: absolute; top: 14px; right: 16px; background: none; border: none; color: var(--hero-text-subtle); font-size: 1.3rem; cursor: pointer; transition: color 0.2s; }
 .modal-close:hover { color: var(--hero-text-primary); }
 
-.modal-type-badge {
-  display: inline-block;
-  padding: 3px 12px;
-  border-radius: var(--hero-radius-pill);
-  font-size: 10px; font-weight: 700;
-  letter-spacing: 1.5px; text-transform: uppercase;
-  margin-bottom: 12px;
-}
+.modal-badges { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
 
+.modal-type-badge { display: inline-block; padding: 3px 12px; border-radius: var(--hero-radius-pill); font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; }
 .modal-type-badge.aca      { background: #d6f2f5; color: #05788a; }
 .modal-type-badge.medicare { background: #dde8fd; color: #0045b0; }
 .modal-type-badge.supp     { background: #d5f5e3; color: #1a7a44; }
 .modal-type-badge.life     { background: #fde8d3; color: #a04000; }
 
-.modal h2 {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-weight: 900; font-size: 1.6rem;
-  text-transform: uppercase; letter-spacing: -0.5px;
-  color: var(--hero-text-primary);
-  margin-bottom: 14px; line-height: 1.1;
-}
+.modal-lang-badge { display: inline-block; padding: 3px 12px; border-radius: var(--hero-radius-pill); font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; }
+.modal-lang-badge.es { background: #fff3cd; color: #856404; }
+.modal-lang-badge.en { background: #cfe2ff; color: #084298; }
+.modal-lang-badge.hidden { display: none; }
 
+.modal h2 { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 1.6rem; text-transform: uppercase; letter-spacing: -0.5px; color: var(--hero-text-primary); margin-bottom: 14px; line-height: 1.1; }
 .modal-meta { display: flex; flex-direction: column; gap: 7px; margin-bottom: 16px; }
-
-.modal-meta span {
-  font-size: 13px; color: var(--hero-text-body);
-  display: flex; align-items: flex-start; gap: 8px;
-}
-
+.modal-meta span { font-size: 13px; color: var(--hero-text-body); display: flex; align-items: flex-start; gap: 8px; }
 .modal-meta span i { font-style: normal; flex-shrink: 0; }
-
-.modal-desc {
-  font-size: 13px; color: var(--hero-text-muted);
-  line-height: 1.65;
-  border-top: 1px solid var(--hero-border-card);
-  padding-top: 14px;
-}
-
-.modal-link-btn {
-  display: flex; align-items: center; justify-content: center; gap: 8px;
-  margin-top: 16px;
-  background: var(--hero-primary); color: #fff;
-  font-family: var(--hero-font);
-  font-weight: 700; font-size: 14px;
-  padding: 12px 24px; border-radius: var(--hero-radius-btn);
-  text-decoration: none; border: none; cursor: pointer;
-  transition: var(--hero-transition);
-  width: 100%;
-}
+.modal-desc { font-size: 13px; color: var(--hero-text-muted); line-height: 1.65; border-top: 1px solid var(--hero-border-card); padding-top: 14px; }
+.modal-link-btn { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 16px; background: var(--hero-primary); color: #fff; font-family: var(--hero-font); font-weight: 700; font-size: 14px; padding: 12px 24px; border-radius: var(--hero-radius-btn); text-decoration: none; border: none; cursor: pointer; transition: var(--hero-transition); width: 100%; }
 .modal-link-btn:hover { background: var(--hero-primary-hover); transform: translateY(-1px); }
 .modal-link-btn.hidden { display: none; }
 
-/* ============================================================
-   RESPONSIVE
-   ============================================================ */
+/* RESPONSIVE */
 @media (max-width: 700px) {
   .topbar, .page-banner, .controls, .filters, .legend, .calendar-wrap, .upcoming-strip, .error-banner { padding-left: 16px; padding-right: 16px; }
   .day-cell { min-height: 72px; padding: 6px 4px; }
@@ -456,6 +215,7 @@ body {
   .day-num { font-size: 11px; }
   #month-label { font-size: 1.2rem; min-width: 160px; }
   .topbar-title { display: none; }
+  .pill-lang { display: none; }
 }
 </style>
 </head>
@@ -467,7 +227,11 @@ body {
     <img src="hero-logo-transparent.png" alt="Hero Insurance">
   </div>
   <div class="topbar-right">
-    <div class="topbar-title">Training Calendar</div>
+    <div class="topbar-title" data-i18n="topbar-title">Training Calendar</div>
+    <div class="lang-switcher">
+      <button class="lang-btn active" data-lang="es">ES</button>
+      <button class="lang-btn" data-lang="en">EN</button>
+    </div>
   </div>
 </div>
 
@@ -475,12 +239,12 @@ body {
 <div class="page-banner">
   <div class="banner-text">
     <div class="hero-tag">Hero Insurance USA</div>
-    <h1>TRAINING <em>CALENDAR</em></h1>
-    <p>Capacitaciones y sesiones en vivo para el equipo Hero.</p>
+    <h1 data-i18n="banner-h1">CALENDARIO DE <em>ENTRENAMIENTOS</em></h1>
+    <p data-i18n="banner-p">Capacitaciones y sesiones en vivo para el equipo Hero.</p>
   </div>
   <div class="sync-bar">
     <div class="sync-dot loading" id="sync-dot"></div>
-    <span id="sync-label">Cargando desde Google Sheets...</span>
+    <span id="sync-label"></span>
   </div>
 </div>
 
@@ -492,13 +256,13 @@ body {
     <button id="next-btn">&#8250;</button>
   </div>
   <div class="controls-right">
-    <button class="refresh-btn" id="refresh-btn">↻ Actualizar</button>
+    <button class="refresh-btn" id="refresh-btn" data-i18n="refresh-btn">↻ Actualizar</button>
   </div>
 </div>
 
 <!-- FILTERS -->
 <div class="filters">
-  <button class="filter-btn all active" data-filter="all">Todos</button>
+  <button class="filter-btn all active" data-filter="all" data-i18n="filter-all">Todos</button>
   <button class="filter-btn aca"      data-filter="aca">ACA</button>
   <button class="filter-btn medicare" data-filter="medicare">Medicare</button>
   <button class="filter-btn supp"     data-filter="supp">Supp</button>
@@ -509,18 +273,18 @@ body {
 <div class="legend">
   <div class="legend-item"><div class="legend-dot aca"></div> ACA</div>
   <div class="legend-item"><div class="legend-dot medicare"></div> Medicare</div>
-  <div class="legend-item"><div class="legend-dot supp"></div> Supplemental</div>
-  <div class="legend-item"><div class="legend-dot life"></div> Life</div>
+  <div class="legend-item"><div class="legend-dot supp"></div> <span data-i18n="legend-supp">Supplemental</span></div>
+  <div class="legend-item"><div class="legend-dot life"></div> <span data-i18n="legend-life">Life Insurance</span></div>
 </div>
 
 <!-- ERROR -->
-<div class="error-banner" id="error-banner">
+<div class="error-banner" id="error-banner" data-i18n="error-msg">
   ⚠️ No se pudo conectar con Google Sheets. Verifica que el Apps Script esté publicado y con acceso público.
 </div>
 
 <!-- CALENDAR -->
 <div class="calendar-wrap">
-  <div class="weekdays">
+  <div class="weekdays" id="weekdays-row">
     <div>Dom</div><div>Lun</div><div>Mar</div><div>Mié</div><div>Jue</div><div>Vie</div><div>Sáb</div>
   </div>
   <div class="calendar-grid" id="calendar-grid"></div>
@@ -528,7 +292,7 @@ body {
 
 <!-- UPCOMING -->
 <div class="upcoming-strip">
-  <h3>⚡ Próximos Eventos</h3>
+  <h3 id="upcoming-title">⚡ Próximos Eventos</h3>
   <div class="upcoming-list" id="upcoming-list"></div>
 </div>
 
@@ -536,7 +300,10 @@ body {
 <div class="modal-overlay" id="modal-overlay">
   <div class="modal">
     <button class="modal-close" id="modal-close">×</button>
-    <div class="modal-type-badge" id="modal-badge"></div>
+    <div class="modal-badges">
+      <div class="modal-type-badge" id="modal-badge"></div>
+      <div class="modal-lang-badge hidden" id="modal-lang-badge"></div>
+    </div>
     <h2 id="modal-title"></h2>
     <div class="modal-meta">
       <span><i>📅</i> <span id="modal-date"></span></span>
@@ -546,19 +313,97 @@ body {
     </div>
     <div class="modal-desc" id="modal-desc"></div>
     <a class="modal-link-btn hidden" id="modal-link" target="_blank" rel="noopener">
-      🔗 Unirse al Meeting
+      🔗 <span data-i18n="join-btn">Unirse al Meeting</span>
     </a>
   </div>
 </div>
 
 <script>
   const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbxoOpBZQllJAtCxpNShPLdrf-xkP4AqcoG1z-vUjQIpmNSM7hewAw6vSP4BY_D5YHVUwg/exec';
-  const MONTHS_ES  = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
 
-  let EVENTS = [];
-  let currentYear  = new Date().getFullYear();
-  let currentMonth = new Date().getMonth();
-  let activeFilter = 'all';
+  // ── TRANSLATIONS ──────────────────────────────────────
+  const I18N = {
+    es: {
+      'topbar-title':  'Calendario de Entrenamientos',
+      'banner-h1':     'CALENDARIO DE <em>ENTRENAMIENTOS</em>',
+      'banner-p':      'Capacitaciones y sesiones en vivo para el equipo Hero.',
+      'refresh-btn':   '↻ Actualizar',
+      'filter-all':    'Todos',
+      'legend-supp':   'Suplementario',
+      'legend-life':   'Vida',
+      'error-msg':     '⚠️ No se pudo conectar con Google Sheets. Verifica que el Apps Script esté publicado y con acceso público.',
+      'upcoming-title':'⚡ Próximos Eventos',
+      'join-btn':      'Unirse al Meeting',
+      'sync-loading':  'Cargando desde Google Sheets...',
+      'sync-ok':       'Sincronizado',
+      'sync-error':    'Error al conectar con Sheets',
+      'no-upcoming':   'No hay eventos próximos.',
+      'event':         'evento',
+      'events':        'eventos',
+      'months':        ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
+      'weekdays':      ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'],
+      'date-format':   (d,m,y) => `${d} de ${m} ${y}`,
+      'lang-es':       '🇪🇸 Español',
+      'lang-en':       '🇺🇸 English',
+      'type-labels':   { aca: 'ACA', medicare: 'Medicare', supp: 'Suplementario', life: 'Seguro de Vida' },
+    },
+    en: {
+      'topbar-title':  'Training Calendar',
+      'banner-h1':     'TRAINING <em>CALENDAR</em>',
+      'banner-p':      'Live training sessions and webinars for the Hero team.',
+      'refresh-btn':   '↻ Refresh',
+      'filter-all':    'All',
+      'legend-supp':   'Supplemental',
+      'legend-life':   'Life Insurance',
+      'error-msg':     '⚠️ Could not connect to Google Sheets. Please verify that the Apps Script is published with public access.',
+      'upcoming-title':'⚡ Upcoming Events',
+      'join-btn':      'Join Meeting',
+      'sync-loading':  'Loading from Google Sheets...',
+      'sync-ok':       'Synced',
+      'sync-error':    'Error connecting to Sheets',
+      'no-upcoming':   'No upcoming events.',
+      'event':         'event',
+      'events':        'events',
+      'months':        ['January','February','March','April','May','June','July','August','September','October','November','December'],
+      'weekdays':      ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],
+      'date-format':   (d,m,y) => `${m} ${d}, ${y}`,
+      'lang-es':       '🇪🇸 Español',
+      'lang-en':       '🇺🇸 English',
+      'type-labels':   { aca: 'ACA', medicare: 'Medicare', supp: 'Supplemental', life: 'Life Insurance' },
+    }
+  };
+
+  let currentLang = 'es';
+
+  function t(key) { return I18N[currentLang][key] || I18N['es'][key] || key; }
+
+  function applyTranslations() {
+    // data-i18n elements (except banner-h1 handled separately)
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      if (key === 'banner-h1') { el.innerHTML = t('banner-h1'); return; }
+      el.textContent = t(key);
+    });
+    // Weekdays
+    const wd = document.getElementById('weekdays-row');
+    if (wd) wd.querySelectorAll('div').forEach((el, i) => el.textContent = t('weekdays')[i]);
+    // Upcoming title
+    document.getElementById('upcoming-title').textContent = t('upcoming-title');
+    // html lang attr
+    document.documentElement.lang = currentLang;
+    // Re-render calendar to update month/date labels
+    renderCalendar();
+  }
+
+  // ── LANG SWITCHER ─────────────────────────────────────
+  document.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      currentLang = btn.dataset.lang;
+      document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      applyTranslations();
+    });
+  });
 
   // ── TIMEZONE ──────────────────────────────────────────
   const TZ_ABBR = {
@@ -572,22 +417,15 @@ body {
     'BRT':'America/Sao_Paulo','CLT':'America/Santiago',
     'CET':'Europe/Madrid','GMT':'Europe/London','UTC':'UTC',
   };
-
   const TZ_LABELS = {
-    'America/New_York':'ET (Nueva York)','America/Chicago':'CT (Chicago)',
-    'America/Denver':'MT (Denver)','America/Los_Angeles':'PT (Los Ángeles)',
+    'America/New_York':'ET (New York)','America/Chicago':'CT (Chicago)',
+    'America/Denver':'MT (Denver)','America/Los_Angeles':'PT (Los Angeles)',
     'America/Bogota':'COT (Bogotá)','America/Lima':'PET (Lima)',
     'America/Caracas':'VET (Caracas)','America/Sao_Paulo':'BRT (São Paulo)',
     'America/Santiago':'CLT (Santiago)','Europe/Madrid':'CET (Madrid)',
-    'Europe/London':'GMT (Londres)','Pacific/Honolulu':'HST (Hawái)',
+    'Europe/London':'GMT (London)','Pacific/Honolulu':'HST (Hawaii)',
   };
-
-  function resolveTimezone(tz) {
-    if (!tz) return '';
-    const upper = tz.trim().toUpperCase();
-    return TZ_ABBR[upper] || tz.trim();
-  }
-
+  function resolveTimezone(tz) { if (!tz) return ''; const u = tz.trim().toUpperCase(); return TZ_ABBR[u] || tz.trim(); }
   function getTZLabel(iana) { return TZ_LABELS[iana] || iana; }
 
   function convertToMiami(timeStr, dateStr, fromTZ) {
@@ -604,25 +442,29 @@ body {
         const isoStr = `${dateStr}T${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:00`;
         const srcDate = new Date(new Date(isoStr).toLocaleString('en-US', { timeZone: fromTZ }));
         const diff = new Date(isoStr) - srcDate;
-        const miamiStr = new Date(new Date(isoStr).getTime() + diff).toLocaleString('en-US', {
+        return new Date(new Date(isoStr).getTime() + diff).toLocaleString('en-US', {
           timeZone: 'America/New_York', hour: 'numeric', minute: '2-digit', hour12: true
         });
-        return miamiStr;
       });
       if (converted.includes(null)) return null;
       return converted.join(' – ');
     } catch(e) { return null; }
   }
 
-  // ── SYNC STATUS ──────────────────────────────────────
-  function setSyncStatus(state, text) {
+  // ── STATE ─────────────────────────────────────────────
+  let EVENTS = [];
+  let currentYear  = new Date().getFullYear();
+  let currentMonth = new Date().getMonth();
+  let activeFilter = 'all';
+
+  function setSyncStatus(state, textKey, extra) {
     document.getElementById('sync-dot').className = 'sync-dot ' + state;
-    document.getElementById('sync-label').textContent = text;
+    document.getElementById('sync-label').textContent = extra ? `${t(textKey)} · ${extra}` : t(textKey);
   }
 
   // ── FETCH ─────────────────────────────────────────────
   async function loadEvents() {
-    setSyncStatus('loading', 'Cargando desde Google Sheets...');
+    setSyncStatus('loading', 'sync-loading');
     renderSkeletons();
     try {
       const res = await fetch(SHEETS_URL);
@@ -637,17 +479,19 @@ body {
         desc:       String(row.desc       || '').trim(),
         link:       String(row.link       || '').trim(),
         timezone:   String(row.timezone   || '').trim(),
+        lang:       String(row.lang       || '').trim().toLowerCase(),
       })).filter(e => e.date && e.title);
-      setSyncStatus('ok', `Sincronizado · ${EVENTS.length} evento${EVENTS.length !== 1 ? 's' : ''}`);
+      const count = EVENTS.length;
+      const word  = count === 1 ? t('event') : t('events');
+      setSyncStatus('ok', 'sync-ok', `${count} ${word}`);
       document.getElementById('error-banner').classList.remove('show');
     } catch(err) {
-      setSyncStatus('error', 'Error al conectar con Sheets');
+      setSyncStatus('error', 'sync-error');
       document.getElementById('error-banner').classList.add('show');
     }
     renderCalendar();
   }
 
-  // ── NORMALIZE DATE ────────────────────────────────────
   function normalizeDate(val) {
     if (!val) return '';
     const s = String(val).trim();
@@ -657,15 +501,22 @@ body {
     return s;
   }
 
+  function langBadgeHTML(lang) {
+    if (!lang) return '';
+    if (lang === 'es') return '<span class="pill-lang es">ES</span>';
+    if (lang === 'en') return '<span class="pill-lang en">EN</span>';
+    return '';
+  }
+
   // ── SKELETON ─────────────────────────────────────────
   function renderSkeletons() {
     const grid = document.getElementById('calendar-grid');
     grid.innerHTML = '';
-    document.getElementById('month-label').textContent = `${MONTHS_ES[currentMonth]} ${currentYear}`;
-    const firstDay    = new Date(currentYear, currentMonth, 1).getDay();
-    const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+    document.getElementById('month-label').textContent = `${t('months')[currentMonth]} ${currentYear}`;
+    const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+    const days     = new Date(currentYear, currentMonth + 1, 0).getDate();
     for (let i = 0; i < firstDay; i++) { const el = document.createElement('div'); el.className = 'day-cell empty'; grid.appendChild(el); }
-    for (let d = 1; d <= daysInMonth; d++) {
+    for (let d = 1; d <= days; d++) {
       const cell = document.createElement('div'); cell.className = 'day-cell';
       cell.innerHTML = `<span class="day-num">${d}</span><div class="skeleton" style="width:75%"></div>`;
       grid.appendChild(cell);
@@ -676,27 +527,25 @@ body {
   function renderCalendar() {
     const grid = document.getElementById('calendar-grid');
     grid.innerHTML = '';
-    document.getElementById('month-label').textContent = `${MONTHS_ES[currentMonth]} ${currentYear}`;
-    const firstDay    = new Date(currentYear, currentMonth, 1).getDay();
-    const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-    const today       = new Date();
+    document.getElementById('month-label').textContent = `${t('months')[currentMonth]} ${currentYear}`;
+    const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+    const days     = new Date(currentYear, currentMonth + 1, 0).getDate();
+    const today    = new Date();
 
     for (let i = 0; i < firstDay; i++) { const el = document.createElement('div'); el.className = 'day-cell empty'; grid.appendChild(el); }
 
-    for (let d = 1; d <= daysInMonth; d++) {
+    for (let d = 1; d <= days; d++) {
       const isToday = today.getDate() === d && today.getMonth() === currentMonth && today.getFullYear() === currentYear;
       const cell    = document.createElement('div');
       cell.className = 'day-cell' + (isToday ? ' today' : '');
-      const dateStr  = `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-      const events   = EVENTS.filter(e => normalizeDate(e.date) === dateStr);
-
-      const numEl = document.createElement('span'); numEl.className = 'day-num'; numEl.textContent = d;
+      const dateStr = `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+      const events  = EVENTS.filter(e => normalizeDate(e.date) === dateStr);
+      const numEl   = document.createElement('span'); numEl.className = 'day-num'; numEl.textContent = d;
       cell.appendChild(numEl);
-
       events.forEach(ev => {
         const pill = document.createElement('button');
         pill.className = `event-pill ${ev.type}${activeFilter !== 'all' && activeFilter !== ev.type ? ' hidden' : ''}`;
-        pill.textContent = ev.title;
+        pill.innerHTML = ev.title + langBadgeHTML(ev.lang);
         pill.addEventListener('click', () => openModal(ev));
         cell.appendChild(pill);
       });
@@ -715,37 +564,52 @@ body {
       .sort((a,b) => normalizeDate(a.date).localeCompare(normalizeDate(b.date)))
       .slice(0, 6);
 
-    if (!upcoming.length) { list.innerHTML = '<p style="font-size:13px;color:var(--hero-text-subtle);">No hay eventos próximos.</p>'; return; }
+    if (!upcoming.length) { list.innerHTML = `<p style="font-size:13px;color:var(--hero-text-subtle);">${t('no-upcoming')}</p>`; return; }
 
     upcoming.forEach(ev => {
-      const [y,m,d] = normalizeDate(ev.date).split('-');
+      const nd = normalizeDate(ev.date);
+      const [y,m,d] = nd.split('-');
+      const monthName = t('months')[parseInt(m)-1];
       const card = document.createElement('div');
       card.className = `upcoming-card ${ev.type}`;
-      card.innerHTML = `<div class="uc-date">${d} ${MONTHS_ES[parseInt(m)-1]}</div><div class="uc-title">${ev.title}</div><div class="uc-time">${ev.time}</div>`;
+      const langTag = ev.lang ? `<span class="uc-lang ${ev.lang}">${ev.lang.toUpperCase()}</span>` : '';
+      card.innerHTML = `<div class="uc-date">${d} ${monthName}</div><div class="uc-title">${ev.title}</div><div class="uc-time">${ev.time}</div>${langTag}`;
       card.addEventListener('click', () => openModal(ev));
       list.appendChild(card);
     });
   }
 
   // ── MODAL ─────────────────────────────────────────────
-  const TYPE_LABELS = { aca: 'ACA', medicare: 'Medicare', supp: 'Supplemental', life: 'Life Insurance' };
-
   function openModal(ev) {
-    const [y,m,d] = normalizeDate(ev.date).split('-');
-    document.getElementById('modal-badge').textContent  = TYPE_LABELS[ev.type] || ev.type.toUpperCase();
-    document.getElementById('modal-badge').className    = `modal-type-badge ${ev.type}`;
-    document.getElementById('modal-title').textContent  = ev.title;
-    document.getElementById('modal-date').textContent   = `${d} de ${MONTHS_ES[parseInt(m)-1]} ${y}`;
+    const nd = normalizeDate(ev.date);
+    const [y,m,d] = nd.split('-');
+    const monthName = t('months')[parseInt(m)-1];
+
+    const typeLabels = t('type-labels');
+    document.getElementById('modal-badge').textContent = typeLabels[ev.type] || ev.type.toUpperCase();
+    document.getElementById('modal-badge').className   = `modal-type-badge ${ev.type}`;
+
+    // Lang badge
+    const langBadge = document.getElementById('modal-lang-badge');
+    if (ev.lang === 'es' || ev.lang === 'en') {
+      langBadge.textContent = ev.lang === 'es' ? '🇪🇸 Español' : '🇺🇸 English';
+      langBadge.className = `modal-lang-badge ${ev.lang}`;
+    } else {
+      langBadge.className = 'modal-lang-badge hidden';
+    }
+
+    document.getElementById('modal-title').textContent = ev.title;
+    document.getElementById('modal-date').textContent  = t('date-format')(d, monthName, y);
     document.getElementById('modal-instructor').textContent = ev.instructor;
-    document.getElementById('modal-desc').textContent   = ev.desc;
+    document.getElementById('modal-desc').textContent  = ev.desc;
 
     // Time + timezone
     const convertedRow = document.getElementById('modal-time-converted-row');
     const ianaZone     = resolveTimezone(ev.timezone);
-    const isEastern    = !ev.timezone || ev.timezone.toUpperCase() === 'EST' || ev.timezone.toUpperCase() === 'EDT' || ianaZone === 'America/New_York';
+    const isEastern    = !ev.timezone || ['EST','EDT'].includes(ev.timezone.toUpperCase()) || ianaZone === 'America/New_York';
 
     if (!isEastern && ianaZone) {
-      const converted = convertToMiami(ev.time, normalizeDate(ev.date), ianaZone);
+      const converted = convertToMiami(ev.time, nd, ianaZone);
       document.getElementById('modal-time').innerHTML = `${ev.time} <small style="color:var(--hero-text-subtle);font-size:0.85em;">${getTZLabel(ianaZone)}</small>`;
       if (converted) {
         document.getElementById('modal-time-converted').innerHTML = `${converted} <small style="color:var(--hero-text-subtle);font-size:0.85em;">EST (Miami, UTC-4)</small>`;
@@ -764,6 +628,7 @@ body {
     document.getElementById('modal-overlay').classList.add('open');
   }
 
+  // ── EVENTS ───────────────────────────────────────────
   document.getElementById('modal-close').addEventListener('click', () => document.getElementById('modal-overlay').classList.remove('open'));
   document.getElementById('modal-overlay').addEventListener('click', e => { if (e.target === document.getElementById('modal-overlay')) document.getElementById('modal-overlay').classList.remove('open'); });
   document.getElementById('prev-btn').addEventListener('click', () => { currentMonth--; if (currentMonth < 0) { currentMonth = 11; currentYear--; } renderCalendar(); });
@@ -778,6 +643,8 @@ body {
   });
   document.getElementById('refresh-btn').addEventListener('click', loadEvents);
 
+  // Init
+  applyTranslations();
   loadEvents();
 </script>
 </body>
