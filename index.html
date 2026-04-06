@@ -208,6 +208,23 @@ body { font-family: var(--hero-font); background: var(--hero-bg-page); color: va
 .modal-link-btn:hover { background: var(--hero-primary-hover); transform: translateY(-1px); }
 .modal-link-btn.hidden { display: none; }
 
+.modal-reminder-btn {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  margin-top: 10px;
+  background: transparent;
+  color: var(--hero-primary);
+  font-family: var(--hero-font);
+  font-weight: 700; font-size: 14px;
+  padding: 11px 24px;
+  border-radius: var(--hero-radius-btn);
+  border: 1.5px solid var(--hero-primary);
+  cursor: pointer;
+  transition: var(--hero-transition);
+  width: 100%;
+  text-decoration: none;
+}
+.modal-reminder-btn:hover { background: var(--hero-primary-light); transform: translateY(-1px); }
+
 /* RESPONSIVE */
 @media (max-width: 700px) {
   .topbar, .page-banner, .controls, .filters, .legend, .calendar-wrap, .upcoming-strip, .error-banner { padding-left: 16px; padding-right: 16px; }
@@ -317,6 +334,9 @@ body { font-family: var(--hero-font); background: var(--hero-bg-page); color: va
     <a class="modal-link-btn hidden" id="modal-link" target="_blank" rel="noopener">
       🔗 <span data-i18n="join-btn">Unirse al Meeting</span>
     </a>
+    <button class="modal-reminder-btn" id="modal-reminder">
+      📅 <span data-i18n="reminder-btn">Agregar al Calendario</span>
+    </button>
   </div>
 </div>
 
@@ -336,6 +356,7 @@ body { font-family: var(--hero-font); background: var(--hero-bg-page); color: va
       'error-msg':     '⚠️ No se pudo conectar con Google Sheets. Verifica que el Apps Script esté publicado y con acceso público.',
       'upcoming-title':'⚡ Próximos Eventos',
       'join-btn':      'Unirse al Meeting',
+      'reminder-btn':  'Agregar al Calendario',
       'sync-loading':  'Cargando desde Google Sheets...',
       'sync-ok':       'Sincronizado',
       'sync-error':    'Error al conectar con Sheets',
@@ -360,6 +381,7 @@ body { font-family: var(--hero-font); background: var(--hero-bg-page); color: va
       'error-msg':     '⚠️ Could not connect to Google Sheets. Please verify that the Apps Script is published with public access.',
       'upcoming-title':'⚡ Upcoming Events',
       'join-btn':      'Join Meeting',
+      'reminder-btn':  'Add to Calendar',
       'sync-loading':  'Loading from Google Sheets...',
       'sync-ok':       'Synced',
       'sync-error':    'Error connecting to Sheets',
@@ -583,6 +605,108 @@ body { font-family: var(--hero-font); background: var(--hero-bg-page); color: va
     });
   }
 
+  // ── ICS GENERATOR ────────────────────────────────────
+  function parseTimeToHHMM(timeStr) {
+    if (!timeStr) return null;
+    // Take first time in a range (e.g. "10:00 AM – 12:00 PM" → "10:00 AM")
+    const first = timeStr.split(/[–-]/)[0].trim();
+    const match = first.match(/(\d{1,2}):(\d{2})\s*(AM|PM)/i);
+    if (!match) return null;
+    let [, h, m, mer] = match;
+    h = parseInt(h); m = parseInt(m);
+    if (mer.toUpperCase() === 'PM' && h !== 12) h += 12;
+    if (mer.toUpperCase() === 'AM' && h === 12) h = 0;
+    return { h, m };
+  }
+
+  function toICSDate(dateStr, hhmm, durationHours = 1) {
+    // dateStr = YYYY-MM-DD, returns ICS format YYYYMMDDTHHMMSS
+    const [y, mo, d] = dateStr.split('-').map(Number);
+    const start = new Date(y, mo - 1, d, hhmm.h, hhmm.m, 0);
+    const end   = new Date(start.getTime() + durationHours * 60 * 60 * 1000);
+    const fmt = dt => [
+      dt.getFullYear(),
+      String(dt.getMonth()+1).padStart(2,'0'),
+      String(dt.getDate()).padStart(2,'0'),
+      'T',
+      String(dt.getHours()).padStart(2,'0'),
+      String(dt.getMinutes()).padStart(2,'0'),
+      '00'
+    ].join('');
+    return { start: fmt(start), end: fmt(end) };
+  }
+
+  function generateICS(ev) {
+    const nd    = normalizeDate(ev.date);
+    const hhmm  = parseTimeToHHMM(ev.time);
+    if (!hhmm) return null;
+
+    // Try to estimate end time from range
+    let durationHours = 1;
+    const parts = ev.time.split(/[–-]/).map(s => s.trim());
+    if (parts.length === 2) {
+      const t1 = parseTimeToHHMM(parts[0]);
+      const t2 = parseTimeToHHMM(parts[1]);
+      if (t1 && t2) {
+        let diff = (t2.h * 60 + t2.m) - (t1.h * 60 + t1.m);
+        if (diff < 0) diff += 24 * 60; // overnight edge case
+        durationHours = diff / 60;
+      }
+    }
+
+    const { start, end } = toICSDate(nd, hhmm, durationHours);
+    const uid = `hero-${nd}-${ev.title.replace(/\s+/g,'-').toLowerCase()}@heroinsuranceusa.com`;
+
+    const typeLabels = { aca: 'ACA', medicare: 'Medicare', supp: 'Supplemental', life: 'Life Insurance' };
+    const category   = typeLabels[ev.type] || ev.type.toUpperCase();
+    const location   = ev.link || '';
+    const descLines  = [
+      ev.desc,
+      ev.instructor ? `Instructor: ${ev.instructor}` : '',
+      ev.time       ? `Time: ${ev.time} EST (Miami, UTC-4)` : '',
+      ev.link       ? `Meeting Link: ${ev.link}` : '',
+    ].filter(Boolean).join('\\n');
+
+    const ics = [
+      'BEGIN:VCALENDAR',
+      'VERSION:2.0',
+      'PRODID:-//Hero Insurance USA//Training Calendar//EN',
+      'CALSCALE:GREGORIAN',
+      'METHOD:PUBLISH',
+      'BEGIN:VEVENT',
+      `UID:${uid}`,
+      `DTSTAMP:${start}Z`,
+      `DTSTART:${start}`,
+      `DTEND:${end}`,
+      `SUMMARY:${category} – ${ev.title}`,
+      `DESCRIPTION:${descLines}`,
+      location ? `LOCATION:${location}` : '',
+      'BEGIN:VALARM',
+      'TRIGGER:-PT15M',
+      'ACTION:DISPLAY',
+      `DESCRIPTION:Reminder: ${ev.title}`,
+      'END:VALARM',
+      'END:VEVENT',
+      'END:VCALENDAR',
+    ].filter(Boolean).join('\r\n');
+
+    return ics;
+  }
+
+  function downloadICS(ev) {
+    const ics = generateICS(ev);
+    if (!ics) return;
+    const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement('a');
+    a.href     = url;
+    a.download = `hero-training-${normalizeDate(ev.date)}.ics`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
   // ── MODAL ─────────────────────────────────────────────
   function openModal(ev) {
     const nd = normalizeDate(ev.date);
@@ -628,6 +752,9 @@ body { font-family: var(--hero-font); background: var(--hero-bg-page); color: va
     const linkBtn = document.getElementById('modal-link');
     if (ev.link) { linkBtn.href = ev.link; linkBtn.classList.remove('hidden'); }
     else         { linkBtn.href = '#';     linkBtn.classList.add('hidden'); }
+
+    // Reminder button
+    document.getElementById('modal-reminder').onclick = () => downloadICS(ev);
 
     document.getElementById('modal-overlay').classList.add('open');
   }
