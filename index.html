@@ -7,433 +7,1327 @@
 <style>
 :root {
   --hero-primary:        #06a3b6;
-  --hero-primary-hover:  #048395;
+  --hero-primary-dark:   #048395;
   --hero-primary-light:  #3dbccc;
-  --hero-bg-page:        #f0f4f8;
-  --hero-bg-card:        #ffffff;
-  --hero-bg-preview:     #f0f4f8;
-  --hero-text-primary:   #1a2733;
-  --hero-text-body:      #5a6b7a;
+  --hero-primary-50:     #e8f6f8;
+  --hero-bg:             #f0f4f8;
+  --hero-card-bg:        #ffffff;
+  --hero-text:           #1a2733;
   --hero-text-muted:     #5a6b7a;
-  --hero-text-subtle:    #5a6b7a;
-  --hero-border-topbar:  #d8e1ea;
-  --hero-border-card:    #d8e1ea;
-  --hero-border-btn:     #d8e1ea;
+  --hero-text-subtle:    #8a9aa8;
+  --hero-border:         #d8e1ea;
+  --hero-border-soft:    #e8edf3;
   --hero-success:        #22a06b;
-  --hero-success-bg:     #e8f7ef;
-  --hero-error:          #d64545;
-  --hero-error-bg:       #fbe9e9;
-  --hero-error-border:   #f0b8b8;
+  --hero-warning:        #e8a317;
+  --hero-danger:         #d64545;
   --hero-font:           'Trebuchet MS', Arial, sans-serif;
-  --hero-radius-card:    10px;
-  --hero-radius-btn:     6px;
-  --hero-radius-pill:    20px;
-  --hero-transition:     background 0.2s, transform 0.15s;
+  --hero-radius-sm:      6px;
+  --hero-radius:         10px;
+  --hero-radius-lg:      16px;
+  --hero-shadow-sm:      0 1px 2px rgba(26,39,51,0.04);
+  --hero-shadow:         0 2px 8px rgba(6,163,182,0.06);
+  --hero-shadow-lg:      0 12px 32px rgba(6,163,182,0.12);
+
+  /* Category colors */
   --cat-aca:      #06a3b6;
   --cat-medicare: #0065F3;
   --cat-supp:     #22a06b;
   --cat-life:     #e8a317;
 }
 
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: var(--hero-font); background: var(--hero-bg-page); color: var(--hero-text-primary); min-height: 100vh; line-height: 1.65; }
-
-/* TOPBAR */
-.topbar {
-  background: var(--hero-bg-card);
-  border-bottom: 1px solid var(--hero-border-topbar);
-  height: 66px;
-  display: flex; align-items: center;
-  padding: 0 40px;
-  position: sticky; top: 0; z-index: 100;
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: var(--hero-font);
+  background: var(--hero-bg);
+  color: var(--hero-text);
+  min-height: 100vh;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
 }
-.topbar-logo img { height: 44px; width: auto; display: block; }
-.topbar-right { margin-left: auto; display: flex; align-items: center; gap: 12px; }
-.topbar-title { font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--hero-text-muted); }
 
-/* LANG SWITCHER */
+/* ════════════════════════════════════════════════════
+   TOPBAR
+   ════════════════════════════════════════════════════ */
+.topbar {
+  background: var(--hero-card-bg);
+  border-bottom: 1px solid var(--hero-border);
+  height: 64px;
+  display: flex; align-items: center;
+  padding: 0 32px;
+  position: sticky; top: 0; z-index: 100;
+  box-shadow: var(--hero-shadow-sm);
+}
+
+.topbar-logo img { height: 40px; width: auto; display: block; }
+
+.topbar-divider { width: 1px; height: 28px; background: var(--hero-border); margin: 0 20px; }
+
+.topbar-breadcrumb {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 13px; color: var(--hero-text-muted);
+}
+.topbar-breadcrumb b { color: var(--hero-text); font-weight: 700; }
+
+.topbar-right {
+  margin-left: auto;
+  display: flex; align-items: center; gap: 12px;
+}
+
+.view-toggle {
+  display: flex;
+  background: var(--hero-bg);
+  border: 1px solid var(--hero-border);
+  border-radius: var(--hero-radius-sm);
+  padding: 3px;
+}
+.view-toggle button {
+  padding: 6px 12px;
+  font-family: var(--hero-font);
+  font-size: 12px; font-weight: 600;
+  border: none; background: transparent;
+  color: var(--hero-text-muted);
+  cursor: pointer; transition: all 0.15s;
+  border-radius: 4px;
+  display: flex; align-items: center; gap: 6px;
+}
+.view-toggle button:hover { color: var(--hero-primary); }
+.view-toggle button.active {
+  background: var(--hero-card-bg);
+  color: var(--hero-primary);
+  box-shadow: var(--hero-shadow-sm);
+}
+
 .lang-switcher {
   display: flex;
-  border: 1px solid var(--hero-border-btn);
-  border-radius: var(--hero-radius-btn);
+  border: 1px solid var(--hero-border);
+  border-radius: var(--hero-radius-sm);
   overflow: hidden;
 }
 .lang-btn {
-  padding: 6px 12px;
+  padding: 7px 12px;
   font-family: var(--hero-font);
-  font-size: 11px; font-weight: 700;
-  letter-spacing: 1px; text-transform: uppercase;
-  border: none; background: transparent;
+  font-size: 12px; font-weight: 700;
+  letter-spacing: 0.5px;
+  border: none; background: var(--hero-card-bg);
   color: var(--hero-text-muted);
-  cursor: pointer; transition: var(--hero-transition);
+  cursor: pointer; transition: all 0.15s;
+  min-width: 38px;
 }
-.lang-btn:first-child { border-right: 1px solid var(--hero-border-btn); }
+.lang-btn:not(:last-child) { border-right: 1px solid var(--hero-border); }
 .lang-btn.active { background: var(--hero-primary); color: #fff; }
-.lang-btn:not(.active):hover { background: var(--hero-primary-light); color: var(--hero-primary); }
+.lang-btn:not(.active):hover { background: var(--hero-primary-50); color: var(--hero-primary); }
 
-/* BANNER */
-.page-banner {
-  background: var(--hero-bg-card);
-  border-bottom: 1px solid var(--hero-border-card);
-  padding: 32px 40px 28px;
+/* ════════════════════════════════════════════════════
+   HERO BANNER (Featured next event)
+   ════════════════════════════════════════════════════ */
+.hero-banner {
+  background:
+    linear-gradient(135deg, rgba(6,163,182,0.04) 0%, rgba(6,163,182,0.0) 60%),
+    var(--hero-card-bg);
+  border-bottom: 1px solid var(--hero-border);
+  padding: 32px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-banner::before {
+  content: '';
+  position: absolute;
+  top: -100px; right: -100px;
+  width: 400px; height: 400px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(6,163,182,0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.banner-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 40px;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+
+.banner-left .label-tag {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--hero-primary-50);
+  color: var(--hero-primary);
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 1.2px; text-transform: uppercase;
+  padding: 5px 12px;
+  border-radius: 100px;
+  margin-bottom: 14px;
+}
+.banner-left .label-tag .dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--hero-primary);
+  animation: pulse 1.6s infinite;
+}
+
+.banner-left h1 {
+  font-family: var(--hero-font);
+  font-size: clamp(22px, 3vw, 32px);
+  font-weight: 900;
+  color: var(--hero-text);
+  line-height: 1.15;
+  margin-bottom: 6px;
+  letter-spacing: -0.5px;
+}
+
+.banner-left .next-meta {
+  display: flex; flex-wrap: wrap; gap: 16px;
+  margin-top: 14px;
+  font-size: 14px;
+  color: var(--hero-text-muted);
+}
+.banner-left .next-meta span { display: inline-flex; align-items: center; gap: 6px; }
+.banner-left .next-meta b { color: var(--hero-text); font-weight: 700; }
+
+.banner-right {
+  display: flex; flex-direction: column; gap: 10px;
+  align-items: flex-end;
+}
+
+.countdown-card {
+  background: linear-gradient(135deg, var(--hero-primary) 0%, var(--hero-primary-dark) 100%);
+  color: #fff;
+  padding: 14px 22px;
+  border-radius: var(--hero-radius);
+  text-align: center;
+  box-shadow: var(--hero-shadow-lg);
+  min-width: 160px;
+}
+.countdown-card .count-num {
+  font-size: 36px;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -1px;
+}
+.countdown-card .count-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-top: 4px;
+  opacity: 0.9;
+}
+
+.banner-actions { display: flex; gap: 8px; }
+
+.btn-primary {
+  background: var(--hero-primary);
+  color: #fff;
+  font-family: var(--hero-font);
+  font-size: 13px; font-weight: 700;
+  padding: 10px 18px;
+  border-radius: var(--hero-radius-sm);
+  border: none;
+  cursor: pointer;
+  transition: all 0.15s;
+  display: inline-flex; align-items: center; gap: 6px;
+  text-decoration: none;
+}
+.btn-primary:hover { background: var(--hero-primary-dark); transform: translateY(-1px); box-shadow: var(--hero-shadow); }
+
+.btn-secondary {
+  background: var(--hero-card-bg);
+  color: var(--hero-text);
+  font-family: var(--hero-font);
+  font-size: 13px; font-weight: 600;
+  padding: 10px 18px;
+  border-radius: var(--hero-radius-sm);
+  border: 1px solid var(--hero-border);
+  cursor: pointer;
+  transition: all 0.15s;
+  display: inline-flex; align-items: center; gap: 6px;
+  text-decoration: none;
+}
+.btn-secondary:hover { border-color: var(--hero-primary); color: var(--hero-primary); }
+
+/* No upcoming state in banner */
+.banner-empty {
+  text-align: center;
+  padding: 20px;
+  color: var(--hero-text-muted);
+  grid-column: 1 / -1;
+}
+.banner-empty h2 { font-size: 18px; color: var(--hero-text); margin-bottom: 6px; }
+
+/* ════════════════════════════════════════════════════
+   MAIN LAYOUT
+   ════════════════════════════════════════════════════ */
+.main {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 28px 32px 60px;
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 28px;
+  align-items: start;
+}
+
+/* SECTION HEADER */
+.section-head {
   display: flex; align-items: center; justify-content: space-between;
-  flex-wrap: wrap; gap: 16px;
+  margin-bottom: 14px;
+  flex-wrap: wrap; gap: 12px;
 }
-.banner-text .hero-tag { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--hero-primary); margin-bottom: 6px; }
-.banner-text h1 { font-family: var(--hero-font); font-weight: 900; font-size: clamp(1.8rem, 4vw, 2.6rem); text-transform: uppercase; letter-spacing: -1px; color: var(--hero-text-primary); line-height: 1; margin-bottom: 6px; }
-.banner-text h1 em { font-style: normal; color: var(--hero-primary); }
-.banner-text p { font-size: 13px; color: var(--hero-text-muted); }
+.section-head h2 {
+  font-family: var(--hero-font);
+  font-size: 18px; font-weight: 700;
+  color: var(--hero-text);
+  display: flex; align-items: center; gap: 10px;
+}
+.section-head h2 .count {
+  background: var(--hero-primary-50);
+  color: var(--hero-primary);
+  font-size: 12px; font-weight: 700;
+  padding: 2px 10px;
+  border-radius: 100px;
+}
 
-.sync-bar { display: inline-flex; align-items: center; gap: 8px; background: var(--hero-bg-preview); border: 1px solid var(--hero-border-card); border-radius: var(--hero-radius-pill); padding: 7px 16px; font-size: 12px; color: var(--hero-text-muted); }
-.sync-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--hero-text-subtle); transition: background 0.3s; }
-.sync-dot.loading { background: #e67e22; animation: pulse 1s infinite; }
-.sync-dot.ok      { background: var(--hero-success); }
-.sync-dot.error   { background: var(--hero-error); }
-@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+.sync-bar {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 12px;
+  color: var(--hero-text-muted);
+}
+.sync-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--hero-text-subtle); }
+.sync-dot.loading { background: var(--hero-warning); animation: pulse 1s infinite; }
+.sync-dot.ok { background: var(--hero-success); }
+.sync-dot.error { background: var(--hero-danger); }
 
-/* CONTROLS */
-.controls { padding: 20px 40px 0; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px; }
-.month-nav { display: flex; align-items: center; gap: 12px; }
-.month-nav button { background: var(--hero-bg-card); border: 1px solid var(--hero-border-btn); color: var(--hero-text-body); width: 36px; height: 36px; border-radius: var(--hero-radius-btn); font-size: 1.1rem; cursor: pointer; transition: var(--hero-transition); display: flex; align-items: center; justify-content: center; }
-.month-nav button:hover { background: var(--hero-primary-light); border-color: var(--hero-primary); color: var(--hero-primary); }
-#month-label { font-family: var(--hero-font); font-weight: 800; font-size: 1.5rem; text-transform: uppercase; letter-spacing: 0.5px; color: var(--hero-text-primary); min-width: 200px; text-align: center; }
-.controls-right { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-.refresh-btn { background: var(--hero-bg-card); border: 1px solid var(--hero-border-btn); color: var(--hero-text-muted); padding: 7px 14px; border-radius: var(--hero-radius-btn); font-family: var(--hero-font); font-size: 12px; font-weight: 700; cursor: pointer; transition: var(--hero-transition); }
-.refresh-btn:hover { background: var(--hero-primary-light); border-color: var(--hero-primary); color: var(--hero-primary); }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
 
-/* FILTERS */
-.filters { display: flex; gap: 8px; flex-wrap: wrap; padding: 14px 40px 0; }
-.filter-btn { padding: 6px 16px; border-radius: var(--hero-radius-pill); border: 1.5px solid var(--hero-border-btn); background: var(--hero-bg-card); color: var(--hero-text-muted); font-family: var(--hero-font); font-weight: 700; font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; cursor: pointer; transition: var(--hero-transition); }
-.filter-btn:hover { border-color: var(--hero-primary); color: var(--hero-primary); background: var(--hero-primary-light); }
-.filter-btn.active.all      { background: var(--hero-text-primary); border-color: var(--hero-text-primary); color: #fff; }
-.filter-btn.active.aca      { background: var(--cat-aca);      border-color: var(--cat-aca);      color: #fff; }
-.filter-btn.active.medicare { background: var(--cat-medicare); border-color: var(--cat-medicare); color: #fff; }
-.filter-btn.active.supp     { background: var(--cat-supp);     border-color: var(--cat-supp);     color: #fff; }
-.filter-btn.active.life     { background: var(--cat-life);     border-color: var(--cat-life);     color: #fff; }
+/* ════════════════════════════════════════════════════
+   FILTERS BAR
+   ════════════════════════════════════════════════════ */
+.filters-row {
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  margin-bottom: 18px;
+}
 
-/* LEGEND */
-.legend { display: flex; gap: 20px; flex-wrap: wrap; padding: 12px 40px 0; align-items: center; }
-.legend-item { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--hero-text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
-.legend-dot { width: 10px; height: 10px; border-radius: 3px; }
-.legend-dot.aca      { background: var(--cat-aca); }
-.legend-dot.medicare { background: var(--cat-medicare); }
-.legend-dot.supp     { background: var(--cat-supp); }
-.legend-dot.life     { background: var(--cat-life); }
+.filter-chip {
+  padding: 6px 14px;
+  font-family: var(--hero-font);
+  font-size: 12px; font-weight: 700;
+  border-radius: 100px;
+  border: 1px solid var(--hero-border);
+  background: var(--hero-card-bg);
+  color: var(--hero-text-muted);
+  cursor: pointer;
+  transition: all 0.15s;
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.filter-chip:hover { border-color: var(--hero-primary); color: var(--hero-primary); }
+.filter-chip .dot { width: 6px; height: 6px; border-radius: 50%; }
+.filter-chip[data-filter="aca"] .dot      { background: var(--cat-aca); }
+.filter-chip[data-filter="medicare"] .dot { background: var(--cat-medicare); }
+.filter-chip[data-filter="supp"] .dot     { background: var(--cat-supp); }
+.filter-chip[data-filter="life"] .dot     { background: var(--cat-life); }
 
-/* ERROR */
-.error-banner { display: none; margin: 16px 40px 0; background: var(--hero-error-bg); border: 1px solid var(--hero-error-border); border-radius: var(--hero-radius-btn); padding: 12px 16px; font-size: 13px; color: var(--hero-error); }
-.error-banner.show { display: block; }
+.filter-chip.active {
+  background: var(--hero-text);
+  border-color: var(--hero-text);
+  color: #fff;
+}
+.filter-chip.active[data-filter="aca"]      { background: var(--cat-aca);      border-color: var(--cat-aca); }
+.filter-chip.active[data-filter="medicare"] { background: var(--cat-medicare); border-color: var(--cat-medicare); }
+.filter-chip.active[data-filter="supp"]     { background: var(--cat-supp);     border-color: var(--cat-supp); }
+.filter-chip.active[data-filter="life"]     { background: var(--cat-life);     border-color: var(--cat-life); }
+.filter-chip.active .dot { background: #fff; }
 
-/* CALENDAR */
-.calendar-wrap { padding: 16px 40px 40px; }
-.weekdays { display: grid; grid-template-columns: repeat(7, 1fr); margin-bottom: 6px; gap: 4px; }
-.weekdays div { text-align: center; font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--hero-text-subtle); padding: 8px 0; }
-.calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
-.day-cell { background: var(--hero-bg-card); border: 1px solid var(--hero-border-card); border-radius: var(--hero-radius-card); min-height: 120px; padding: 10px 8px 8px; transition: border-color 0.2s; }
-.day-cell:hover { border-color: var(--hero-primary); }
-.day-cell.empty { background: transparent; border-color: transparent; pointer-events: none; }
-.day-cell.today { border-color: var(--hero-primary); background: rgba(6,163,182,0.08); }
-.day-num { font-size: 13px; font-weight: 700; color: var(--hero-text-subtle); margin-bottom: 5px; display: block; }
-.day-cell.today .day-num { background: var(--hero-primary); color: #fff; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; margin-bottom: 5px; }
+/* ════════════════════════════════════════════════════
+   TRAINING LIST CARDS
+   ════════════════════════════════════════════════════ */
+.training-list { display: flex; flex-direction: column; gap: 10px; }
 
-.event-pill { display: block; width: 100%; border-radius: 5px; padding: 3px 7px; font-family: var(--hero-font); font-weight: 700; font-size: 11px; line-height: 1.4; margin-bottom: 3px; cursor: pointer; border: none; text-align: left; transition: filter 0.15s, transform 0.15s; position: relative; }
-.event-pill:hover { filter: brightness(0.93); transform: scale(1.01); }
-.event-pill.aca      { background: #d6f2f5; color: #05788a; border-left: 3px solid var(--cat-aca); }
-.event-pill.medicare { background: #dde8fd; color: #0045b0; border-left: 3px solid var(--cat-medicare); }
-.event-pill.supp     { background: #d5f5e3; color: #1a7a44; border-left: 3px solid var(--cat-supp); }
-.event-pill.life     { background: #fde8d3; color: #a04000; border-left: 3px solid var(--cat-life); }
-.event-pill.hidden   { display: none; }
-.pill-time { display: block; font-size: 10px; font-weight: 400; opacity: 0.75; margin-top: 1px; }
+.training-card {
+  background: var(--hero-card-bg);
+  border: 1px solid var(--hero-border);
+  border-radius: var(--hero-radius);
+  padding: 18px 20px;
+  transition: all 0.18s;
+  cursor: pointer;
+  position: relative;
+  display: grid;
+  grid-template-columns: 72px 1fr auto;
+  gap: 18px;
+  align-items: center;
+}
+.training-card:hover {
+  border-color: var(--hero-primary);
+  box-shadow: var(--hero-shadow);
+  transform: translateY(-1px);
+}
 
-/* Language badge on pill */
-.pill-lang {
-  display: inline-block;
-  font-size: 9px; font-weight: 700;
+.training-card .date-block {
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  background: var(--hero-bg);
+  border-radius: var(--hero-radius-sm);
+  padding: 10px 6px;
+  border-left: 3px solid var(--cat-aca);
+}
+.training-card.medicare .date-block { border-left-color: var(--cat-medicare); }
+.training-card.supp     .date-block { border-left-color: var(--cat-supp); }
+.training-card.life     .date-block { border-left-color: var(--cat-life); }
+
+.date-block .day {
+  font-size: 22px; font-weight: 900;
+  color: var(--hero-text);
+  line-height: 1;
+}
+.date-block .month {
+  font-size: 10px; font-weight: 700;
+  letter-spacing: 1.5px; text-transform: uppercase;
+  color: var(--hero-text-muted);
+  margin-top: 4px;
+}
+.date-block .weekday {
+  font-size: 10px; font-weight: 600;
+  color: var(--hero-text-subtle);
+  margin-top: 2px;
+}
+
+.training-card .body { min-width: 0; }
+
+.training-card .meta-row {
+  display: flex; flex-wrap: wrap; gap: 6px;
+  margin-bottom: 6px;
+  font-size: 11px;
+}
+
+.cat-chip {
+  display: inline-flex; align-items: center;
+  font-size: 10px; font-weight: 700;
+  letter-spacing: 0.8px; text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+.cat-chip.aca      { background: rgba(6,163,182,0.12);  color: var(--cat-aca); }
+.cat-chip.medicare { background: rgba(0,101,243,0.12);  color: var(--cat-medicare); }
+.cat-chip.supp     { background: rgba(34,160,107,0.12); color: var(--cat-supp); }
+.cat-chip.life     { background: rgba(232,163,23,0.15); color: #b07a0e; }
+
+.lang-chip {
+  display: inline-flex; align-items: center;
+  font-size: 10px; font-weight: 700;
+  letter-spacing: 0.8px;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+.lang-chip.es { background: #fff5d6; color: #856404; }
+.lang-chip.en { background: #d6e4ff; color: #084298; }
+
+.now-chip {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 10px; font-weight: 700;
   letter-spacing: 0.5px; text-transform: uppercase;
-  border-radius: 3px; padding: 1px 4px;
-  margin-left: 4px; vertical-align: middle;
-  opacity: 0.75;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: rgba(214,69,69,0.12); color: var(--hero-danger);
 }
-.pill-lang.es { background: #fff3cd; color: #856404; }
-.pill-lang.en { background: #cfe2ff; color: #084298; }
+.now-chip::before { content:''; width:5px; height:5px; border-radius:50%; background:var(--hero-danger); animation:pulse 1.2s infinite; }
 
-/* SKELETON */
-.skeleton { background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; border-radius: 5px; height: 18px; margin-bottom: 4px; }
+.next-chip {
+  display: inline-flex; align-items: center;
+  font-size: 10px; font-weight: 700;
+  letter-spacing: 0.5px; text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: var(--hero-primary); color: #fff;
+}
+
+.training-card h3 {
+  font-family: var(--hero-font);
+  font-size: 16px; font-weight: 700;
+  color: var(--hero-text);
+  margin: 2px 0 6px;
+  line-height: 1.3;
+}
+
+.training-card .info {
+  display: flex; flex-wrap: wrap; gap: 14px;
+  font-size: 12.5px;
+  color: var(--hero-text-muted);
+}
+.training-card .info span { display: inline-flex; align-items: center; gap: 5px; }
+.training-card .info svg { width: 13px; height: 13px; opacity: 0.7; }
+
+.training-card .actions {
+  display: flex; flex-direction: column; gap: 6px;
+  align-items: stretch;
+}
+.training-card .actions .btn-primary,
+.training-card .actions .btn-secondary {
+  font-size: 12px;
+  padding: 8px 14px;
+  white-space: nowrap;
+}
+
+/* Empty state */
+.empty-state {
+  background: var(--hero-card-bg);
+  border: 1px dashed var(--hero-border);
+  border-radius: var(--hero-radius);
+  padding: 40px 24px;
+  text-align: center;
+  color: var(--hero-text-muted);
+}
+.empty-state .icon {
+  width: 48px; height: 48px;
+  margin: 0 auto 12px;
+  background: var(--hero-bg);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px;
+}
+.empty-state h3 { font-size: 15px; color: var(--hero-text); margin-bottom: 4px; }
+.empty-state p { font-size: 13px; }
+
+/* Skeleton */
+.skeleton-card {
+  height: 90px;
+  background: linear-gradient(90deg, #f3f6fa 25%, #e8edf3 50%, #f3f6fa 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite;
+  border-radius: var(--hero-radius);
+}
 @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
 
-/* UPCOMING */
-.upcoming-strip { margin: 0 40px 40px; background: var(--hero-bg-card); border: 1px solid var(--hero-border-card); border-radius: var(--hero-radius-card); padding: 20px 24px; }
-.upcoming-strip h3 { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--hero-primary); margin-bottom: 14px; }
-.upcoming-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; }
-.upcoming-card { background: var(--hero-bg-preview); border: 1px solid var(--hero-border-card); border-radius: var(--hero-radius-btn); padding: 12px 14px; border-left: 3px solid var(--cat-aca); cursor: pointer; transition: var(--hero-transition); }
-.upcoming-card:hover { background: var(--hero-primary-light); border-color: var(--hero-primary); }
-.upcoming-card.medicare { border-left-color: var(--cat-medicare); }
-.upcoming-card.supp     { border-left-color: var(--cat-supp); }
-.upcoming-card.life     { border-left-color: var(--cat-life); }
-.uc-date  { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--hero-text-subtle); margin-bottom: 3px; }
-.uc-title { font-size: 13px; font-weight: 700; color: var(--hero-text-primary); line-height: 1.3; }
-.uc-time  { font-size: 11px; color: var(--hero-text-muted); margin-top: 3px; }
-.uc-lang  { display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; border-radius: 4px; padding: 2px 7px; margin-top: 5px; }
-.uc-lang.es { background: #fff3cd; color: #856404; }
-.uc-lang.en { background: #cfe2ff; color: #084298; }
+/* ════════════════════════════════════════════════════
+   SIDEBAR
+   ════════════════════════════════════════════════════ */
+.sidebar { display: flex; flex-direction: column; gap: 16px; position: sticky; top: 80px; }
 
-/* MODAL */
-.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.35); z-index: 500; backdrop-filter: blur(3px); align-items: center; justify-content: center; padding: 20px; }
+.side-card {
+  background: var(--hero-card-bg);
+  border: 1px solid var(--hero-border);
+  border-radius: var(--hero-radius);
+  padding: 18px;
+}
+
+.side-card h3 {
+  font-family: var(--hero-font);
+  font-size: 13px; font-weight: 700;
+  color: var(--hero-text);
+  letter-spacing: 0.3px;
+  margin-bottom: 14px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+
+.side-card h3 .nav-arrows { display: flex; gap: 4px; }
+.side-card h3 .nav-arrows button {
+  width: 24px; height: 24px;
+  border-radius: 5px;
+  border: 1px solid var(--hero-border);
+  background: var(--hero-card-bg);
+  color: var(--hero-text-muted);
+  cursor: pointer;
+  font-size: 12px;
+  transition: all 0.15s;
+  display: flex; align-items: center; justify-content: center;
+}
+.side-card h3 .nav-arrows button:hover { border-color: var(--hero-primary); color: var(--hero-primary); }
+
+/* MINI CALENDAR */
+.mini-cal-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+  margin-bottom: 4px;
+}
+.mini-cal-weekdays div {
+  text-align: center;
+  font-size: 10px; font-weight: 700;
+  color: var(--hero-text-subtle);
+  letter-spacing: 0.5px;
+  padding: 4px 0;
+  text-transform: uppercase;
+}
+
+.mini-cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; }
+
+.mini-day {
+  aspect-ratio: 1;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 600;
+  color: var(--hero-text);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.12s;
+  position: relative;
+  border: 1px solid transparent;
+}
+.mini-day:hover { background: var(--hero-bg); }
+.mini-day.empty { pointer-events: none; color: transparent; }
+.mini-day.has-events { font-weight: 700; }
+.mini-day.today {
+  background: var(--hero-primary);
+  color: #fff;
+}
+.mini-day.selected {
+  border-color: var(--hero-primary);
+  background: var(--hero-primary-50);
+  color: var(--hero-primary);
+}
+.mini-day.today.selected { background: var(--hero-primary); color: #fff; }
+
+.mini-day .dots {
+  display: flex; gap: 2px;
+  margin-top: 2px;
+  height: 4px;
+}
+.mini-day .dots span {
+  width: 4px; height: 4px;
+  border-radius: 50%;
+}
+.mini-day.today .dots span { background: #fff !important; }
+
+/* Filters in sidebar */
+.filter-list { display: flex; flex-direction: column; gap: 4px; }
+.filter-list-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.15s;
+  font-size: 13px;
+  color: var(--hero-text);
+  border: none;
+  background: transparent;
+  font-family: var(--hero-font);
+  width: 100%;
+  text-align: left;
+}
+.filter-list-item:hover { background: var(--hero-bg); }
+.filter-list-item.active { background: var(--hero-primary-50); color: var(--hero-primary); font-weight: 700; }
+.filter-list-item .swatch { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
+.filter-list-item .swatch.all      { background: var(--hero-text); }
+.filter-list-item .swatch.aca      { background: var(--cat-aca); }
+.filter-list-item .swatch.medicare { background: var(--cat-medicare); }
+.filter-list-item .swatch.supp     { background: var(--cat-supp); }
+.filter-list-item .swatch.life     { background: var(--cat-life); }
+.filter-list-item .num {
+  margin-left: auto;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--hero-text-subtle);
+  background: var(--hero-bg);
+  padding: 1px 7px;
+  border-radius: 100px;
+}
+.filter-list-item.active .num { background: rgba(6,163,182,0.15); color: var(--hero-primary); }
+
+/* ════════════════════════════════════════════════════
+   GRID VIEW (alternative view)
+   ════════════════════════════════════════════════════ */
+.grid-view { display: none; grid-column: 1 / -1; }
+.grid-view.active { display: block; }
+.list-view { display: contents; }
+.list-view.hidden { display: none; }
+.sidebar.hidden { display: none; }
+
+.calendar-grid-wrap {
+  background: var(--hero-card-bg);
+  border: 1px solid var(--hero-border);
+  border-radius: var(--hero-radius);
+  padding: 20px;
+}
+
+.cal-grid-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 14px;
+}
+.cal-grid-month {
+  font-family: var(--hero-font);
+  font-size: 18px; font-weight: 700;
+}
+.cal-grid-nav { display: flex; gap: 6px; }
+.cal-grid-nav button {
+  width: 32px; height: 32px;
+  border-radius: 6px;
+  border: 1px solid var(--hero-border);
+  background: var(--hero-card-bg);
+  color: var(--hero-text);
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.15s;
+}
+.cal-grid-nav button:hover { border-color: var(--hero-primary); color: var(--hero-primary); }
+
+.cal-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  margin-bottom: 6px;
+}
+.cal-weekdays div {
+  text-align: center;
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 1px; text-transform: uppercase;
+  color: var(--hero-text-subtle);
+  padding: 6px 0;
+}
+
+.cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+
+.cal-day {
+  background: var(--hero-bg);
+  border: 1px solid transparent;
+  border-radius: var(--hero-radius-sm);
+  min-height: 110px;
+  padding: 8px;
+  transition: border-color 0.15s;
+  position: relative;
+}
+.cal-day:hover { border-color: var(--hero-primary); }
+.cal-day.empty { background: transparent; pointer-events: none; }
+.cal-day.today { border-color: var(--hero-primary); background: var(--hero-primary-50); }
+
+.cal-day-num {
+  font-size: 13px; font-weight: 700;
+  color: var(--hero-text);
+  margin-bottom: 4px;
+}
+.cal-day.today .cal-day-num {
+  background: var(--hero-primary); color: #fff;
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px;
+}
+
+.cal-pill {
+  display: block;
+  font-size: 10.5px; font-weight: 700;
+  padding: 3px 6px;
+  border-radius: 4px;
+  margin-bottom: 2px;
+  cursor: pointer;
+  border: none;
+  text-align: left;
+  width: 100%;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  transition: filter 0.15s;
+}
+.cal-pill:hover { filter: brightness(0.9); }
+.cal-pill.aca      { background: rgba(6,163,182,0.15);  color: var(--cat-aca);      border-left: 2px solid var(--cat-aca); }
+.cal-pill.medicare { background: rgba(0,101,243,0.15);  color: var(--cat-medicare); border-left: 2px solid var(--cat-medicare); }
+.cal-pill.supp     { background: rgba(34,160,107,0.15); color: var(--cat-supp);     border-left: 2px solid var(--cat-supp); }
+.cal-pill.life     { background: rgba(232,163,23,0.18); color: #b07a0e;             border-left: 2px solid var(--cat-life); }
+.cal-pill .pill-time { display: block; font-weight: 400; font-size: 9.5px; opacity: 0.85; }
+.cal-pill.hidden { display: none; }
+
+/* ════════════════════════════════════════════════════
+   ERROR BANNER
+   ════════════════════════════════════════════════════ */
+.error-banner {
+  display: none;
+  margin: 0 0 16px;
+  background: rgba(214,69,69,0.08);
+  border: 1px solid rgba(214,69,69,0.25);
+  border-radius: var(--hero-radius);
+  padding: 12px 16px;
+  font-size: 13px;
+  color: var(--hero-danger);
+}
+.error-banner.show { display: block; }
+
+/* ════════════════════════════════════════════════════
+   MODAL
+   ════════════════════════════════════════════════════ */
+.modal-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(26,39,51,0.4);
+  backdrop-filter: blur(4px);
+  z-index: 500;
+  align-items: center; justify-content: center;
+  padding: 20px;
+}
 .modal-overlay.open { display: flex; }
-.modal { background: var(--hero-bg-card); border: 1px solid var(--hero-border-card); border-radius: var(--hero-radius-card); padding: 32px; max-width: 440px; width: 100%; position: relative; animation: modalIn 0.22s ease; box-shadow: 0 20px 60px rgba(0,0,0,0.12); }
-@keyframes modalIn { from{opacity:0;transform:scale(0.94) translateY(8px)} to{opacity:1;transform:scale(1) translateY(0)} }
-.modal-close { position: absolute; top: 14px; right: 16px; background: none; border: none; color: var(--hero-text-subtle); font-size: 1.3rem; cursor: pointer; transition: color 0.2s; }
-.modal-close:hover { color: var(--hero-text-primary); }
 
-.modal-badges { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+.modal {
+  background: var(--hero-card-bg);
+  border-radius: var(--hero-radius-lg);
+  padding: 32px;
+  max-width: 480px; width: 100%;
+  position: relative;
+  animation: modalIn 0.22s ease;
+  box-shadow: var(--hero-shadow-lg);
+  max-height: 90vh; overflow-y: auto;
+}
+@keyframes modalIn {
+  from { opacity: 0; transform: scale(0.96) translateY(8px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
 
-.modal-type-badge { display: inline-block; padding: 3px 12px; border-radius: var(--hero-radius-pill); font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; }
-.modal-type-badge.aca      { background: #d6f2f5; color: #05788a; }
-.modal-type-badge.medicare { background: #dde8fd; color: #0045b0; }
-.modal-type-badge.supp     { background: #d5f5e3; color: #1a7a44; }
-.modal-type-badge.life     { background: #fde8d3; color: #a04000; }
+.modal-close {
+  position: absolute; top: 14px; right: 14px;
+  width: 32px; height: 32px;
+  border-radius: 6px;
+  background: var(--hero-bg);
+  border: none;
+  color: var(--hero-text-muted);
+  font-size: 18px;
+  cursor: pointer;
+  transition: all 0.15s;
+  display: flex; align-items: center; justify-content: center;
+}
+.modal-close:hover { background: var(--hero-border); color: var(--hero-text); }
 
-.modal-lang-badge { display: inline-block; padding: 3px 12px; border-radius: var(--hero-radius-pill); font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; }
-.modal-lang-badge.es { background: #fff3cd; color: #856404; }
-.modal-lang-badge.en { background: #cfe2ff; color: #084298; }
+.modal-badges { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
+.modal-cat-badge {
+  display: inline-flex; align-items: center;
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 1px; text-transform: uppercase;
+  padding: 4px 12px;
+  border-radius: 100px;
+}
+.modal-cat-badge.aca      { background: rgba(6,163,182,0.12);  color: var(--cat-aca); }
+.modal-cat-badge.medicare { background: rgba(0,101,243,0.12);  color: var(--cat-medicare); }
+.modal-cat-badge.supp     { background: rgba(34,160,107,0.12); color: var(--cat-supp); }
+.modal-cat-badge.life     { background: rgba(232,163,23,0.15); color: #b07a0e; }
+
+.modal-lang-badge {
+  display: inline-flex; align-items: center;
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 0.5px;
+  padding: 4px 12px;
+  border-radius: 100px;
+}
+.modal-lang-badge.es { background: #fff5d6; color: #856404; }
+.modal-lang-badge.en { background: #d6e4ff; color: #084298; }
 .modal-lang-badge.hidden { display: none; }
 
-.modal h2 { font-family: var(--hero-font); font-weight: 900; font-size: 1.6rem; text-transform: uppercase; letter-spacing: -0.5px; color: var(--hero-text-primary); margin-bottom: 14px; line-height: 1.1; }
-.modal-meta { display: flex; flex-direction: column; gap: 7px; margin-bottom: 16px; }
-.modal-meta span { font-size: 13px; color: var(--hero-text-body); display: flex; align-items: flex-start; gap: 8px; }
-.modal-meta span i { font-style: normal; flex-shrink: 0; }
-.modal-desc { font-size: 13px; color: var(--hero-text-muted); line-height: 1.65; border-top: 1px solid var(--hero-border-card); padding-top: 14px; }
-.modal-link-btn { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 16px; background: var(--hero-primary); color: #fff; font-family: var(--hero-font); font-weight: 700; font-size: 14px; padding: 12px 24px; border-radius: var(--hero-radius-btn); text-decoration: none; border: none; cursor: pointer; transition: var(--hero-transition); width: 100%; }
-.modal-link-btn:hover { background: var(--hero-primary-hover); transform: translateY(-1px); }
+.modal h2 {
+  font-family: var(--hero-font);
+  font-size: 22px; font-weight: 800;
+  color: var(--hero-text);
+  margin-bottom: 18px;
+  line-height: 1.25;
+  padding-right: 30px;
+}
+
+.modal-meta { display: flex; flex-direction: column; gap: 10px; margin-bottom: 18px; }
+.modal-meta .meta-row {
+  display: flex; align-items: flex-start; gap: 10px;
+  font-size: 13.5px;
+  color: var(--hero-text);
+}
+.modal-meta .meta-row svg { width: 16px; height: 16px; color: var(--hero-text-muted); margin-top: 1px; flex-shrink: 0; }
+.modal-meta .meta-row b { font-weight: 700; }
+.modal-meta .meta-row small { color: var(--hero-text-muted); font-size: 11.5px; margin-left: 4px; }
+
+.modal-desc {
+  font-size: 13.5px;
+  color: var(--hero-text-muted);
+  line-height: 1.65;
+  padding: 14px 0;
+  border-top: 1px solid var(--hero-border-soft);
+}
+
+.modal-actions { display: flex; flex-direction: column; gap: 8px; }
+
+.modal-link-btn {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  background: var(--hero-primary); color: #fff;
+  font-family: var(--hero-font);
+  font-size: 14px; font-weight: 700;
+  padding: 12px 20px;
+  border-radius: var(--hero-radius-sm);
+  text-decoration: none; border: none;
+  cursor: pointer; transition: all 0.15s;
+  width: 100%;
+}
+.modal-link-btn:hover { background: var(--hero-primary-dark); transform: translateY(-1px); }
 .modal-link-btn.hidden { display: none; }
 
-/* RESPONSIVE */
-@media (max-width: 700px) {
-  .topbar, .page-banner, .controls, .filters, .legend, .calendar-wrap, .upcoming-strip, .error-banner { padding-left: 16px; padding-right: 16px; }
-  .day-cell { min-height: 72px; padding: 6px 4px; }
-  .event-pill { font-size: 10px; padding: 2px 4px; }
-  .pill-time { display: none; }
-  .day-num { font-size: 11px; }
-  #month-label { font-size: 1.2rem; min-width: 160px; }
-  .topbar-title { display: none; }
-  .pill-lang { display: none; }
+/* CALENDAR PICKER */
+.cal-picker { position: relative; width: 100%; }
+.cal-picker-btn {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  width: 100%; padding: 11px 20px;
+  background: var(--hero-card-bg); color: var(--hero-primary);
+  font-family: var(--hero-font); font-size: 13px; font-weight: 700;
+  border: 1.5px solid var(--hero-primary); border-radius: var(--hero-radius-sm);
+  cursor: pointer; transition: all 0.15s;
+}
+.cal-picker-btn:hover { background: var(--hero-primary-50); }
+.cal-picker-btn .arrow { font-size: 9px; margin-left: auto; transition: transform 0.2s; }
+.cal-picker-btn.open .arrow { transform: rotate(180deg); }
+
+.cal-dropdown {
+  display: none;
+  flex-direction: column;
+  position: absolute; bottom: calc(100% + 6px); left: 0; right: 0;
+  background: var(--hero-card-bg);
+  border: 1px solid var(--hero-border);
+  border-radius: var(--hero-radius);
+  box-shadow: var(--hero-shadow-lg);
+  overflow: hidden; z-index: 10;
+  animation: dropUp 0.18s ease;
+}
+.cal-dropdown.open { display: flex; }
+@keyframes dropUp { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
+
+.cal-option {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 16px;
+  font-family: var(--hero-font); font-size: 13px; font-weight: 600;
+  color: var(--hero-text);
+  text-decoration: none; border: none; background: none;
+  cursor: pointer; transition: background 0.15s;
+  border-bottom: 1px solid var(--hero-border-soft);
+  text-align: left;
+}
+.cal-option:last-child { border-bottom: none; }
+.cal-option:hover { background: var(--hero-bg); }
+.cal-option-icon { width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.cal-option-label { display: flex; flex-direction: column; }
+.cal-option-label span { font-size: 11px; color: var(--hero-text-subtle); font-weight: 400; margin-top: 1px; }
+
+/* ════════════════════════════════════════════════════
+   FOOTER
+   ════════════════════════════════════════════════════ */
+.hero-footer {
+  background: var(--hero-card-bg);
+  border-top: 1px solid var(--hero-border);
+  margin-top: 40px;
+}
+.hero-footer-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 16px 32px;
+  display: flex; justify-content: space-between;
+  color: var(--hero-text-muted);
+  font-size: 13px;
+}
+
+/* ════════════════════════════════════════════════════
+   RESPONSIVE
+   ════════════════════════════════════════════════════ */
+@media (max-width: 1024px) {
+  .main { grid-template-columns: 1fr; }
+  .sidebar { position: static; }
+}
+
+@media (max-width: 720px) {
+  .topbar { padding: 0 16px; height: 56px; }
+  .topbar-divider, .topbar-breadcrumb { display: none; }
+  .topbar-logo img { height: 32px; }
+  .view-toggle button { padding: 6px 8px; font-size: 11px; }
+
+  .hero-banner { padding: 22px 16px; }
+  .banner-inner { grid-template-columns: 1fr; gap: 18px; }
+  .banner-right { align-items: flex-start; width: 100%; }
+  .countdown-card { width: 100%; min-width: 0; }
+
+  .main { padding: 20px 16px 40px; }
+
+  .training-card {
+    grid-template-columns: 56px 1fr;
+    gap: 14px;
+  }
+  .training-card .actions { grid-column: 1 / -1; flex-direction: row; }
+
+  .hero-footer-inner { padding: 14px 16px; flex-direction: column; gap: 4px; text-align: center; }
+
+  .cal-day { min-height: 70px; padding: 4px; }
+  .cal-pill { font-size: 9.5px; padding: 2px 4px; }
+  .cal-pill .pill-time { display: none; }
 }
 </style>
 </head>
 <body>
 
-<!-- TOPBAR -->
-<div class="topbar">
+<!-- ═══════════ TOPBAR ═══════════ -->
+<header class="topbar">
   <div class="topbar-logo">
     <img src="hero-logo-transparent.png" alt="Hero Insurance">
   </div>
+  <div class="topbar-divider"></div>
+  <div class="topbar-breadcrumb">
+    <span data-i18n="breadcrumb-tools">Herramientas</span>
+    <span>/</span>
+    <b data-i18n="breadcrumb-tc">Training Calendar</b>
+  </div>
   <div class="topbar-right">
-    <div class="topbar-title" data-i18n="topbar-title">Training Calendar</div>
+    <div class="view-toggle">
+      <button id="view-list" class="active">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+        <span data-i18n="view-list">Lista</span>
+      </button>
+      <button id="view-grid">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        <span data-i18n="view-grid">Mes</span>
+      </button>
+    </div>
     <div class="lang-switcher">
       <button class="lang-btn active" data-lang="es">ES</button>
       <button class="lang-btn" data-lang="en">EN</button>
     </div>
   </div>
-</div>
+</header>
 
-<!-- BANNER -->
-<div class="page-banner">
-  <div class="banner-text">
-    <div class="hero-tag">Hero Insurance USA</div>
-    <h1 data-i18n="banner-h1">CALENDARIO DE <em>ENTRENAMIENTOS</em></h1>
-    <p data-i18n="banner-p">Capacitaciones y sesiones en vivo para el equipo Hero.</p>
+<!-- ═══════════ HERO BANNER ═══════════ -->
+<section class="hero-banner" id="hero-banner">
+  <!-- Filled dynamically -->
+</section>
+
+<!-- ═══════════ MAIN ═══════════ -->
+<main class="main">
+
+  <!-- Error banner spans full -->
+  <div class="error-banner" id="error-banner" data-i18n="error-msg" style="grid-column: 1 / -1;">
+    ⚠️ No se pudo conectar con Google Sheets. Verifica que el Apps Script esté publicado y con acceso público.
   </div>
-  <div class="sync-bar">
-    <div class="sync-dot loading" id="sync-dot"></div>
-    <span id="sync-label"></span>
+
+  <!-- ─── LIST VIEW (default) ─── -->
+  <div class="list-view" id="list-view">
+
+    <!-- Left: Training list -->
+    <section>
+      <div class="section-head">
+        <h2>
+          <span id="list-title" data-i18n="upcoming-title">Próximos Trainings</span>
+          <span class="count" id="list-count">0</span>
+        </h2>
+        <div class="sync-bar">
+          <div class="sync-dot loading" id="sync-dot"></div>
+          <span id="sync-label"></span>
+        </div>
+      </div>
+
+      <!-- Filter chips on mobile/desktop -->
+      <div class="filters-row" id="filters-row">
+        <button class="filter-chip active" data-filter="all" data-i18n="filter-all">Todos</button>
+        <button class="filter-chip" data-filter="aca"><span class="dot"></span>ACA</button>
+        <button class="filter-chip" data-filter="medicare"><span class="dot"></span>Medicare</button>
+        <button class="filter-chip" data-filter="supp"><span class="dot"></span><span data-i18n="cat-supp">Supplemental</span></button>
+        <button class="filter-chip" data-filter="life"><span class="dot"></span><span data-i18n="cat-life">Life</span></button>
+      </div>
+
+      <div class="training-list" id="training-list">
+        <!-- Skeletons during load -->
+      </div>
+    </section>
+
+    <!-- Right: Sidebar -->
+    <aside class="sidebar" id="sidebar">
+
+      <!-- Mini calendar -->
+      <div class="side-card">
+        <h3>
+          <span id="mini-cal-month"></span>
+          <div class="nav-arrows">
+            <button id="mini-prev">‹</button>
+            <button id="mini-next">›</button>
+          </div>
+        </h3>
+        <div class="mini-cal-weekdays" id="mini-weekdays">
+          <div>D</div><div>L</div><div>M</div><div>M</div><div>J</div><div>V</div><div>S</div>
+        </div>
+        <div class="mini-cal-grid" id="mini-cal-grid"></div>
+      </div>
+
+      <!-- Filter list -->
+      <div class="side-card">
+        <h3 data-i18n="categories">Categorías</h3>
+        <div class="filter-list" id="filter-list">
+          <button class="filter-list-item active" data-filter="all">
+            <span class="swatch all"></span>
+            <span data-i18n="filter-all">Todos</span>
+            <span class="num" id="num-all">0</span>
+          </button>
+          <button class="filter-list-item" data-filter="aca">
+            <span class="swatch aca"></span>
+            <span>ACA</span>
+            <span class="num" id="num-aca">0</span>
+          </button>
+          <button class="filter-list-item" data-filter="medicare">
+            <span class="swatch medicare"></span>
+            <span>Medicare</span>
+            <span class="num" id="num-medicare">0</span>
+          </button>
+          <button class="filter-list-item" data-filter="supp">
+            <span class="swatch supp"></span>
+            <span data-i18n="cat-supp">Supplemental</span>
+            <span class="num" id="num-supp">0</span>
+          </button>
+          <button class="filter-list-item" data-filter="life">
+            <span class="swatch life"></span>
+            <span data-i18n="cat-life">Life</span>
+            <span class="num" id="num-life">0</span>
+          </button>
+        </div>
+      </div>
+
+    </aside>
   </div>
-</div>
 
-<!-- CONTROLS -->
-<div class="controls">
-  <div class="month-nav">
-    <button id="prev-btn">&#8249;</button>
-    <div id="month-label"></div>
-    <button id="next-btn">&#8250;</button>
+  <!-- ─── GRID VIEW ─── -->
+  <div class="grid-view" id="grid-view">
+    <div class="calendar-grid-wrap">
+      <div class="cal-grid-header">
+        <div class="cal-grid-month" id="grid-month"></div>
+        <div class="cal-grid-nav">
+          <button id="grid-prev">‹</button>
+          <button id="grid-today" data-i18n="today-btn">Hoy</button>
+          <button id="grid-next">›</button>
+        </div>
+      </div>
+      <div class="cal-weekdays" id="cal-weekdays-row">
+        <div>Dom</div><div>Lun</div><div>Mar</div><div>Mié</div><div>Jue</div><div>Vie</div><div>Sáb</div>
+      </div>
+      <div class="cal-grid" id="cal-grid"></div>
+    </div>
   </div>
-  <div class="controls-right">
-    <button class="refresh-btn" id="refresh-btn" data-i18n="refresh-btn">↻ Actualizar</button>
-  </div>
-</div>
 
-<!-- FILTERS -->
-<div class="filters">
-  <button class="filter-btn all active" data-filter="all" data-i18n="filter-all">Todos</button>
-  <button class="filter-btn aca"      data-filter="aca">ACA</button>
-  <button class="filter-btn medicare" data-filter="medicare">Medicare</button>
-  <button class="filter-btn supp"     data-filter="supp">Supp</button>
-  <button class="filter-btn life"     data-filter="life">Life</button>
-</div>
+</main>
 
-<!-- LEGEND -->
-<div class="legend">
-  <div class="legend-item"><div class="legend-dot aca"></div> ACA</div>
-  <div class="legend-item"><div class="legend-dot medicare"></div> Medicare</div>
-  <div class="legend-item"><div class="legend-dot supp"></div> <span data-i18n="legend-supp">Supplemental</span></div>
-  <div class="legend-item"><div class="legend-dot life"></div> <span data-i18n="legend-life">Life Insurance</span></div>
-</div>
-
-<!-- ERROR -->
-<div class="error-banner" id="error-banner" data-i18n="error-msg">
-  ⚠️ No se pudo conectar con Google Sheets. Verifica que el Apps Script esté publicado y con acceso público.
-</div>
-
-<!-- CALENDAR -->
-<div class="calendar-wrap">
-  <div class="weekdays" id="weekdays-row">
-    <div>Dom</div><div>Lun</div><div>Mar</div><div>Mié</div><div>Jue</div><div>Vie</div><div>Sáb</div>
-  </div>
-  <div class="calendar-grid" id="calendar-grid"></div>
-</div>
-
-<!-- UPCOMING -->
-<div class="upcoming-strip">
-  <h3 id="upcoming-title">⚡ Próximos Eventos</h3>
-  <div class="upcoming-list" id="upcoming-list"></div>
-</div>
-
-<!-- MODAL -->
+<!-- ═══════════ MODAL ═══════════ -->
 <div class="modal-overlay" id="modal-overlay">
   <div class="modal">
     <button class="modal-close" id="modal-close">×</button>
     <div class="modal-badges">
-      <div class="modal-type-badge" id="modal-badge"></div>
+      <div class="modal-cat-badge" id="modal-badge"></div>
       <div class="modal-lang-badge hidden" id="modal-lang-badge"></div>
     </div>
     <h2 id="modal-title"></h2>
     <div class="modal-meta">
-      <span><i>📅</i> <span id="modal-date"></span></span>
-      <span><i>🕐</i> <span id="modal-time"></span></span>
-      <span id="modal-time-converted-row" style="display:none"><i>🌎</i> <span id="modal-time-converted"></span></span>
-      <span><i>👤</i> <span id="modal-instructor"></span></span>
+      <div class="meta-row">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        <div><b id="modal-date"></b></div>
+      </div>
+      <div class="meta-row">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <div id="modal-time"></div>
+      </div>
+      <div class="meta-row" id="modal-time-converted-row" style="display:none;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        <div id="modal-time-converted"></div>
+      </div>
+      <div class="meta-row">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <div id="modal-instructor"></div>
+      </div>
     </div>
     <div class="modal-desc" id="modal-desc"></div>
-    <a class="modal-link-btn hidden" id="modal-link" target="_blank" rel="noopener">
-      🔗 <span data-i18n="join-btn">Unirse al Meeting</span>
-    </a>
+    <div class="modal-actions">
+      <a class="modal-link-btn hidden" id="modal-link" target="_blank" rel="noopener">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+        <span data-i18n="join-btn">Unirse al Meeting</span>
+      </a>
+
+      <div class="cal-picker" id="cal-picker">
+        <button class="cal-picker-btn" id="cal-picker-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          <span data-i18n="reminder-btn">Agregar al Calendario</span>
+          <span class="arrow">▼</span>
+        </button>
+        <div class="cal-dropdown" id="cal-dropdown">
+          <a class="cal-option" id="cal-google" target="_blank" rel="noopener">
+            <div class="cal-option-icon">
+              <svg width="22" height="22" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                <path fill="#4285F4" d="M45.5 24.5c0-1.4-.1-2.8-.4-4.1H24v7.8h12.1c-.5 2.7-2.1 5-4.4 6.5v5.4h7.1c4.2-3.8 6.7-9.5 6.7-15.6z"/>
+                <path fill="#34A853" d="M24 46c6 0 11-2 14.7-5.4l-7.1-5.4c-2 1.3-4.5 2.1-7.6 2.1-5.8 0-10.8-3.9-12.5-9.2H4.1v5.6C7.8 41.9 15.4 46 24 46z"/>
+                <path fill="#FBBC05" d="M11.5 28.1c-.5-1.3-.7-2.7-.7-4.1s.3-2.8.7-4.1v-5.6H4.1C2.5 17.4 2 20.6 2 24s.5 6.6 2.1 9.7l7.4-5.6z"/>
+                <path fill="#EA4335" d="M24 9.7c3.3 0 6.2 1.1 8.5 3.3l6.3-6.3C34.9 3.2 29.8 1 24 1 15.4 1 7.8 5.1 4.1 11.9l7.4 5.6C13.2 13.6 18.2 9.7 24 9.7z"/>
+              </svg>
+            </div>
+            <div class="cal-option-label">Google Calendar<span data-i18n="cal-opens-browser">Abre en el navegador</span></div>
+          </a>
+          <button class="cal-option" id="cal-outlook">
+            <div class="cal-option-icon">
+              <svg width="22" height="22" viewBox="0 0 48 48"><path fill="#1976D2" d="M44 24c0 11-9 20-20 20S4 35 4 24 13 4 24 4s20 9 20 20z"/><path fill="#fff" d="M24 12c-6.6 0-12 5.4-12 12s5.4 12 12 12 12-5.4 12-12-5.4-12-12-12zm0 20c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8-3.6 8-8 8z"/><rect fill="#fff" x="22" y="16" width="4" height="9"/><rect fill="#fff" x="22" y="26" width="4" height="4"/></svg>
+            </div>
+            <div class="cal-option-label">Outlook<span data-i18n="cal-downloads">Descarga archivo .ics</span></div>
+          </button>
+          <button class="cal-option" id="cal-apple">
+            <div class="cal-option-icon">
+              <svg width="22" height="22" viewBox="0 0 48 48"><path fill="#424242" d="M35.5 12.2c-3.4.2-6.2 2.3-7.8 2.3-1.6 0-4.1-2.2-6.8-2.1-3.5.1-6.7 2-8.5 5.1-3.6 6.3-.9 15.6 2.6 20.7 1.7 2.5 3.8 5.3 6.5 5.2 2.6-.1 3.6-1.7 6.7-1.7s4 1.7 6.7 1.6c2.8-.1 4.6-2.5 6.3-5 2-2.9 2.8-5.7 2.8-5.8-.1 0-5.4-2.1-5.4-8.3-.1-5.2 4.3-7.7 4.5-7.8-2.5-3.6-6.3-4-7.6-4.2zM30.5 6c1.4-1.7 2.4-4 2.1-6.3-2 .1-4.5 1.3-5.9 3-1.3 1.5-2.4 3.9-2.1 6.2 2.3.2 4.5-1.1 5.9-2.9z"/></svg>
+            </div>
+            <div class="cal-option-label">Apple Calendar<span data-i18n="cal-downloads">Descarga archivo .ics</span></div>
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
+
+<!-- ═══════════ FOOTER ═══════════ -->
+<footer class="hero-footer">
+  <div class="hero-footer-inner">
+    <span>© Hero Insurance USA</span>
+    <span data-i18n="footer-tagline">Protegemos lo más valioso</span>
+  </div>
+</footer>
 
 <script>
   const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbxoOpBZQllJAtCxpNShPLdrf-xkP4AqcoG1z-vUjQIpmNSM7hewAw6vSP4BY_D5YHVUwg/exec';
 
-  // ── TRANSLATIONS ──────────────────────────────────────
+  // ═════════════ I18N ═════════════
   const I18N = {
     es: {
-      'topbar-title':  'Calendario de Entrenamientos',
-      'banner-h1':     'CALENDARIO DE <em>ENTRENAMIENTOS</em>',
-      'banner-p':      'Capacitaciones y sesiones en vivo para el equipo Hero.',
-      'refresh-btn':   '↻ Actualizar',
-      'filter-all':    'Todos',
-      'legend-supp':   'Suplementario',
-      'legend-life':   'Vida',
-      'error-msg':     '⚠️ No se pudo conectar con Google Sheets. Verifica que el Apps Script esté publicado y con acceso público.',
-      'upcoming-title':'⚡ Próximos Eventos',
-      'join-btn':      'Unirse al Meeting',
-      'sync-loading':  'Cargando desde Google Sheets...',
-      'sync-ok':       'Sincronizado',
-      'sync-error':    'Error al conectar con Sheets',
-      'no-upcoming':   'No hay eventos próximos.',
-      'event':         'evento',
-      'events':        'eventos',
-      'months':        ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
-      'weekdays':      ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'],
-      'date-format':   (d,m,y) => `${d} de ${m} ${y}`,
-      'lang-es':       '🇪🇸 Español',
-      'lang-en':       '🇺🇸 English',
-      'type-labels':   { aca: 'ACA', medicare: 'Medicare', supp: 'Suplementario', life: 'Seguro de Vida' },
+      'breadcrumb-tools':  'Herramientas',
+      'breadcrumb-tc':     'Training Calendar',
+      'view-list':         'Lista',
+      'view-grid':         'Mes',
+      'today-btn':         'Hoy',
+      'upcoming-title':    'Próximos Trainings',
+      'filter-all':        'Todos',
+      'cat-supp':          'Suplementario',
+      'cat-life':          'Vida',
+      'categories':        'Categorías',
+      'error-msg':         '⚠️ No se pudo conectar con Google Sheets. Verifica que el Apps Script esté publicado y con acceso público.',
+      'join-btn':          'Unirse al Meeting',
+      'reminder-btn':      'Agregar al Calendario',
+      'cal-opens-browser': 'Abre en el navegador',
+      'cal-downloads':     'Descarga archivo .ics',
+      'sync-loading':      'Cargando…',
+      'sync-ok':           'Sincronizado',
+      'sync-error':        'Error al conectar',
+      'no-trainings':      'No hay trainings próximos',
+      'no-trainings-sub':  'Cambia el filtro o vuelve más tarde.',
+      'next-training':     'Próximo training',
+      'in-progress':       'En curso',
+      'starts-in':         'Comienza en',
+      'days':              'días',
+      'day':               'día',
+      'hours':             'horas',
+      'hour':              'hora',
+      'minutes':           'minutos',
+      'now':               'Ahora',
+      'today':             'Hoy',
+      'tomorrow':          'Mañana',
+      'add-to-cal':        'Agregar',
+      'join':              'Unirse',
+      'no-events-banner':  'No hay trainings programados',
+      'no-events-banner-sub': 'Pronto agregaremos nuevas sesiones.',
+      'instructor':        'Instructor',
+      'event':             'evento',
+      'events':            'eventos',
+      'next-chip':         'Próximo',
+      'now-chip':          'En curso',
+      'footer-tagline':    'Protegemos lo más valioso',
+      'months':            ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
+      'months-short':      ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'],
+      'weekdays':          ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'],
+      'weekdays-short':    ['D','L','M','M','J','V','S'],
+      'weekdays-grid':     ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'],
+      'date-format':       (d,m,y) => `${d} de ${m} ${y}`,
+      'type-labels':       { aca: 'ACA', medicare: 'Medicare', supp: 'Suplementario', life: 'Seguro de Vida' },
     },
     en: {
-      'topbar-title':  'Training Calendar',
-      'banner-h1':     'TRAINING <em>CALENDAR</em>',
-      'banner-p':      'Live training sessions and webinars for the Hero team.',
-      'refresh-btn':   '↻ Refresh',
-      'filter-all':    'All',
-      'legend-supp':   'Supplemental',
-      'legend-life':   'Life Insurance',
-      'error-msg':     '⚠️ Could not connect to Google Sheets. Please verify that the Apps Script is published with public access.',
-      'upcoming-title':'⚡ Upcoming Events',
-      'join-btn':      'Join Meeting',
-      'sync-loading':  'Loading from Google Sheets...',
-      'sync-ok':       'Synced',
-      'sync-error':    'Error connecting to Sheets',
-      'no-upcoming':   'No upcoming events.',
-      'event':         'event',
-      'events':        'events',
-      'months':        ['January','February','March','April','May','June','July','August','September','October','November','December'],
-      'weekdays':      ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],
-      'date-format':   (d,m,y) => `${m} ${d}, ${y}`,
-      'lang-es':       '🇪🇸 Español',
-      'lang-en':       '🇺🇸 English',
-      'type-labels':   { aca: 'ACA', medicare: 'Medicare', supp: 'Supplemental', life: 'Life Insurance' },
+      'breadcrumb-tools':  'Tools',
+      'breadcrumb-tc':     'Training Calendar',
+      'view-list':         'List',
+      'view-grid':         'Month',
+      'today-btn':         'Today',
+      'upcoming-title':    'Upcoming Trainings',
+      'filter-all':        'All',
+      'cat-supp':          'Supplemental',
+      'cat-life':          'Life',
+      'categories':        'Categories',
+      'error-msg':         '⚠️ Could not connect to Google Sheets. Please verify that the Apps Script is published with public access.',
+      'join-btn':          'Join Meeting',
+      'reminder-btn':      'Add to Calendar',
+      'cal-opens-browser': 'Opens in browser',
+      'cal-downloads':     'Downloads .ics file',
+      'sync-loading':      'Loading…',
+      'sync-ok':           'Synced',
+      'sync-error':        'Connection error',
+      'no-trainings':      'No upcoming trainings',
+      'no-trainings-sub':  'Try a different filter or check back later.',
+      'next-training':     'Next training',
+      'in-progress':       'In progress',
+      'starts-in':         'Starts in',
+      'days':              'days',
+      'day':               'day',
+      'hours':             'hours',
+      'hour':              'hour',
+      'minutes':           'minutes',
+      'now':               'Now',
+      'today':             'Today',
+      'tomorrow':          'Tomorrow',
+      'add-to-cal':        'Add',
+      'join':              'Join',
+      'no-events-banner':  'No trainings scheduled',
+      'no-events-banner-sub': "We'll add new sessions soon.",
+      'instructor':        'Instructor',
+      'event':             'event',
+      'events':            'events',
+      'next-chip':         'Next',
+      'now-chip':          'Live',
+      'footer-tagline':    'We protect what matters most',
+      'months':            ['January','February','March','April','May','June','July','August','September','October','November','December'],
+      'months-short':      ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+      'weekdays':          ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],
+      'weekdays-short':    ['S','M','T','W','T','F','S'],
+      'weekdays-grid':     ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],
+      'date-format':       (d,m,y) => `${m} ${d}, ${y}`,
+      'type-labels':       { aca: 'ACA', medicare: 'Medicare', supp: 'Supplemental', life: 'Life Insurance' },
     }
   };
 
   let currentLang = 'es';
-
-  function t(key) { return I18N[currentLang][key] || I18N['es'][key] || key; }
+  function t(key) { return I18N[currentLang][key] !== undefined ? I18N[currentLang][key] : I18N['es'][key] || key; }
 
   function applyTranslations(rerender = true) {
-    // data-i18n elements
     document.querySelectorAll('[data-i18n]').forEach(el => {
       const key = el.getAttribute('data-i18n');
-      if (key === 'banner-h1') { el.innerHTML = t('banner-h1'); return; }
-      if (key === 'error-msg') { el.innerHTML = t('error-msg'); return; } // preserve emoji
+      if (key === 'error-msg') { el.innerHTML = t(key); return; }
       el.textContent = t(key);
     });
-    // Weekdays
-    const wd = document.getElementById('weekdays-row');
-    if (wd) wd.querySelectorAll('div').forEach((el, i) => el.textContent = t('weekdays')[i]);
-    // Upcoming title
-    document.getElementById('upcoming-title').textContent = t('upcoming-title');
-    // html lang attr
     document.documentElement.lang = currentLang;
-    // Re-render calendar only if data is already loaded
-    if (rerender) renderCalendar();
+
+    // Mini cal weekdays
+    const mw = document.getElementById('mini-weekdays');
+    if (mw) mw.querySelectorAll('div').forEach((el,i) => el.textContent = t('weekdays-short')[i]);
+
+    // Grid weekdays
+    const gw = document.getElementById('cal-weekdays-row');
+    if (gw) gw.querySelectorAll('div').forEach((el,i) => el.textContent = t('weekdays-grid')[i]);
+
+    if (rerender) {
+      renderHeroBanner();
+      renderTrainingList();
+      renderMiniCal();
+      renderGridView();
+      updateCounts();
+    }
   }
 
-  // ── LANG SWITCHER ─────────────────────────────────────
-  document.querySelectorAll('.lang-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      currentLang = btn.dataset.lang;
-      document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      applyTranslations();
-    });
-  });
-
-  // ── TIMEZONE ──────────────────────────────────────────
+  // ═════════════ TIMEZONE ═════════════
   const TZ_ABBR = {
     'EST':'America/New_York','EDT':'America/New_York',
     'CST':'America/Chicago','CDT':'America/Chicago',
     'MST':'America/Denver','MDT':'America/Denver',
     'PST':'America/Los_Angeles','PDT':'America/Los_Angeles',
     'HST':'Pacific/Honolulu',
-    'COT':'America/Bogota','PET':'America/Lima',
-    'VET':'America/Caracas','ART':'America/Argentina/Buenos_Aires',
-    'BRT':'America/Sao_Paulo','CLT':'America/Santiago',
+    'COT':'America/Bogota','PET':'America/Lima','VET':'America/Caracas',
+    'ART':'America/Argentina/Buenos_Aires','BRT':'America/Sao_Paulo','CLT':'America/Santiago',
     'CET':'Europe/Madrid','GMT':'Europe/London','UTC':'UTC',
   };
   const TZ_LABELS = {
     'America/New_York':'ET (New York)','America/Chicago':'CT (Chicago)',
     'America/Denver':'MT (Denver)','America/Los_Angeles':'PT (Los Angeles)',
-    'America/Bogota':'COT (Bogotá)','America/Lima':'PET (Lima)',
-    'America/Caracas':'VET (Caracas)','America/Sao_Paulo':'BRT (São Paulo)',
-    'America/Santiago':'CLT (Santiago)','Europe/Madrid':'CET (Madrid)',
-    'Europe/London':'GMT (London)','Pacific/Honolulu':'HST (Hawaii)',
+    'America/Bogota':'COT (Bogotá)','America/Lima':'PET (Lima)','America/Caracas':'VET',
+    'America/Sao_Paulo':'BRT','America/Santiago':'CLT','Europe/Madrid':'CET',
+    'Europe/London':'GMT','Pacific/Honolulu':'HST',
   };
-  function resolveTimezone(tz) { if (!tz) return ''; const u = tz.trim().toUpperCase(); return TZ_ABBR[u] || tz.trim(); }
-  function getTZLabel(iana) { return TZ_LABELS[iana] || iana; }
+  function resolveTimezone(tz){if(!tz)return'';const u=tz.trim().toUpperCase();return TZ_ABBR[u]||tz.trim();}
+  function getTZLabel(iana){return TZ_LABELS[iana]||iana;}
 
   function convertToMiami(timeStr, dateStr, fromTZ) {
     if (!timeStr || !fromTZ) return null;
     try {
-      // Support both en-dash (–) and regular hyphen (-) as range separator
       const parts = timeStr.split(/\s*[–-]\s*/).map(s => s.trim()).filter(Boolean);
       const converted = parts.map(part => {
         const match = part.match(/(\d{1,2}):(\d{2})\s*(AM|PM)/i);
@@ -454,18 +1348,22 @@ body { font-family: var(--hero-font); background: var(--hero-bg-page); color: va
     } catch(e) { return null; }
   }
 
-  // ── STATE ─────────────────────────────────────────────
+  // ═════════════ STATE ═════════════
   let EVENTS = [];
-  let currentYear  = new Date().getFullYear();
-  let currentMonth = new Date().getMonth();
   let activeFilter = 'all';
+  let currentView = 'list'; // 'list' | 'grid'
+  let miniYear = new Date().getFullYear();
+  let miniMonth = new Date().getMonth();
+  let gridYear = new Date().getFullYear();
+  let gridMonth = new Date().getMonth();
+  let selectedDate = null; // YYYY-MM-DD
 
-  function setSyncStatus(state, textKey, extra) {
+  // ═════════════ FETCH ═════════════
+  function setSyncStatus(state, key, extra) {
     document.getElementById('sync-dot').className = 'sync-dot ' + state;
-    document.getElementById('sync-label').textContent = extra ? `${t(textKey)} · ${extra}` : t(textKey);
+    document.getElementById('sync-label').textContent = extra ? `${t(key)} · ${extra}` : t(key);
   }
 
-  // ── FETCH ─────────────────────────────────────────────
   async function loadEvents() {
     setSyncStatus('loading', 'sync-loading');
     renderSkeletons();
@@ -483,7 +1381,7 @@ body { font-family: var(--hero-font); background: var(--hero-bg-page); color: va
         link:       String(row.link       || '').trim(),
         timezone:   String(row.timezone   || '').trim(),
         lang:       String(row.lang       || '').trim().toLowerCase(),
-      })).filter(e => e.date && e.title);
+      })).filter(e => e.date && e.title).map(e => ({ ...e, _dateStr: normalizeDate(e.date) }));
       const count = EVENTS.length;
       const word  = count === 1 ? t('event') : t('events');
       setSyncStatus('ok', 'sync-ok', `${count} ${word}`);
@@ -492,7 +1390,11 @@ body { font-family: var(--hero-font); background: var(--hero-bg-page); color: va
       setSyncStatus('error', 'sync-error');
       document.getElementById('error-banner').classList.add('show');
     }
-    renderCalendar();
+    renderHeroBanner();
+    renderTrainingList();
+    renderMiniCal();
+    renderGridView();
+    updateCounts();
   }
 
   function normalizeDate(val) {
@@ -504,164 +1406,555 @@ body { font-family: var(--hero-font); background: var(--hero-bg-page); color: va
     return s;
   }
 
-  function langBadgeHTML(lang) {
-    if (!lang) return '';
-    if (lang === 'es') return '<span class="pill-lang es">ES</span>';
-    if (lang === 'en') return '<span class="pill-lang en">EN</span>';
-    return '';
-  }
-
-  // ── SKELETON ─────────────────────────────────────────
   function renderSkeletons() {
-    const grid = document.getElementById('calendar-grid');
-    grid.innerHTML = '';
-    document.getElementById('month-label').textContent = `${t('months')[currentMonth]} ${currentYear}`;
-    const firstDay = new Date(currentYear, currentMonth, 1).getDay();
-    const days     = new Date(currentYear, currentMonth + 1, 0).getDate();
-    for (let i = 0; i < firstDay; i++) { const el = document.createElement('div'); el.className = 'day-cell empty'; grid.appendChild(el); }
-    for (let d = 1; d <= days; d++) {
-      const cell = document.createElement('div'); cell.className = 'day-cell';
-      cell.innerHTML = `<span class="day-num">${d}</span><div class="skeleton" style="width:75%"></div>`;
-      grid.appendChild(cell);
+    const list = document.getElementById('training-list');
+    list.innerHTML = '';
+    for (let i = 0; i < 4; i++) {
+      const sk = document.createElement('div');
+      sk.className = 'skeleton-card';
+      list.appendChild(sk);
     }
   }
 
-  // ── CALENDAR ──────────────────────────────────────────
-  function renderCalendar() {
-    const grid = document.getElementById('calendar-grid');
-    grid.innerHTML = '';
-    document.getElementById('month-label').textContent = `${t('months')[currentMonth]} ${currentYear}`;
-    const firstDay = new Date(currentYear, currentMonth, 1).getDay();
-    const days     = new Date(currentYear, currentMonth + 1, 0).getDate();
-    const today    = new Date();
+  // ═════════════ HERO BANNER ═════════════
+  function renderHeroBanner() {
+    const banner = document.getElementById('hero-banner');
+    const now = new Date();
 
-    for (let i = 0; i < firstDay; i++) { const el = document.createElement('div'); el.className = 'day-cell empty'; grid.appendChild(el); }
+    // Find next event (today or future). Use full datetime if time available
+    const candidates = EVENTS.map(ev => {
+      const nd = ev._dateStr;
+      const startTime = parseTimeToHHMM((ev.time || '12:00 AM').split(/[–-]/)[0].trim()) || { h: 0, m: 0 };
+      const startDate = new Date(`${nd}T${String(startTime.h).padStart(2,'0')}:${String(startTime.m).padStart(2,'0')}:00`);
 
-    for (let d = 1; d <= days; d++) {
-      const isToday = today.getDate() === d && today.getMonth() === currentMonth && today.getFullYear() === currentYear;
-      const cell    = document.createElement('div');
-      cell.className = 'day-cell' + (isToday ? ' today' : '');
-      const dateStr = `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-      const events  = EVENTS.filter(e => normalizeDate(e.date) === dateStr);
-      const numEl   = document.createElement('span'); numEl.className = 'day-num'; numEl.textContent = d;
-      cell.appendChild(numEl);
-      events.forEach(ev => {
-        const pill = document.createElement('button');
-        pill.className = `event-pill ${ev.type}${activeFilter !== 'all' && activeFilter !== ev.type ? ' hidden' : ''}`;
-        pill.innerHTML = ev.title + langBadgeHTML(ev.lang) + (ev.time ? `<span class="pill-time">${ev.time}</span>` : '');
-        pill.addEventListener('click', () => openModal(ev));
-        cell.appendChild(pill);
-      });
-      grid.appendChild(cell);
+      // Estimate end time
+      let endDate = new Date(startDate.getTime() + 60*60*1000);
+      const parts = (ev.time || '').split(/[–-]/).map(s => s.trim());
+      if (parts.length === 2) {
+        const t1 = parseTimeToHHMM(parts[0]);
+        const t2 = parseTimeToHHMM(parts[1]);
+        if (t1 && t2) {
+          let diff = (t2.h*60+t2.m) - (t1.h*60+t1.m);
+          if (diff < 0) diff += 24*60;
+          endDate = new Date(startDate.getTime() + diff*60*1000);
+        }
+      }
+      return { ev, startDate, endDate };
+    });
+
+    // Find an event in progress first
+    const inProgress = candidates.find(c => c.startDate <= now && now < c.endDate);
+    const upcoming = candidates.filter(c => c.startDate > now).sort((a,b) => a.startDate - b.startDate);
+    const featured = inProgress || upcoming[0] || null;
+
+    if (!featured) {
+      banner.innerHTML = `
+        <div class="banner-inner">
+          <div class="banner-empty">
+            <h2>${t('no-events-banner')}</h2>
+            <p>${t('no-events-banner-sub')}</p>
+          </div>
+        </div>
+      `;
+      return;
     }
-    renderUpcoming();
+
+    const { ev, startDate } = featured;
+    const isLive = inProgress != null;
+    const nd = ev._dateStr;
+    const [y,m,d] = nd.split('-');
+    const monthName = t('months')[parseInt(m)-1];
+
+    // Countdown
+    const diffMs = startDate - now;
+    let countNum, countLabel;
+    if (isLive) {
+      countNum = '🔴'; countLabel = t('in-progress');
+    } else {
+      const diffDays = Math.floor(diffMs / (1000*60*60*24));
+      const diffHours = Math.floor(diffMs / (1000*60*60));
+      const diffMins = Math.floor(diffMs / (1000*60));
+      if (diffDays >= 1) {
+        countNum = diffDays;
+        countLabel = diffDays === 1 ? t('day') : t('days');
+      } else if (diffHours >= 1) {
+        countNum = diffHours;
+        countLabel = diffHours === 1 ? t('hour') : t('hours');
+      } else {
+        countNum = diffMins;
+        countLabel = t('minutes');
+      }
+    }
+
+    const tagText = isLive ? t('now-chip') : t('next-training');
+    const tagColor = isLive ? '#d64545' : '#06a3b6';
+
+    const linkBtn = ev.link
+      ? `<a href="${ev.link}" target="_blank" rel="noopener" class="btn-primary">
+           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+           ${t('join')}
+         </a>` : '';
+
+    banner.innerHTML = `
+      <div class="banner-inner">
+        <div class="banner-left">
+          <div class="label-tag" style="${isLive ? 'background:rgba(214,69,69,0.1);color:#d64545' : ''}">
+            <span class="dot" style="background:${tagColor}"></span>
+            ${tagText}
+          </div>
+          <h1>${escapeHTML(ev.title)}</h1>
+          <div class="next-meta">
+            <span><b>${t('date-format')(d, monthName, y)}</b></span>
+            ${ev.time ? `<span>${escapeHTML(ev.time)}</span>` : ''}
+            ${ev.instructor ? `<span>${t('instructor')}: <b>${escapeHTML(ev.instructor)}</b></span>` : ''}
+          </div>
+        </div>
+        <div class="banner-right">
+          <div class="countdown-card">
+            <div class="count-num">${countNum}</div>
+            <div class="count-label">${countLabel}</div>
+          </div>
+          <div class="banner-actions">
+            <button class="btn-secondary" onclick="openModalById('${ev._dateStr}','${escapeAttr(ev.title)}')">
+              ${t('add-to-cal')}
+            </button>
+            ${linkBtn}
+          </div>
+        </div>
+      </div>
+    `;
   }
 
-  // ── UPCOMING ──────────────────────────────────────────
-  function renderUpcoming() {
-    const list = document.getElementById('upcoming-list');
+  function escapeHTML(s) { return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'})[c]); }
+  function escapeAttr(s) { return String(s).replace(/'/g, "\\'").replace(/"/g, '&quot;'); }
+
+  window.openModalById = (dateStr, title) => {
+    const ev = EVENTS.find(e => e._dateStr === dateStr && e.title === title.replace(/&quot;/g,'"'));
+    if (ev) openModal(ev);
+  };
+
+  // ═════════════ TRAINING LIST ═════════════
+  function renderTrainingList() {
+    const list = document.getElementById('training-list');
     list.innerHTML = '';
     const now = new Date(); now.setHours(0,0,0,0);
-    const upcoming = EVENTS
-      .filter(e => { const d = new Date(normalizeDate(e.date)+'T00:00:00'); return d >= now && (activeFilter === 'all' || e.type === activeFilter); })
-      .sort((a,b) => normalizeDate(a.date).localeCompare(normalizeDate(b.date)))
-      .slice(0, 6);
 
-    if (!upcoming.length) { list.innerHTML = `<p style="font-size:13px;color:var(--hero-text-subtle);">${t('no-upcoming')}</p>`; return; }
+    // Filter: by activeFilter, by selectedDate (if any), and only future
+    let filtered = EVENTS.filter(e => {
+      const d = new Date(e._dateStr + 'T00:00:00');
+      if (selectedDate) return e._dateStr === selectedDate && (activeFilter === 'all' || e.type === activeFilter);
+      return d >= now && (activeFilter === 'all' || e.type === activeFilter);
+    });
 
-    upcoming.forEach(ev => {
-      const nd = normalizeDate(ev.date);
-      const [y,m,d] = nd.split('-');
-      const monthName = t('months')[parseInt(m)-1];
-      const card = document.createElement('div');
-      card.className = `upcoming-card ${ev.type}`;
-      const langTag = ev.lang ? `<span class="uc-lang ${ev.lang}">${ev.lang.toUpperCase()}</span>` : '';
-      card.innerHTML = `<div class="uc-date">${d} ${monthName}</div><div class="uc-title">${ev.title}</div><div class="uc-time">${ev.time}</div>${langTag}`;
-      card.addEventListener('click', () => openModal(ev));
+    filtered.sort((a,b) => a._dateStr.localeCompare(b._dateStr));
+    document.getElementById('list-count').textContent = filtered.length;
+
+    if (!filtered.length) {
+      list.innerHTML = `
+        <div class="empty-state">
+          <div class="icon">📭</div>
+          <h3>${t('no-trainings')}</h3>
+          <p>${t('no-trainings-sub')}</p>
+        </div>
+      `;
+      return;
+    }
+
+    // Find next (first future event regardless of selectedDate)
+    const nextEvent = EVENTS
+      .filter(e => new Date(e._dateStr + 'T00:00:00') >= now && (activeFilter === 'all' || e.type === activeFilter))
+      .sort((a,b) => a._dateStr.localeCompare(b._dateStr))[0];
+
+    filtered.forEach(ev => {
+      const card = createTrainingCard(ev, ev === nextEvent);
       list.appendChild(card);
     });
   }
 
-  // ── MODAL ─────────────────────────────────────────────
+  function createTrainingCard(ev, isNext) {
+    const nd = ev._dateStr;
+    const [y,m,d] = nd.split('-');
+    const dateObj = new Date(nd + 'T00:00:00');
+    const monthShort = t('months-short')[parseInt(m)-1];
+    const weekdayShort = t('weekdays-short')[dateObj.getDay()];
+    const typeLabels = t('type-labels');
+
+    // Live check
+    const now = new Date();
+    let isLive = false;
+    if (ev.time) {
+      const startT = parseTimeToHHMM(ev.time.split(/[–-]/)[0].trim());
+      const parts = ev.time.split(/[–-]/).map(s => s.trim());
+      if (startT) {
+        const startDate = new Date(`${nd}T${String(startT.h).padStart(2,'0')}:${String(startT.m).padStart(2,'0')}:00`);
+        let endDate = new Date(startDate.getTime() + 60*60*1000);
+        if (parts.length === 2) {
+          const t2 = parseTimeToHHMM(parts[1]);
+          if (t2) {
+            let diff = (t2.h*60+t2.m) - (startT.h*60+startT.m);
+            if (diff < 0) diff += 24*60;
+            endDate = new Date(startDate.getTime() + diff*60*1000);
+          }
+        }
+        isLive = startDate <= now && now < endDate;
+      }
+    }
+
+    const card = document.createElement('div');
+    card.className = `training-card ${ev.type}`;
+
+    let chips = `<span class="cat-chip ${ev.type}">${typeLabels[ev.type] || ev.type.toUpperCase()}</span>`;
+    if (ev.lang === 'es' || ev.lang === 'en') chips += `<span class="lang-chip ${ev.lang}">${ev.lang.toUpperCase()}</span>`;
+    if (isLive) chips += `<span class="now-chip">${t('now-chip')}</span>`;
+    else if (isNext) chips += `<span class="next-chip">${t('next-chip')}</span>`;
+
+    let info = '';
+    if (ev.time) info += `<span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> ${escapeHTML(ev.time)}</span>`;
+    if (ev.instructor) info += `<span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> ${escapeHTML(ev.instructor)}</span>`;
+
+    card.innerHTML = `
+      <div class="date-block">
+        <div class="day">${parseInt(d)}</div>
+        <div class="month">${monthShort}</div>
+        <div class="weekday">${weekdayShort}</div>
+      </div>
+      <div class="body">
+        <div class="meta-row">${chips}</div>
+        <h3>${escapeHTML(ev.title)}</h3>
+        <div class="info">${info}</div>
+      </div>
+      <div class="actions">
+        ${ev.link ? `<a class="btn-primary" href="${ev.link}" target="_blank" rel="noopener" onclick="event.stopPropagation()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>${t('join')}</a>` : ''}
+        <button class="btn-secondary" onclick="event.stopPropagation();openModal(__getEvent('${nd}', this.dataset.title))" data-title="${escapeAttr(ev.title)}"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/></svg>${t('add-to-cal')}</button>
+      </div>
+    `;
+
+    card.addEventListener('click', () => openModal(ev));
+    return card;
+  }
+
+  window.__getEvent = (dateStr, title) => EVENTS.find(e => e._dateStr === dateStr && e.title === title);
+
+  // ═════════════ MINI CALENDAR ═════════════
+  function renderMiniCal() {
+    const grid = document.getElementById('mini-cal-grid');
+    grid.innerHTML = '';
+    document.getElementById('mini-cal-month').textContent = `${t('months-short')[miniMonth]} ${miniYear}`;
+
+    const firstDay = new Date(miniYear, miniMonth, 1).getDay();
+    const days = new Date(miniYear, miniMonth + 1, 0).getDate();
+    const today = new Date();
+
+    for (let i = 0; i < firstDay; i++) {
+      const cell = document.createElement('div');
+      cell.className = 'mini-day empty';
+      grid.appendChild(cell);
+    }
+
+    for (let d = 1; d <= days; d++) {
+      const dateStr = `${miniYear}-${String(miniMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+      const events = EVENTS.filter(e => e._dateStr === dateStr && (activeFilter === 'all' || e.type === activeFilter));
+      const isToday = today.getDate() === d && today.getMonth() === miniMonth && today.getFullYear() === miniYear;
+
+      const cell = document.createElement('div');
+      cell.className = 'mini-day';
+      if (isToday) cell.classList.add('today');
+      if (selectedDate === dateStr) cell.classList.add('selected');
+      if (events.length) cell.classList.add('has-events');
+
+      let dotsHTML = '';
+      if (events.length) {
+        const types = [...new Set(events.map(e => e.type))].slice(0, 3);
+        dotsHTML = '<div class="dots">' + types.map(ty => `<span style="background:var(--cat-${ty})"></span>`).join('') + '</div>';
+      } else {
+        dotsHTML = '<div class="dots"></div>';
+      }
+      cell.innerHTML = `<div>${d}</div>${dotsHTML}`;
+
+      cell.addEventListener('click', () => {
+        if (selectedDate === dateStr) {
+          selectedDate = null;
+        } else {
+          selectedDate = dateStr;
+        }
+        renderMiniCal();
+        renderTrainingList();
+      });
+
+      grid.appendChild(cell);
+    }
+  }
+
+  // ═════════════ GRID VIEW ═════════════
+  function renderGridView() {
+    const grid = document.getElementById('cal-grid');
+    grid.innerHTML = '';
+    document.getElementById('grid-month').textContent = `${t('months')[gridMonth]} ${gridYear}`;
+
+    const firstDay = new Date(gridYear, gridMonth, 1).getDay();
+    const days = new Date(gridYear, gridMonth + 1, 0).getDate();
+    const today = new Date();
+
+    for (let i = 0; i < firstDay; i++) {
+      const cell = document.createElement('div');
+      cell.className = 'cal-day empty';
+      grid.appendChild(cell);
+    }
+
+    for (let d = 1; d <= days; d++) {
+      const isToday = today.getDate() === d && today.getMonth() === gridMonth && today.getFullYear() === gridYear;
+      const cell = document.createElement('div');
+      cell.className = 'cal-day' + (isToday ? ' today' : '');
+      const dateStr = `${gridYear}-${String(gridMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+      const events = EVENTS.filter(e => e._dateStr === dateStr);
+
+      const numEl = document.createElement('div');
+      numEl.className = 'cal-day-num';
+      numEl.textContent = d;
+      cell.appendChild(numEl);
+
+      events.forEach(ev => {
+        const pill = document.createElement('button');
+        pill.className = `cal-pill ${ev.type}${activeFilter !== 'all' && activeFilter !== ev.type ? ' hidden' : ''}`;
+        pill.innerHTML = escapeHTML(ev.title) + (ev.time ? `<span class="pill-time">${escapeHTML(ev.time)}</span>` : '');
+        pill.addEventListener('click', () => openModal(ev));
+        cell.appendChild(pill);
+      });
+
+      grid.appendChild(cell);
+    }
+  }
+
+  // ═════════════ COUNTS ═════════════
+  function updateCounts() {
+    const now = new Date(); now.setHours(0,0,0,0);
+    const future = EVENTS.filter(e => new Date(e._dateStr + 'T00:00:00') >= now);
+    document.getElementById('num-all').textContent = future.length;
+    document.getElementById('num-aca').textContent = future.filter(e => e.type === 'aca').length;
+    document.getElementById('num-medicare').textContent = future.filter(e => e.type === 'medicare').length;
+    document.getElementById('num-supp').textContent = future.filter(e => e.type === 'supp').length;
+    document.getElementById('num-life').textContent = future.filter(e => e.type === 'life').length;
+  }
+
+  // ═════════════ ICS / GOOGLE CAL ═════════════
+  function parseTimeToHHMM(timeStr) {
+    if (!timeStr) return null;
+    const first = timeStr.split(/[–-]/)[0].trim();
+    const match = first.match(/(\d{1,2}):(\d{2})\s*(AM|PM)/i);
+    if (!match) return null;
+    let [, h, m, mer] = match;
+    h = parseInt(h); m = parseInt(m);
+    if (mer.toUpperCase() === 'PM' && h !== 12) h += 12;
+    if (mer.toUpperCase() === 'AM' && h === 12) h = 0;
+    return { h, m };
+  }
+
+  function toICSDate(dateStr, hhmm, durationHours = 1) {
+    const [y, mo, d] = dateStr.split('-').map(Number);
+    const start = new Date(y, mo - 1, d, hhmm.h, hhmm.m, 0);
+    const end = new Date(start.getTime() + durationHours * 60 * 60 * 1000);
+    const fmt = dt => [
+      dt.getFullYear(), String(dt.getMonth()+1).padStart(2,'0'), String(dt.getDate()).padStart(2,'0'),
+      'T', String(dt.getHours()).padStart(2,'0'), String(dt.getMinutes()).padStart(2,'0'), '00'
+    ].join('');
+    return { start: fmt(start), end: fmt(end) };
+  }
+
+  function getDuration(timeStr) {
+    let durationHours = 1;
+    const parts = (timeStr || '').split(/[–-]/).map(s => s.trim());
+    if (parts.length === 2) {
+      const t1 = parseTimeToHHMM(parts[0]);
+      const t2 = parseTimeToHHMM(parts[1]);
+      if (t1 && t2) {
+        let diff = (t2.h*60+t2.m) - (t1.h*60+t1.m);
+        if (diff < 0) diff += 24*60;
+        durationHours = diff / 60;
+      }
+    }
+    return durationHours;
+  }
+
+  function generateICS(ev) {
+    const nd = ev._dateStr;
+    const hhmm = parseTimeToHHMM(ev.time);
+    if (!hhmm) return null;
+    const durationHours = getDuration(ev.time);
+    const { start, end } = toICSDate(nd, hhmm, durationHours);
+    const uid = `hero-${nd}-${ev.title.replace(/\s+/g,'-').toLowerCase()}@heroinsuranceusa.com`;
+    const typeLabels = { aca: 'ACA', medicare: 'Medicare', supp: 'Supplemental', life: 'Life Insurance' };
+    const category = typeLabels[ev.type] || ev.type.toUpperCase();
+    const location = ev.link || '';
+    const descLines = [
+      ev.desc,
+      ev.instructor ? `Instructor: ${ev.instructor}` : '',
+      ev.time ? `Time: ${ev.time} EST (Miami, UTC-4)` : '',
+      ev.link ? `Meeting Link: ${ev.link}` : '',
+    ].filter(Boolean).join('\\n');
+
+    return [
+      'BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Hero Insurance USA//Training Calendar//EN',
+      'CALSCALE:GREGORIAN','METHOD:PUBLISH','BEGIN:VEVENT',
+      `UID:${uid}`,`DTSTAMP:${start}Z`,`DTSTART:${start}`,`DTEND:${end}`,
+      `SUMMARY:${category} – ${ev.title}`,`DESCRIPTION:${descLines}`,
+      location ? `LOCATION:${location}` : '',
+      'BEGIN:VALARM','TRIGGER:-PT15M','ACTION:DISPLAY',
+      `DESCRIPTION:Reminder: ${ev.title}`,'END:VALARM','END:VEVENT','END:VCALENDAR',
+    ].filter(Boolean).join('\r\n');
+  }
+
+  function downloadICS(ev) {
+    const ics = generateICS(ev);
+    if (!ics) return;
+    const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `hero-training-${ev._dateStr}.ics`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
+  function generateGoogleCalendarURL(ev) {
+    const nd = ev._dateStr;
+    const hhmm = parseTimeToHHMM(ev.time);
+    if (!hhmm) return null;
+    const durationHours = getDuration(ev.time);
+    const { start, end } = toICSDate(nd, hhmm, durationHours);
+    const typeLabels = { aca: 'ACA', medicare: 'Medicare', supp: 'Supplemental', life: 'Life Insurance' };
+    const title = encodeURIComponent(`${typeLabels[ev.type] || ev.type.toUpperCase()} – ${ev.title}`);
+    const details = encodeURIComponent([ev.desc, ev.instructor ? `Instructor: ${ev.instructor}` : '', ev.link ? `Meeting: ${ev.link}` : ''].filter(Boolean).join('\n'));
+    const location = encodeURIComponent(ev.link || '');
+    return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${start}/${end}&details=${details}&location=${location}`;
+  }
+
+  // ═════════════ MODAL ═════════════
   function openModal(ev) {
-    const nd = normalizeDate(ev.date);
+    const nd = ev._dateStr;
     const [y,m,d] = nd.split('-');
     const monthName = t('months')[parseInt(m)-1];
-
     const typeLabels = t('type-labels');
-    document.getElementById('modal-badge').textContent = typeLabels[ev.type] || ev.type.toUpperCase();
-    document.getElementById('modal-badge').className   = `modal-type-badge ${ev.type}`;
 
-    // Lang badge
+    document.getElementById('modal-badge').textContent = typeLabels[ev.type] || ev.type.toUpperCase();
+    document.getElementById('modal-badge').className = `modal-cat-badge ${ev.type}`;
+
     const langBadge = document.getElementById('modal-lang-badge');
     if (ev.lang === 'es' || ev.lang === 'en') {
       langBadge.textContent = ev.lang === 'es' ? '🇪🇸 Español' : '🇺🇸 English';
       langBadge.className = `modal-lang-badge ${ev.lang}`;
-    } else {
-      langBadge.className = 'modal-lang-badge hidden';
-    }
+    } else langBadge.className = 'modal-lang-badge hidden';
 
     document.getElementById('modal-title').textContent = ev.title;
-    document.getElementById('modal-date').textContent  = t('date-format')(d, monthName, y);
-    document.getElementById('modal-instructor').textContent = ev.instructor;
-    document.getElementById('modal-desc').textContent  = ev.desc;
+    document.getElementById('modal-date').textContent = t('date-format')(d, monthName, y);
+    document.getElementById('modal-instructor').textContent = ev.instructor || '—';
+    document.getElementById('modal-desc').textContent = ev.desc || '';
 
     // Time + timezone
     const convertedRow = document.getElementById('modal-time-converted-row');
-    const ianaZone     = resolveTimezone(ev.timezone);
-    const isEastern    = !ev.timezone || ['EST','EDT'].includes(ev.timezone.toUpperCase()) || ianaZone === 'America/New_York';
+    const ianaZone = resolveTimezone(ev.timezone);
+    const isEastern = !ev.timezone || ['EST','EDT'].includes(ev.timezone.toUpperCase()) || ianaZone === 'America/New_York';
 
     if (!isEastern && ianaZone) {
       const converted = convertToMiami(ev.time, nd, ianaZone);
-      document.getElementById('modal-time').innerHTML = `${ev.time} <small style="color:var(--hero-text-subtle);font-size:0.85em;">${getTZLabel(ianaZone)}</small>`;
+      document.getElementById('modal-time').innerHTML = `${escapeHTML(ev.time)} <small>${getTZLabel(ianaZone)}</small>`;
       if (converted) {
-        document.getElementById('modal-time-converted').innerHTML = `${converted} <small style="color:var(--hero-text-subtle);font-size:0.85em;">EST (Miami, UTC-4)</small>`;
+        document.getElementById('modal-time-converted').innerHTML = `${converted} <small>EST (Miami)</small>`;
         convertedRow.style.display = 'flex';
-      } else { convertedRow.style.display = 'none'; }
+      } else convertedRow.style.display = 'none';
     } else {
-      document.getElementById('modal-time').innerHTML = `${ev.time} <small style="color:var(--hero-text-subtle);font-size:0.85em;">EST (Miami, UTC-4)</small>`;
+      document.getElementById('modal-time').innerHTML = `${escapeHTML(ev.time || '')} <small>EST (Miami, UTC-4)</small>`;
       convertedRow.style.display = 'none';
     }
 
     // Link
     const linkBtn = document.getElementById('modal-link');
     if (ev.link) { linkBtn.href = ev.link; linkBtn.classList.remove('hidden'); }
-    else         { linkBtn.href = '#';     linkBtn.classList.add('hidden'); }
+    else { linkBtn.href = '#'; linkBtn.classList.add('hidden'); }
+
+    // Calendar picker
+    const pickerBtn = document.getElementById('cal-picker-btn');
+    const dropdown = document.getElementById('cal-dropdown');
+    pickerBtn.classList.remove('open'); dropdown.classList.remove('open');
+    pickerBtn.onclick = e => { e.stopPropagation(); pickerBtn.classList.toggle('open'); dropdown.classList.toggle('open'); };
+
+    const googleURL = generateGoogleCalendarURL(ev);
+    const googleBtn = document.getElementById('cal-google');
+    if (googleURL) { googleBtn.href = googleURL; googleBtn.style.opacity = '1'; googleBtn.style.pointerEvents = ''; }
+    else { googleBtn.href = '#'; googleBtn.style.opacity = '0.4'; googleBtn.style.pointerEvents = 'none'; }
+    document.getElementById('cal-outlook').onclick = () => { downloadICS(ev); dropdown.classList.remove('open'); pickerBtn.classList.remove('open'); };
+    document.getElementById('cal-apple').onclick = () => { downloadICS(ev); dropdown.classList.remove('open'); pickerBtn.classList.remove('open'); };
 
     document.getElementById('modal-overlay').classList.add('open');
   }
 
-  // ── EVENTS ───────────────────────────────────────────
-  document.getElementById('modal-close').addEventListener('click', () => document.getElementById('modal-overlay').classList.remove('open'));
-  document.getElementById('modal-overlay').addEventListener('click', e => { if (e.target === document.getElementById('modal-overlay')) document.getElementById('modal-overlay').classList.remove('open'); });
-  document.getElementById('prev-btn').addEventListener('click', () => { currentMonth--; if (currentMonth < 0) { currentMonth = 11; currentYear--; } renderCalendar(); });
-  document.getElementById('next-btn').addEventListener('click', () => { currentMonth++; if (currentMonth > 11) { currentMonth = 0; currentYear++; } renderCalendar(); });
-  document.querySelectorAll('.filter-btn').forEach(btn => {
+  // ═════════════ EVENTS ═════════════
+  document.getElementById('modal-close').addEventListener('click', () => {
+    document.getElementById('modal-overlay').classList.remove('open');
+    document.getElementById('cal-dropdown').classList.remove('open');
+    document.getElementById('cal-picker-btn').classList.remove('open');
+  });
+  document.getElementById('modal-overlay').addEventListener('click', e => {
+    const dropdown = document.getElementById('cal-dropdown');
+    if (dropdown.classList.contains('open') && !e.target.closest('.cal-picker')) {
+      dropdown.classList.remove('open');
+      document.getElementById('cal-picker-btn').classList.remove('open');
+      return;
+    }
+    if (e.target === document.getElementById('modal-overlay'))
+      document.getElementById('modal-overlay').classList.remove('open');
+  });
+
+  // Mini cal nav
+  document.getElementById('mini-prev').addEventListener('click', e => { e.stopPropagation(); miniMonth--; if (miniMonth<0){miniMonth=11;miniYear--;} renderMiniCal(); });
+  document.getElementById('mini-next').addEventListener('click', e => { e.stopPropagation(); miniMonth++; if (miniMonth>11){miniMonth=0;miniYear++;} renderMiniCal(); });
+
+  // Grid nav
+  document.getElementById('grid-prev').addEventListener('click', () => { gridMonth--; if (gridMonth<0){gridMonth=11;gridYear--;} renderGridView(); });
+  document.getElementById('grid-next').addEventListener('click', () => { gridMonth++; if (gridMonth>11){gridMonth=0;gridYear++;} renderGridView(); });
+  document.getElementById('grid-today').addEventListener('click', () => { const n = new Date(); gridMonth = n.getMonth(); gridYear = n.getFullYear(); renderGridView(); });
+
+  // Filters (chips and sidebar list)
+  function setActiveFilter(filter) {
+    activeFilter = filter;
+    document.querySelectorAll('.filter-chip').forEach(b => b.classList.toggle('active', b.dataset.filter === filter));
+    document.querySelectorAll('.filter-list-item').forEach(b => b.classList.toggle('active', b.dataset.filter === filter));
+    renderTrainingList();
+    renderMiniCal();
+    renderGridView();
+  }
+  document.querySelectorAll('.filter-chip, .filter-list-item').forEach(btn => {
+    btn.addEventListener('click', () => setActiveFilter(btn.dataset.filter));
+  });
+
+  // View toggle
+  document.getElementById('view-list').addEventListener('click', () => switchView('list'));
+  document.getElementById('view-grid').addEventListener('click', () => switchView('grid'));
+  function switchView(view) {
+    currentView = view;
+    document.getElementById('view-list').classList.toggle('active', view === 'list');
+    document.getElementById('view-grid').classList.toggle('active', view === 'grid');
+    document.getElementById('list-view').classList.toggle('hidden', view !== 'list');
+    document.getElementById('sidebar').classList.toggle('hidden', view !== 'list');
+    document.getElementById('grid-view').classList.toggle('active', view === 'grid');
+  }
+
+  // Lang switcher
+  document.querySelectorAll('.lang-btn').forEach(btn => {
     btn.addEventListener('click', () => {
-      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      currentLang = btn.dataset.lang;
+      document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
-      activeFilter = btn.dataset.filter;
-      renderCalendar();
+      applyTranslations();
     });
   });
-  document.getElementById('refresh-btn').addEventListener('click', loadEvents);
 
-  // Init — apply translations first WITHOUT rerender, then load data
+  // Init
   applyTranslations(false);
   document.getElementById('sync-label').textContent = t('sync-loading');
   loadEvents();
 </script>
-<!-- HERO FOOTER (added by hero-branding skill) -->
-<footer class="hero-footer">
-  <div class="hero-footer-inner">
-    <span>© Hero Insurance USA</span>
-    <span>Herramienta interna</span>
-  </div>
-</footer>
-<style>
-  .hero-footer { background: var(--hero-bg-card); border-top: 1px solid var(--hero-border-card); margin-top: 40px; }
-  .hero-footer-inner { max-width: 1200px; margin: 0 auto; padding: 16px 40px; display: flex; justify-content: space-between; color: var(--hero-text-muted); font-size: 14px; font-family: var(--hero-font); }
-</style>
 
 </body>
 </html>
