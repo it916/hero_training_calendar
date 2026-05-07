@@ -1918,6 +1918,7 @@ body {
   // Filters (chips and sidebar list)
   function setActiveFilter(filter) {
     activeFilter = filter;
+    updateURLFilter(filter);
     document.querySelectorAll('.filter-chip').forEach(b => b.classList.toggle('active', b.dataset.filter === filter));
     document.querySelectorAll('.filter-list-item').forEach(b => b.classList.toggle('active', b.dataset.filter === filter));
     renderTrainingList();
@@ -1950,9 +1951,38 @@ body {
     });
   });
 
+  // ═════════════ URL PARAMS ═════════════
+  // Read ?filter=aca|medicare|supp|life from URL on load
+  function getInitialFilterFromURL() {
+    const params = new URLSearchParams(window.location.search);
+    const f = (params.get('filter') || params.get('product') || '').toLowerCase().trim();
+    const valid = ['all', 'aca', 'medicare', 'supp', 'life'];
+    return valid.includes(f) ? f : 'all';
+  }
+
+  // Update URL when filter changes (without reloading page)
+  function updateURLFilter(filter) {
+    const url = new URL(window.location);
+    if (filter === 'all') {
+      url.searchParams.delete('filter');
+    } else {
+      url.searchParams.set('filter', filter);
+    }
+    window.history.replaceState({}, '', url);
+  }
+
   // Init
   applyTranslations(false);
   document.getElementById('sync-label').textContent = t('sync-loading');
+
+  // Apply initial filter from URL BEFORE loading events
+  const initialFilter = getInitialFilterFromURL();
+  if (initialFilter !== 'all') {
+    activeFilter = initialFilter;
+    document.querySelectorAll('.filter-chip').forEach(b => b.classList.toggle('active', b.dataset.filter === initialFilter));
+    document.querySelectorAll('.filter-list-item').forEach(b => b.classList.toggle('active', b.dataset.filter === initialFilter));
+  }
+
   loadEvents();
 </script>
 
