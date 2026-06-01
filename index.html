@@ -4,6 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Hero Insurance – Training Calendar</title>
+<meta name="description" content="Calendario de capacitaciones de Hero Insurance USA: ACA, Medicare, Supplemental y Life. Hora de Miami (ET).">
+<meta name="theme-color" content="#06a3b6">
+<link rel="icon" type="image/png" href="hero-logo-transparent.png">
+<link rel="apple-touch-icon" href="hero-logo-transparent.png">
+<meta property="og:title" content="Hero Insurance – Training Calendar">
+<meta property="og:description" content="Calendario de capacitaciones de Hero Insurance USA.">
+<meta property="og:image" content="hero-logo-transparent.png">
+<meta property="og:type" content="website">
 <style>
 :root {
   --hero-primary:        #06a3b6;
@@ -20,7 +28,7 @@
   --hero-success:        #22a06b;
   --hero-warning:        #e8a317;
   --hero-danger:         #d64545;
-  --hero-font:           'Trebuchet MS', Arial, sans-serif;
+  --hero-font:           system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   --hero-radius-sm:      6px;
   --hero-radius:         10px;
   --hero-radius-lg:      16px;
@@ -663,7 +671,7 @@ body {
 
 .cal-weekdays {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
+  grid-template-columns: repeat(7, minmax(0, 1fr));
   gap: 4px;
   margin-bottom: 6px;
 }
@@ -675,7 +683,7 @@ body {
   padding: 6px 0;
 }
 
-.cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+.cal-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; }
 
 .cal-day {
   background: var(--hero-bg);
@@ -685,6 +693,10 @@ body {
   padding: 8px;
   transition: border-color 0.15s;
   position: relative;
+  min-width: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 .cal-day:hover { border-color: var(--hero-primary); }
 .cal-day.empty { background: transparent; pointer-events: none; }
@@ -694,6 +706,7 @@ body {
   font-size: 13px; font-weight: 700;
   color: var(--hero-text);
   margin-bottom: 4px;
+  flex-shrink: 0;
 }
 .cal-day.today .cal-day-num {
   background: var(--hero-primary); color: #fff;
@@ -703,26 +716,65 @@ body {
   font-size: 11px;
 }
 
+.cal-day-events {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  overflow: hidden;
+}
+
 .cal-pill {
   display: block;
   font-size: 10.5px; font-weight: 700;
   padding: 3px 6px;
   border-radius: 4px;
-  margin-bottom: 2px;
   cursor: pointer;
   border: none;
   text-align: left;
   width: 100%;
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  overflow: hidden;
   transition: filter 0.15s;
+  line-height: 1.25;
+}
+.cal-pill .pill-title {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .cal-pill:hover { filter: brightness(0.9); }
 .cal-pill.aca      { background: rgba(6,163,182,0.15);  color: var(--cat-aca);      border-left: 2px solid var(--cat-aca); }
 .cal-pill.medicare { background: rgba(0,101,243,0.15);  color: var(--cat-medicare); border-left: 2px solid var(--cat-medicare); }
 .cal-pill.supp     { background: rgba(34,160,107,0.15); color: var(--cat-supp);     border-left: 2px solid var(--cat-supp); }
 .cal-pill.life     { background: rgba(232,163,23,0.18); color: #b07a0e;             border-left: 2px solid var(--cat-life); }
-.cal-pill .pill-time { display: block; font-weight: 400; font-size: 9.5px; opacity: 0.85; }
+.cal-pill .pill-time {
+  display: block;
+  font-weight: 400;
+  font-size: 9.5px;
+  opacity: 0.85;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 .cal-pill.hidden { display: none; }
+
+.cal-day-more {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--hero-text-muted);
+  padding: 2px 6px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  text-align: left;
+  width: 100%;
+  border-radius: 4px;
+}
+.cal-day-more:hover { color: var(--hero-primary); background: rgba(6,163,182,0.05); }
 
 /* ════════════════════════════════════════════════════
    ERROR BANNER
@@ -939,8 +991,9 @@ body {
   .hero-footer-inner { padding: 14px 16px; flex-direction: column; gap: 4px; text-align: center; }
 
   .cal-day { min-height: 70px; padding: 4px; }
-  .cal-pill { font-size: 9.5px; padding: 2px 4px; }
+  .cal-pill { font-size: 9px; padding: 2px 4px; }
   .cal-pill .pill-time { display: none; }
+  .cal-day-more { font-size: 9px; padding: 1px 4px; }
 }
 </style>
 </head>
@@ -1031,7 +1084,7 @@ body {
           </div>
         </h3>
         <div class="mini-cal-weekdays" id="mini-weekdays">
-          <div>D</div><div>L</div><div>M</div><div>M</div><div>J</div><div>V</div><div>S</div>
+          <div></div><div></div><div></div><div></div><div></div><div></div><div></div>
         </div>
         <div class="mini-cal-grid" id="mini-cal-grid"></div>
       </div>
@@ -1083,7 +1136,7 @@ body {
         </div>
       </div>
       <div class="cal-weekdays" id="cal-weekdays-row">
-        <div>Dom</div><div>Lun</div><div>Mar</div><div>Mié</div><div>Jue</div><div>Vie</div><div>Sáb</div>
+        <div></div><div></div><div></div><div></div><div></div><div></div><div></div>
       </div>
       <div class="cal-grid" id="cal-grid"></div>
     </div>
@@ -1276,7 +1329,10 @@ body {
     }
   };
 
-  let currentLang = 'es';
+  const LS_KEY_LANG = 'hero-tc-lang';
+  const LS_KEY_VIEW = 'hero-tc-view';
+  const storedLang = (() => { try { return localStorage.getItem(LS_KEY_LANG); } catch { return null; } })();
+  let currentLang = (storedLang === 'es' || storedLang === 'en') ? storedLang : 'es';
   function t(key) { return I18N[currentLang][key] !== undefined ? I18N[currentLang][key] : I18N['es'][key] || key; }
 
   function applyTranslations(rerender = true) {
@@ -1364,9 +1420,11 @@ body {
     document.getElementById('sync-label').textContent = extra ? `${t(key)} · ${extra}` : t(key);
   }
 
-  async function loadEvents() {
-    setSyncStatus('loading', 'sync-loading');
-    renderSkeletons();
+  async function loadEvents(silent = false) {
+    if (!silent) {
+      setSyncStatus('loading', 'sync-loading');
+      renderSkeletons();
+    }
     try {
       const res = await fetch(SHEETS_URL);
       if (!res.ok) throw new Error('HTTP ' + res.status);
@@ -1381,8 +1439,10 @@ body {
         link:       String(row.link       || '').trim(),
         timezone:   String(row.timezone   || '').trim(),
         lang:       String(row.lang       || '').trim().toLowerCase(),
-      })).filter(e => e.date && e.title).map(e => ({ ...e, _dateStr: normalizeDate(e.date) }));
-      const count = EVENTS.length;
+      })).filter(e => e.date && e.title)
+        .map(e => ({ ...e, _dateStr: normalizeDate(e.date) }));
+      const startOfToday = new Date(); startOfToday.setHours(0,0,0,0);
+      const count = EVENTS.filter(e => new Date(e._dateStr + 'T00:00:00') >= startOfToday).length;
       const word  = count === 1 ? t('event') : t('events');
       setSyncStatus('ok', 'sync-ok', `${count} ${word}`);
       document.getElementById('error-banner').classList.remove('show');
@@ -1489,8 +1549,9 @@ body {
     const tagText = isLive ? t('now-chip') : t('next-training');
     const tagColor = isLive ? '#d64545' : '#06a3b6';
 
-    const linkBtn = ev.link
-      ? `<a href="${ev.link}" target="_blank" rel="noopener" class="btn-primary">
+    const bannerMeetingURL = safeLink(ev.link);
+    const linkBtn = bannerMeetingURL
+      ? `<a href="${escapeHTML(bannerMeetingURL)}" target="_blank" rel="noopener" class="btn-primary">
            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
            ${t('join')}
          </a>` : '';
@@ -1515,7 +1576,7 @@ body {
             <div class="count-label">${countLabel}</div>
           </div>
           <div class="banner-actions">
-            <button class="btn-secondary" onclick="openModalById('${ev._dateStr}','${escapeAttr(ev.title)}')">
+            <button class="btn-secondary" data-action="add-to-cal">
               ${t('add-to-cal')}
             </button>
             ${linkBtn}
@@ -1523,15 +1584,11 @@ body {
         </div>
       </div>
     `;
+    const addBtn = banner.querySelector('[data-action="add-to-cal"]');
+    if (addBtn) addBtn.addEventListener('click', () => openModal(ev));
   }
 
   function escapeHTML(s) { return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'})[c]); }
-  function escapeAttr(s) { return String(s).replace(/'/g, "\\'").replace(/"/g, '&quot;'); }
-
-  window.openModalById = (dateStr, title) => {
-    const ev = EVENTS.find(e => e._dateStr === dateStr && e.title === title.replace(/&quot;/g,'"'));
-    if (ev) openModal(ev);
-  };
 
   // ═════════════ TRAINING LIST ═════════════
   function renderTrainingList() {
@@ -1602,6 +1659,7 @@ body {
 
     const card = document.createElement('div');
     card.className = `training-card ${ev.type}`;
+    const cardMeetingURL = safeLink(ev.link);
 
     let chips = `<span class="cat-chip ${ev.type}">${typeLabels[ev.type] || ev.type.toUpperCase()}</span>`;
     if (ev.lang === 'es' || ev.lang === 'en') chips += `<span class="lang-chip ${ev.lang}">${ev.lang.toUpperCase()}</span>`;
@@ -1624,16 +1682,18 @@ body {
         <div class="info">${info}</div>
       </div>
       <div class="actions">
-        ${ev.link ? `<a class="btn-primary" href="${ev.link}" target="_blank" rel="noopener" onclick="event.stopPropagation()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>${t('join')}</a>` : ''}
-        <button class="btn-secondary" onclick="event.stopPropagation();openModal(__getEvent('${nd}', this.dataset.title))" data-title="${escapeAttr(ev.title)}"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/></svg>${t('add-to-cal')}</button>
+        ${cardMeetingURL ? `<a class="btn-primary" href="${escapeHTML(cardMeetingURL)}" target="_blank" rel="noopener" data-action="join"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>${t('join')}</a>` : ''}
+        <button class="btn-secondary" data-action="add-to-cal"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/></svg>${t('add-to-cal')}</button>
       </div>
     `;
 
     card.addEventListener('click', () => openModal(ev));
+    const joinLink = card.querySelector('[data-action="join"]');
+    if (joinLink) joinLink.addEventListener('click', e => e.stopPropagation());
+    const calBtn = card.querySelector('[data-action="add-to-cal"]');
+    calBtn.addEventListener('click', e => { e.stopPropagation(); openModal(ev); });
     return card;
   }
-
-  window.__getEvent = (dateStr, title) => EVENTS.find(e => e._dateStr === dateStr && e.title === title);
 
   // ═════════════ MINI CALENDAR ═════════════
   function renderMiniCal() {
@@ -1713,14 +1773,39 @@ body {
       numEl.textContent = d;
       cell.appendChild(numEl);
 
-      events.forEach(ev => {
+      const eventsContainer = document.createElement('div');
+      eventsContainer.className = 'cal-day-events';
+
+      // Show max 3 events; collapse rest into "+N más"
+      const visibleEvents = events.filter(ev => activeFilter === 'all' || activeFilter === ev.type);
+      const MAX_VISIBLE = 3;
+      const shown = visibleEvents.slice(0, MAX_VISIBLE);
+      const hidden = visibleEvents.slice(MAX_VISIBLE);
+
+      shown.forEach(ev => {
         const pill = document.createElement('button');
-        pill.className = `cal-pill ${ev.type}${activeFilter !== 'all' && activeFilter !== ev.type ? ' hidden' : ''}`;
-        pill.innerHTML = escapeHTML(ev.title) + (ev.time ? `<span class="pill-time">${escapeHTML(ev.time)}</span>` : '');
-        pill.addEventListener('click', () => openModal(ev));
-        cell.appendChild(pill);
+        pill.className = `cal-pill ${ev.type}`;
+        pill.innerHTML = `<span class="pill-title">${escapeHTML(ev.title)}</span>` + (ev.time ? `<span class="pill-time">${escapeHTML(ev.time)}</span>` : '');
+        pill.addEventListener('click', e => { e.stopPropagation(); openModal(ev); });
+        eventsContainer.appendChild(pill);
       });
 
+      if (hidden.length) {
+        const moreBtn = document.createElement('button');
+        moreBtn.className = 'cal-day-more';
+        moreBtn.textContent = `+${hidden.length} ${currentLang === 'es' ? 'más' : 'more'}`;
+        moreBtn.addEventListener('click', e => {
+          e.stopPropagation();
+          selectedDate = dateStr;
+          miniYear = gridYear; miniMonth = gridMonth;
+          switchView('list');
+          renderTrainingList();
+          renderMiniCal();
+        });
+        eventsContainer.appendChild(moreBtn);
+      }
+
+      cell.appendChild(eventsContainer);
       grid.appendChild(cell);
     }
   }
@@ -1749,15 +1834,53 @@ body {
     return { h, m };
   }
 
+  // Only allow http(s) URLs (block javascript:, data:, etc.)
+  function safeLink(url) {
+    if (!url) return '';
+    const trimmed = String(url).trim();
+    try {
+      const u = new URL(trimmed);
+      if (u.protocol === 'https:' || u.protocol === 'http:') return trimmed;
+    } catch {}
+    return '';
+  }
+
+  // Current UTC timestamp formatted for ICS DTSTAMP
+  function nowUTCStamp() {
+    const n = new Date();
+    const pad = x => String(x).padStart(2,'0');
+    return `${n.getUTCFullYear()}${pad(n.getUTCMonth()+1)}${pad(n.getUTCDate())}T${pad(n.getUTCHours())}${pad(n.getUTCMinutes())}${pad(n.getUTCSeconds())}Z`;
+  }
+
+  // VTIMEZONE block for America/New_York (covers EST/EDT)
+  const VTIMEZONE_NY = [
+    'BEGIN:VTIMEZONE',
+    'TZID:America/New_York',
+    'BEGIN:DAYLIGHT',
+    'TZOFFSETFROM:-0500','TZOFFSETTO:-0400','TZNAME:EDT',
+    'DTSTART:19700308T020000','RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=2SU',
+    'END:DAYLIGHT',
+    'BEGIN:STANDARD',
+    'TZOFFSETFROM:-0400','TZOFFSETTO:-0500','TZNAME:EST',
+    'DTSTART:19701101T020000','RRULE:FREQ=YEARLY;BYMONTH=11;BYDAY=1SU',
+    'END:STANDARD',
+    'END:VTIMEZONE',
+  ].join('\r\n');
+
+  // Emit Miami-local time as literal strings (paired with TZID=America/New_York).
+  // Avoids floating-time bug where Outlook/Apple interpreted the event in the user's local zone.
   function toICSDate(dateStr, hhmm, durationHours = 1) {
+    const pad = n => String(n).padStart(2, '0');
     const [y, mo, d] = dateStr.split('-').map(Number);
-    const start = new Date(y, mo - 1, d, hhmm.h, hhmm.m, 0);
-    const end = new Date(start.getTime() + durationHours * 60 * 60 * 1000);
-    const fmt = dt => [
-      dt.getFullYear(), String(dt.getMonth()+1).padStart(2,'0'), String(dt.getDate()).padStart(2,'0'),
-      'T', String(dt.getHours()).padStart(2,'0'), String(dt.getMinutes()).padStart(2,'0'), '00'
-    ].join('');
-    return { start: fmt(start), end: fmt(end) };
+    const startMin = hhmm.h * 60 + hhmm.m;
+    const endMin = startMin + Math.round(durationHours * 60);
+    const endH = Math.floor(endMin / 60) % 24;
+    const endM = endMin % 60;
+    const dayOffset = Math.floor(endMin / (24 * 60));
+    const endDate = new Date(Date.UTC(y, mo - 1, d + dayOffset));
+    const start = `${y}${pad(mo)}${pad(d)}T${pad(hhmm.h)}${pad(hhmm.m)}00`;
+    const end = `${endDate.getUTCFullYear()}${pad(endDate.getUTCMonth()+1)}${pad(endDate.getUTCDate())}T${pad(endH)}${pad(endM)}00`;
+    return { start, end };
   }
 
   function getDuration(timeStr) {
@@ -1782,22 +1905,26 @@ body {
     const durationHours = getDuration(ev.time);
     const { start, end } = toICSDate(nd, hhmm, durationHours);
     const uid = `hero-${nd}-${ev.title.replace(/\s+/g,'-').toLowerCase()}@heroinsuranceusa.com`;
-    const typeLabels = { aca: 'ACA', medicare: 'Medicare', supp: 'Supplemental', life: 'Life Insurance' };
-    const category = typeLabels[ev.type] || ev.type.toUpperCase();
-    const location = ev.link || '';
+    const category = t('type-labels')[ev.type] || ev.type.toUpperCase();
+    const meetingURL = safeLink(ev.link);
     const descLines = [
       ev.desc,
       ev.instructor ? `Instructor: ${ev.instructor}` : '',
-      ev.time ? `Time: ${ev.time} EST (Miami, UTC-4)` : '',
-      ev.link ? `Meeting Link: ${ev.link}` : '',
+      ev.time ? `Time: ${ev.time} ET (Miami)` : '',
+      meetingURL ? `Meeting Link: ${meetingURL}` : '',
     ].filter(Boolean).join('\\n');
 
     return [
       'BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Hero Insurance USA//Training Calendar//EN',
-      'CALSCALE:GREGORIAN','METHOD:PUBLISH','BEGIN:VEVENT',
-      `UID:${uid}`,`DTSTAMP:${start}Z`,`DTSTART:${start}`,`DTEND:${end}`,
+      'CALSCALE:GREGORIAN','METHOD:PUBLISH',
+      VTIMEZONE_NY,
+      'BEGIN:VEVENT',
+      `UID:${uid}`,
+      `DTSTAMP:${nowUTCStamp()}`,
+      `DTSTART;TZID=America/New_York:${start}`,
+      `DTEND;TZID=America/New_York:${end}`,
       `SUMMARY:${category} – ${ev.title}`,`DESCRIPTION:${descLines}`,
-      location ? `LOCATION:${location}` : '',
+      meetingURL ? `LOCATION:${meetingURL}` : '',
       'BEGIN:VALARM','TRIGGER:-PT15M','ACTION:DISPLAY',
       `DESCRIPTION:Reminder: ${ev.title}`,'END:VALARM','END:VEVENT','END:VCALENDAR',
     ].filter(Boolean).join('\r\n');
@@ -1823,11 +1950,11 @@ body {
     if (!hhmm) return null;
     const durationHours = getDuration(ev.time);
     const { start, end } = toICSDate(nd, hhmm, durationHours);
-    const typeLabels = { aca: 'ACA', medicare: 'Medicare', supp: 'Supplemental', life: 'Life Insurance' };
-    const title = encodeURIComponent(`${typeLabels[ev.type] || ev.type.toUpperCase()} – ${ev.title}`);
-    const details = encodeURIComponent([ev.desc, ev.instructor ? `Instructor: ${ev.instructor}` : '', ev.link ? `Meeting: ${ev.link}` : ''].filter(Boolean).join('\n'));
-    const location = encodeURIComponent(ev.link || '');
-    return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${start}/${end}&details=${details}&location=${location}`;
+    const title = encodeURIComponent(`${t('type-labels')[ev.type] || ev.type.toUpperCase()} – ${ev.title}`);
+    const meetingURL = safeLink(ev.link);
+    const details = encodeURIComponent([ev.desc, ev.instructor ? `Instructor: ${ev.instructor}` : '', meetingURL ? `Meeting: ${meetingURL}` : ''].filter(Boolean).join('\n'));
+    const location = encodeURIComponent(meetingURL);
+    return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${start}/${end}&details=${details}&location=${location}&ctz=America/New_York`;
   }
 
   // ═════════════ MODAL ═════════════
@@ -1860,17 +1987,18 @@ body {
       const converted = convertToMiami(ev.time, nd, ianaZone);
       document.getElementById('modal-time').innerHTML = `${escapeHTML(ev.time)} <small>${getTZLabel(ianaZone)}</small>`;
       if (converted) {
-        document.getElementById('modal-time-converted').innerHTML = `${converted} <small>EST (Miami)</small>`;
+        document.getElementById('modal-time-converted').innerHTML = `${converted} <small>ET (Miami)</small>`;
         convertedRow.style.display = 'flex';
       } else convertedRow.style.display = 'none';
     } else {
-      document.getElementById('modal-time').innerHTML = `${escapeHTML(ev.time || '')} <small>EST (Miami, UTC-4)</small>`;
+      document.getElementById('modal-time').innerHTML = `${escapeHTML(ev.time || '')} <small>ET (Miami)</small>`;
       convertedRow.style.display = 'none';
     }
 
     // Link
     const linkBtn = document.getElementById('modal-link');
-    if (ev.link) { linkBtn.href = ev.link; linkBtn.classList.remove('hidden'); }
+    const meetingURL = safeLink(ev.link);
+    if (meetingURL) { linkBtn.href = meetingURL; linkBtn.classList.remove('hidden'); }
     else { linkBtn.href = '#'; linkBtn.classList.add('hidden'); }
 
     // Calendar picker
@@ -1906,6 +2034,18 @@ body {
       document.getElementById('modal-overlay').classList.remove('open');
   });
 
+  document.addEventListener('keydown', e => {
+    if (e.key !== 'Escape') return;
+    const overlay = document.getElementById('modal-overlay');
+    const dropdown = document.getElementById('cal-dropdown');
+    if (dropdown.classList.contains('open')) {
+      dropdown.classList.remove('open');
+      document.getElementById('cal-picker-btn').classList.remove('open');
+    } else if (overlay.classList.contains('open')) {
+      overlay.classList.remove('open');
+    }
+  });
+
   // Mini cal nav
   document.getElementById('mini-prev').addEventListener('click', e => { e.stopPropagation(); miniMonth--; if (miniMonth<0){miniMonth=11;miniYear--;} renderMiniCal(); });
   document.getElementById('mini-next').addEventListener('click', e => { e.stopPropagation(); miniMonth++; if (miniMonth>11){miniMonth=0;miniYear++;} renderMiniCal(); });
@@ -1932,8 +2072,9 @@ body {
   // View toggle
   document.getElementById('view-list').addEventListener('click', () => switchView('list'));
   document.getElementById('view-grid').addEventListener('click', () => switchView('grid'));
-  function switchView(view) {
+  function switchView(view, persist = true) {
     currentView = view;
+    if (persist) { try { localStorage.setItem(LS_KEY_VIEW, view); } catch {} }
     document.getElementById('view-list').classList.toggle('active', view === 'list');
     document.getElementById('view-grid').classList.toggle('active', view === 'grid');
     document.getElementById('list-view').classList.toggle('hidden', view !== 'list');
@@ -1943,10 +2084,11 @@ body {
 
   // Lang switcher
   document.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.lang === currentLang);
     btn.addEventListener('click', () => {
       currentLang = btn.dataset.lang;
-      document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
+      try { localStorage.setItem(LS_KEY_LANG, currentLang); } catch {}
+      document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.dataset.lang === currentLang));
       applyTranslations();
     });
   });
@@ -1975,6 +2117,10 @@ body {
   applyTranslations(false);
   document.getElementById('sync-label').textContent = t('sync-loading');
 
+  // Restore saved view
+  const storedView = (() => { try { return localStorage.getItem(LS_KEY_VIEW); } catch { return null; } })();
+  if (storedView === 'grid' || storedView === 'list') switchView(storedView, false);
+
   // Apply initial filter from URL BEFORE loading events
   const initialFilter = getInitialFilterFromURL();
   if (initialFilter !== 'all') {
@@ -1984,6 +2130,12 @@ body {
   }
 
   loadEvents();
+
+  // Keep the hero banner's countdown live (re-renders every 30s)
+  setInterval(renderHeroBanner, 30 * 1000);
+
+  // Silent refresh of events every 5 minutes (no skeletons / no loading state)
+  setInterval(() => loadEvents(true), 5 * 60 * 1000);
 </script>
 
 </body>
